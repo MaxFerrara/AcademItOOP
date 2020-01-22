@@ -1,0 +1,62 @@
+public final class Range {
+    private double from;
+    private double to;
+
+    public Range(double from, double to) {
+        this.from = from;
+        this.to = to;
+    }
+
+    @Override
+    public String toString() {
+        return this.from + " " + this.to;
+    }
+
+    public final double getLength() {
+        return to - from;
+    }
+
+    public final Range getRangesIntersection(Range range) {
+        if (range.to >= from && range.from <= to) {
+            return new Range(Math.max(from, range.from), Math.min(to, range.to));
+        }
+
+        return null;
+    }
+
+    public final Range[] getRangesUnion(Range range) {
+        if (range.to >= from && range.from <= to) {
+            return new Range[]{new Range(Math.min(from, range.from), Math.max(to, range.to))};
+        }
+
+        return new Range[]{new Range(from, to), new Range(range.from, range.to)};
+    }
+
+    public final Range[] getRangesDifference(Range range) {
+        if ((from <= range.to) && (range.to >= from && range.from <= to)) {
+            return new Range[]{new Range(Math.min(from, range.from), Math.min(to, Math.min(range.from, range.to)))};
+        }
+
+        if ((range.from <= to) && (range.to >= from && range.from <= to)) {
+            return new Range[]{new Range(Math.min(range.from, from), Math.min(range.to, Math.min(from, to)))};
+        }
+
+        return new Range[]{new Range(from, to), new Range(range.from, to)};
+    }
+
+    public double getFrom() {
+        return from;
+    }
+
+    public void setFrom(double from) {
+        this.from = from;
+    }
+
+    public double getTo() {
+        return to;
+    }
+
+    public void setTo(double to) {
+        this.to = to;
+    }
+}

@@ -1,3 +1,5 @@
+import range.Range;
+
 import java.util.Arrays;
 
 public class RangeMain {
@@ -9,6 +11,8 @@ public class RangeMain {
         System.out.println(range1.getLength());
         System.out.println(range1.getRangesIntersection(range2));
         System.out.println(Arrays.toString(range1.getRangesUnion(range2)));
-        System.out.println(Arrays.toString(range1.getRangesDifference(range1, range2)));
+
+        System.out.println(Arrays.toString(range1.getRangesDifference(range2)));
+        System.out.println(Arrays.toString(range2.getRangesDifference(range1)));
     }
 }

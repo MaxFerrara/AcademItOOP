@@ -1,3 +1,5 @@
+package range;
+
 public final class Range {
     private double from;
     private double to;
@@ -33,12 +35,12 @@ public final class Range {
     }
 
     public final Range[] getRangesDifference(Range range) {
-        if ((from <= range.to) && (range.to >= from && range.from <= to)) {
-            return new Range[]{new Range(Math.min(from, range.from), Math.min(to, Math.min(range.from, range.to)))};
+        if ((from <= range.from) && (range.to >= from && range.from <= to)) {
+            return new Range[]{new Range(from, range.from)};
         }
 
-        if ((range.from <= to) && (range.to >= from && range.from <= to)) {
-            return new Range[]{new Range(Math.min(range.from, from), Math.min(range.to, Math.min(from, to)))};
+        if ((from >= range.from) && (range.to >= from && range.from <= to)) {
+            return new Range[]{new Range(range.to, to)};
         }
 
         return new Range[]{new Range(from, to), new Range(range.from, to)};

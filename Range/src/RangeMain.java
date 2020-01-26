@@ -2,7 +2,7 @@ import range.Range;
 
 import java.util.Arrays;
 
-public class RangeMain {
+public final class RangeMain {
     public static void main(String[] args) {
         Range range1 = new Range(-5, 20);
         Range range2 = new Range(16, 25);

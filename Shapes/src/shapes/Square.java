@@ -1,3 +1,5 @@
+package shapes;
+
 public final class Square implements Shape {
     private double sideLength;
 
@@ -27,7 +29,7 @@ public final class Square implements Shape {
 
     @Override
     public String toString() {
-        return "Square side length/area: " + sideLength + "/" + getArea();
+        return "shapes.Square side length/area: " + sideLength + "/" + getArea();
     }
 
     @Override

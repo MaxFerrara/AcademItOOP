@@ -1,3 +1,5 @@
+package shapes;
+
 public final class Circle implements Shape {
     private double radius;
 
@@ -27,7 +29,7 @@ public final class Circle implements Shape {
 
     @Override
     public String toString() {
-        return "Circle radius/area: " + radius + "/" + getArea();
+        return "shapes.Circle radius/area: " + radius + "/" + getArea();
     }
 
     @Override

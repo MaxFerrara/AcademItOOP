@@ -1,3 +1,5 @@
+package shapes;
+
 public final class Triangle implements Shape {
     private double x1;
     private double y1;
@@ -41,7 +43,7 @@ public final class Triangle implements Shape {
 
     @Override
     public String toString() {
-        return "Triangle max x/max y/area: " + Math.max(x1, Math.max(x2, x3)) + "/" + Math.max(y1, Math.max(y2, y3)) + "/" + getArea();
+        return "shapes.Triangle max x/max y/area: " + Math.max(x1, Math.max(x2, x3)) + "/" + Math.max(y1, Math.max(y2, y3)) + "/" + getArea();
     }
 
     @Override

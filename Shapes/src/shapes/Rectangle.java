@@ -1,3 +1,5 @@
+package shapes;
+
 public final class Rectangle implements Shape {
     private double rectangleWidth;
     private double rectangleHeight;
@@ -29,7 +31,7 @@ public final class Rectangle implements Shape {
 
     @Override
     public String toString() {
-        return "Rectangle width/height/area: " + rectangleWidth + "/" + rectangleHeight + "/" + getArea();
+        return "shapes.Rectangle width/height/area: " + rectangleWidth + "/" + rectangleHeight + "/" + getArea();
     }
 
     @Override

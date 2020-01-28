@@ -29,7 +29,7 @@ public final class Circle implements Shape {
 
     @Override
     public String toString() {
-        return "shapes.Circle radius/area: " + radius + "/" + getArea();
+        return String.format("Square radius: %s", radius);
     }
 
     @Override

@@ -27,9 +27,14 @@ public final class Square implements Shape {
         return sideLength * 4;
     }
 
-    @Override
+    /*@Override
     public String toString() {
         return "shapes.Square side length/area: " + sideLength + "/" + getArea();
+    }*/
+
+    @Override
+    public String toString() {
+        return String.format("Square side length: %s", sideLength);
     }
 
     @Override

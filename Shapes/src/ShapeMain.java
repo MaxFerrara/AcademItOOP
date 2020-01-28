@@ -15,7 +15,7 @@ public class ShapeMain {
         Square square1 = new Square(5);
         Square square2 = new Square(6);
 
-        Rectangle rectangle1 = new Rectangle(5, 2);
+        /*Rectangle rectangle1 = new Rectangle(5, 2);
         Rectangle rectangle2 = new Rectangle(4, 3);
 
         Triangle triangle1 = new Triangle(1, 1, 2, 2, 3, 3);
@@ -27,6 +27,8 @@ public class ShapeMain {
         Shape[] shapes = {square1, square2, rectangle1, rectangle2, circle1, circle2};
 
         getElementInfo(shapes, compareShapeArea, 1);
-        getElementInfo(shapes, perimeterComparator, 2);
+        getElementInfo(shapes, perimeterComparator, 2);*/
+
+        System.out.println(square1.toString());
     }
 }

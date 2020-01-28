@@ -5,6 +5,10 @@ public final class Range {
     private double to;
 
     public Range(double from, double to) {
+        if (to < from) {
+            throw new IllegalArgumentException("поле to должно быть больше чем from");
+        }
+
         this.from = from;
         this.to = to;
     }

@@ -29,7 +29,7 @@ public final class Triangle implements Shape {
 
     @Override
     public double getArea() {
-        return 0.5 * ((x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3));
+        return 0.5 * Math.abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1));
     }
 
     @Override
@@ -43,7 +43,7 @@ public final class Triangle implements Shape {
 
     @Override
     public String toString() {
-        return "shapes.Triangle max x/max y/area: " + Math.max(x1, Math.max(x2, x3)) + "/" + Math.max(y1, Math.max(y2, y3)) + "/" + getArea();
+        return String.format("Triangle fields: %nx1: %s, y1: %s %nx2: %s, y2: %s %nx3: %s, y3: %s", x1, y1, x2, y2, x3, y3);
     }
 
     @Override
@@ -63,7 +63,12 @@ public final class Triangle implements Shape {
 
     @Override
     public int hashCode() {
-        return (int) Math.abs(Math.max(x1, Math.max(x2, x3)) * Math.max(y1, Math.max(y2, y3)) * getArea());
+        final int prime = 33;
+        int hash = 1;
+        hash *= prime + Math.max(Double.hashCode(x1), Double.hashCode(y1));
+        hash *= prime + Math.max(Double.hashCode(x2), Double.hashCode(y2));
+        hash *= prime + Math.max(Double.hashCode(x3), Double.hashCode(y3));
+        return Math.abs(hash);
     }
 
     public double getX1() {

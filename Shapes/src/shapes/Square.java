@@ -27,11 +27,6 @@ public final class Square implements Shape {
         return sideLength * 4;
     }
 
-    /*@Override
-    public String toString() {
-        return "shapes.Square side length/area: " + sideLength + "/" + getArea();
-    }*/
-
     @Override
     public String toString() {
         return String.format("Square side length: %s", sideLength);
@@ -53,7 +48,10 @@ public final class Square implements Shape {
 
     @Override
     public int hashCode() {
-        return (int) (sideLength * getArea());
+        final int prime = 21;
+        int hash = 1;
+        hash *= prime + Double.hashCode(sideLength);
+        return hash;
     }
 
     public double getSideLength() {

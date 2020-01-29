@@ -31,7 +31,7 @@ public final class Rectangle implements Shape {
 
     @Override
     public String toString() {
-        return "shapes.Rectangle width/height/area: " + rectangleWidth + "/" + rectangleHeight + "/" + getArea();
+        return String.format("Rectangle width: %s, height: %s", rectangleWidth, rectangleHeight);
     }
 
     @Override
@@ -50,7 +50,11 @@ public final class Rectangle implements Shape {
 
     @Override
     public int hashCode() {
-        return (int) (rectangleHeight * rectangleWidth * getArea());
+        final int prime = 45;
+        int hash = 1;
+        hash *= prime + Double.hashCode(rectangleHeight);
+        hash *= prime + Double.hashCode(rectangleWidth);
+        return Math.abs(hash);
     }
 
     public double getRectangleWidth() {

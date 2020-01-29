@@ -29,7 +29,7 @@ public final class Circle implements Shape {
 
     @Override
     public String toString() {
-        return String.format("Square radius: %s", radius);
+        return String.format("Circle radius: %s", radius);
     }
 
     @Override
@@ -48,7 +48,10 @@ public final class Circle implements Shape {
 
     @Override
     public int hashCode() {
-        return (int) (radius * getArea());
+        final int prime = 33;
+        int hash = 1;
+        hash *= prime + Double.hashCode(radius);
+        return hash;
     }
 
     public double getRadius() {

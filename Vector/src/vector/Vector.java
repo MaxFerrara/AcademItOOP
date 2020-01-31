@@ -7,6 +7,10 @@ public class Vector {
     private double[] vectorDirection;
 
     public Vector(int vectorSize) {
+        if (vectorSize < 0) {
+            throw new IllegalArgumentException("vectorSize can not < zero");
+        }
+
         double[] tmp = new double[vectorSize];
 
         Arrays.fill(tmp, 0);
@@ -20,6 +24,10 @@ public class Vector {
     }
 
     public Vector(double[] vectorDirection, int vectorSize) {
+        if (vectorSize < 0) {
+            throw new IllegalArgumentException("vectorSize can not < zero");
+        }
+
         double[] tmp = new double[vectorSize];
         int lengthValue = tmp.length - vectorDirection.length;
 
@@ -35,13 +43,39 @@ public class Vector {
         this.vectorDirection = tmp;
     }
 
-    public Vector(Vector v) {
-        this(v.getVectorDirection(), v.getVectorSize());
+    public Vector(Vector vector) {
+        this.vectorSize = vector.vectorSize;
+        this.vectorDirection = vector.vectorDirection;
     }
 
     @Override
     public String toString() {
         return Arrays.toString(vectorDirection);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object == this) {
+            return true;
+        }
+
+        if (object == null || object.getClass() != this.getClass()) {
+            return false;
+        }
+
+        Vector vector = (Vector) object;
+
+        return vectorSize == vector.vectorSize && Arrays.equals(vectorDirection, vector.vectorDirection);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 21;
+        int hash = 1;
+
+        hash *= prime + vectorSize;
+        hash *= prime + Arrays.stream(vectorDirection).sum();
+        return Math.abs(hash);
     }
 
     public double[] getVectorDirection() {
@@ -57,6 +91,10 @@ public class Vector {
     }
 
     public void setVectorSize(int vectorSize) {
+        if (vectorSize < 0) {
+            throw new IllegalArgumentException("vectorSize can not < zero");
+        }
+
         this.vectorSize = vectorSize;
     }
 }

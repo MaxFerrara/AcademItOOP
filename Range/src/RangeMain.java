@@ -10,11 +10,11 @@ public final class RangeMain {
 
             System.out.println(range1.toString());
             System.out.println(range1.getLength());
-            System.out.println(range1.getRangesIntersection(range2));
+            System.out.println(range1.getIntersection(range2));
 
-            System.out.println(Arrays.toString(range1.getRangesUnion(range2)));
-            System.out.println(Arrays.toString(range1.getRangesDifference(range2)));
-            System.out.println(Arrays.toString(range2.getRangesDifference(range1)));
+            System.out.println(Arrays.toString(range1.getUnion(range2)));
+            System.out.println(Arrays.toString(range1.getDifference(range2)));
+            System.out.println(Arrays.toString(range2.getDifference(range1)));
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }

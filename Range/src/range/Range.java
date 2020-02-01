@@ -13,16 +13,40 @@ public final class Range {
         this.to = to;
     }
 
-    @Override
-    public String toString() {
-        return this.from + " " + this.to;
+    public double getFrom() {
+        return from;
     }
 
-    public final double getLength() {
+    public void setFrom(double from) {
+        if (to < from) {
+            throw new IllegalArgumentException("поле to должно быть больше чем from");
+        }
+
+        this.from = from;
+    }
+
+    public double getTo() {
+        return to;
+    }
+
+    public void setTo(double to) {
+        if (to < from) {
+            throw new IllegalArgumentException("поле to должно быть больше чем from");
+        }
+
+        this.to = to;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + this.from + ";" + this.to + ")";
+    }
+
+    public double getLength() {
         return to - from;
     }
 
-    public final Range getRangesIntersection(Range range) {
+    public Range getIntersection(Range range) {
         if (range.to >= from && range.from <= to) {
             return new Range(Math.max(from, range.from), Math.min(to, range.to));
         }
@@ -30,7 +54,7 @@ public final class Range {
         return null;
     }
 
-    public final Range[] getRangesUnion(Range range) {
+    public Range[] getUnion(Range range) {
         if (range.to >= from && range.from <= to) {
             return new Range[]{new Range(Math.min(from, range.from), Math.max(to, range.to))};
         }
@@ -38,7 +62,7 @@ public final class Range {
         return new Range[]{new Range(from, to), new Range(range.from, range.to)};
     }
 
-    public final Range[] getRangesDifference(Range range) {
+    public Range[] getDifference(Range range) {
         if (from <= range.from && to <= range.to) {
             return new Range[]{new Range(from, range.from)};
         }
@@ -56,21 +80,5 @@ public final class Range {
         }
 
         return null;
-    }
-
-    public double getFrom() {
-        return from;
-    }
-
-    public void setFrom(double from) {
-        this.from = from;
-    }
-
-    public double getTo() {
-        return to;
-    }
-
-    public void setTo(double to) {
-        this.to = to;
     }
 }

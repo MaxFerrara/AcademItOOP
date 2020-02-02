@@ -48,6 +48,26 @@ public class Vector {
         this.vectorDirection = vector.vectorDirection;
     }
 
+    public double[] getVectorDirection() {
+        return vectorDirection;
+    }
+
+    public void setVectorDirection(double[] vectorDirection) {
+        this.vectorDirection = vectorDirection;
+    }
+
+    public int getVectorSize() {
+        return vectorSize;
+    }
+
+    public void setVectorSize(int vectorSize) {
+        if (vectorSize < 0) {
+            throw new IllegalArgumentException("vectorSize can not < zero");
+        }
+
+        this.vectorSize = vectorSize;
+    }
+
     @Override
     public String toString() {
         return Arrays.toString(vectorDirection);
@@ -75,26 +95,30 @@ public class Vector {
 
         hash *= prime + vectorSize;
         hash *= prime + Arrays.stream(vectorDirection).sum();
-        return Math.abs(hash);
+        return hash;
     }
 
-    public double[] getVectorDirection() {
+    public double getElementIndex(int index) {
+        return vectorDirection[index];
+    }
+
+    public int getLength() {
+        return vectorDirection.length;
+    }
+
+    public double[] reverse() {
+        for (int i = 0; i < vectorDirection.length; ++i) {
+            vectorDirection[i] *= -1;
+        }
+
         return vectorDirection;
     }
 
-    public void setVectorDirection(double[] vectorDirection) {
-        this.vectorDirection = vectorDirection;
-    }
-
-    public int getVectorSize() {
-        return vectorSize;
-    }
-
-    public void setVectorSize(int vectorSize) {
-        if (vectorSize < 0) {
-            throw new IllegalArgumentException("vectorSize can not < zero");
+    public double[] getScalar(int number) {
+        for (int i = 0; i < vectorDirection.length; ++i) {
+            vectorDirection[i] *= number;
         }
 
-        this.vectorSize = vectorSize;
+        return vectorDirection;
     }
 }

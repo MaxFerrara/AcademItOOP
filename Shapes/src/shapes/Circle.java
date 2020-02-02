@@ -7,6 +7,14 @@ public final class Circle implements Shape {
         this.radius = radius;
     }
 
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
     @Override
     public double getWidth() {
         return radius * 2;
@@ -52,13 +60,5 @@ public final class Circle implements Shape {
         int hash = 1;
         hash *= prime + Double.hashCode(radius);
         return hash;
-    }
-
-    public double getRadius() {
-        return radius;
-    }
-
-    public void setRadius(double radius) {
-        this.radius = radius;
     }
 }

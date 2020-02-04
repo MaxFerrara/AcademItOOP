@@ -157,18 +157,18 @@ public class Vector {
 
     public Vector getSumVec(Vector vector) {
         double[] tmp = new double[Math.max(vectorDirection.length, vector.vectorDirection.length)];
-        int lengthDiff = Math.max(vectorDirection.length, vector.vectorDirection.length) - Math.min(vectorDirection.length, vector.vectorDirection.length);
+        int lengthDifference = Math.max(vectorDirection.length, vector.vectorDirection.length) - Math.min(vectorDirection.length, vector.vectorDirection.length);
 
-        for (int i = 0; i < tmp.length - lengthDiff; ++i) {
-            if (tmp[i] > Math.min(vectorDirection.length, vector.vectorDirection.length)) {
-                if (vectorDirection.length > vector.vectorDirection.length) {
-                    tmp[i] = vectorDirection[i];
-                } else {
-                    tmp[i] = vector.vectorDirection[i];
-                }
+        for (int i = 0; i < tmp.length - lengthDifference; ++i) {
+            if(tmp[i] > Math.min(vectorDirection.length, vector.vectorDirection.length)) {
+                tmp[i] = 0;
             }
 
-            tmp[i] = vectorDirection[i] + vector.vectorDirection[i];
+            tmp[i] = vectorDirection[i];
+        }
+
+        for(int i = 0; i < tmp.length; ++i) {
+            tmp[i] += vector.vectorDirection[i];
         }
 
         return new Vector(tmp);

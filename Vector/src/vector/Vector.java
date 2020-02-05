@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Vector {
     private int vectorSize;
-    private double[] vectorDirection;
+    private double[] vectorCoordinates;
 
     public Vector(int vectorSize) {
         if (vectorSize < 0) {
@@ -16,44 +16,44 @@ public class Vector {
         Arrays.fill(tmp, 0);
 
         this.vectorSize = vectorSize;
-        this.vectorDirection = tmp;
+        this.vectorCoordinates = tmp;
     }
 
-    public Vector(double[] vectorDirection) {
-        this.vectorDirection = vectorDirection;
+    public Vector(double[] vectorCoordinates) {
+        this.vectorCoordinates = vectorCoordinates;
     }
 
-    public Vector(double[] vectorDirection, int vectorSize) {
+    public Vector(double[] vectorCoordinates, int vectorSize) {
         if (vectorSize < 0) {
             throw new IllegalArgumentException("vectorSize can not < zero");
         }
 
         double[] tmp = new double[vectorSize];
-        int lengthValue = tmp.length - vectorDirection.length;
+        int lengthValue = tmp.length - vectorCoordinates.length;
 
         for (int i = 0; i < tmp.length - lengthValue; i++) {
-            if (tmp[i] > vectorDirection.length) {
+            if (tmp[i] > vectorCoordinates.length) {
                 tmp[i] = 0;
             }
 
-            tmp[i] = vectorDirection[i];
+            tmp[i] = vectorCoordinates[i];
         }
 
         this.vectorSize = vectorSize;
-        this.vectorDirection = tmp;
+        this.vectorCoordinates = tmp;
     }
 
     public Vector(Vector vector) {
         this.vectorSize = vector.vectorSize;
-        this.vectorDirection = vector.vectorDirection;
+        this.vectorCoordinates = vector.vectorCoordinates;
     }
 
-    public double[] getVectorDirection() {
-        return vectorDirection;
+    public double[] getVectorCoordinates() {
+        return vectorCoordinates;
     }
 
-    public void setVectorDirection(double[] vectorDirection) {
-        this.vectorDirection = vectorDirection;
+    public void setVectorCoordinates(double[] vectorCoordinates) {
+        this.vectorCoordinates = vectorCoordinates;
     }
 
     public int getVectorSize() {
@@ -70,7 +70,7 @@ public class Vector {
 
     @Override
     public String toString() {
-        return Arrays.toString(vectorDirection);
+        return Arrays.toString(vectorCoordinates);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class Vector {
 
         Vector vector = (Vector) object;
 
-        return vectorSize == vector.vectorSize && Arrays.equals(vectorDirection, vector.vectorDirection);
+        return vectorSize == vector.vectorSize && Arrays.equals(vectorCoordinates, vector.vectorCoordinates);
     }
 
     @Override
@@ -94,116 +94,116 @@ public class Vector {
         int hash = 1;
 
         hash *= prime + vectorSize;
-        hash *= prime + Arrays.stream(vectorDirection).sum();
+        hash *= prime + Arrays.stream(vectorCoordinates).sum();
         return hash;
     }
 
     public double getElementIndex(int index) {
-        return vectorDirection[index];
+        return vectorCoordinates[index];
     }
 
     public int getLength() {
-        return vectorDirection.length;
+        return vectorCoordinates.length;
     }
 
     public double[] reverse() {
-        for (int i = 0; i < vectorDirection.length; ++i) {
-            vectorDirection[i] *= -1;
+        for (int i = 0; i < vectorCoordinates.length; ++i) {
+            vectorCoordinates[i] *= -1;
         }
 
-        return vectorDirection;
+        return vectorCoordinates;
     }
 
     public double[] getScalar(int number) {
-        for (int i = 0; i < vectorDirection.length; ++i) {
-            vectorDirection[i] *= number;
+        for (int i = 0; i < vectorCoordinates.length; ++i) {
+            vectorCoordinates[i] *= number;
         }
 
-        return vectorDirection;
+        return vectorCoordinates;
     }
 
     public static Vector getSum(Vector vector1, Vector vector2) {
-        double[] tmp = new double[Math.max(vector1.vectorDirection.length, vector2.vectorDirection.length)];
+        double[] vectorsSum = new double[Math.max(vector1.vectorCoordinates.length, vector2.vectorCoordinates.length)];
 
-        for (int i = 0; i < tmp.length; ++i) {
-            tmp[i] = 0;
+        for (int i = 0; i < vectorsSum.length; ++i) {
+            vectorsSum[i] = 0;
 
-            if (i >= Math.min(vector1.vectorDirection.length, vector2.vectorDirection.length)) {
-                tmp[i] = getMaxVector(vector1.vectorDirection, vector2.vectorDirection)[i];
+            if (i >= Math.min(vector1.vectorCoordinates.length, vector2.vectorCoordinates.length)) {
+                vectorsSum[i] = getMaxLengthVector(vector1.vectorCoordinates, vector2.vectorCoordinates)[i];
             } else {
-                tmp[i] = vector1.vectorDirection[i] + vector2.vectorDirection[i];
+                vectorsSum[i] = vector1.vectorCoordinates[i] + vector2.vectorCoordinates[i];
             }
         }
 
-        return new Vector(tmp);
+        return new Vector(vectorsSum);
     }
 
     public static Vector getDifference(Vector vector1, Vector vector2) {
-        double[] tmp = new double[Math.max(vector1.vectorDirection.length, vector2.vectorDirection.length)];
+        double[] vectorsDifference = new double[Math.max(vector1.vectorCoordinates.length, vector2.vectorCoordinates.length)];
 
-        for (int i = 0; i < tmp.length; ++i) {
-            tmp[i] = 0;
+        for (int i = 0; i < vectorsDifference.length; ++i) {
+            vectorsDifference[i] = 0;
 
-            if (i >= Math.min(vector1.vectorDirection.length, vector2.vectorDirection.length)) {
-                tmp[i] = -getMaxVector(vector1.vectorDirection, vector2.vectorDirection)[i];
+            if (i >= Math.min(vector1.vectorCoordinates.length, vector2.vectorCoordinates.length)) {
+                vectorsDifference[i] = -getMaxLengthVector(vector1.vectorCoordinates, vector2.vectorCoordinates)[i];
             } else {
-                tmp[i] = vector1.vectorDirection[i] - vector2.vectorDirection[i];
+                vectorsDifference[i] = vector1.vectorCoordinates[i] - vector2.vectorCoordinates[i];
             }
         }
 
-        return new Vector(tmp);
+        return new Vector(vectorsDifference);
     }
 
     public static Vector getScalarComposition(Vector vector1, Vector vector2) {
-        double[] tmp = new double[Math.max(vector1.vectorDirection.length, vector2.vectorDirection.length)];
+        double[] vectorsScalarComposition = new double[Math.max(vector1.vectorCoordinates.length, vector2.vectorCoordinates.length)];
 
-        for (int i = 0; i < tmp.length; ++i) {
-            tmp[i] = 0;
+        for (int i = 0; i < vectorsScalarComposition.length; ++i) {
+            vectorsScalarComposition[i] = 0;
 
-            if (i >= Math.min(vector1.vectorDirection.length, vector2.vectorDirection.length)) {
-                tmp[i] = 0 * getMaxVector(vector1.vectorDirection, vector2.vectorDirection)[i];
+            if (i >= Math.min(vector1.vectorCoordinates.length, vector2.vectorCoordinates.length)) {
+                vectorsScalarComposition[i] = 0 * getMaxLengthVector(vector1.vectorCoordinates, vector2.vectorCoordinates)[i];
             } else {
-                tmp[i] = vector1.vectorDirection[i] * vector2.vectorDirection[i];
+                vectorsScalarComposition[i] = vector1.vectorCoordinates[i] * vector2.vectorCoordinates[i];
             }
         }
 
-        return new Vector(tmp);
+        return new Vector(vectorsScalarComposition);
     }
 
-    public Vector getSumVec(Vector vector) {
-        double[] tmp = new double[Math.max(vectorDirection.length, vector.vectorDirection.length)];
+    public Vector getSum(Vector vector) {
+        double[] vectorsSum = new double[Math.max(vectorCoordinates.length, vector.vectorCoordinates.length)];
 
-        for (int i = 0; i < tmp.length; ++i) {
-            tmp[i] = 0;
+        for (int i = 0; i < vectorsSum.length; ++i) {
+            vectorsSum[i] = 0;
 
-            if (i >= Math.min(vectorDirection.length, vector.vectorDirection.length)) {
-                tmp[i] = getMaxVector(vectorDirection, vector.vectorDirection)[i];
+            if (i >= Math.min(vectorCoordinates.length, vector.vectorCoordinates.length)) {
+                vectorsSum[i] = getMaxLengthVector(vectorCoordinates, vector.vectorCoordinates)[i];
             } else {
-                tmp[i] = vectorDirection[i] + vector.vectorDirection[i];
+                vectorsSum[i] = vectorCoordinates[i] + vector.vectorCoordinates[i];
             }
         }
 
-        return new Vector(tmp);
+        return new Vector(vectorsSum);
     }
 
-    public Vector getDiffVec(Vector vector) {
-        double[] tmp = new double[Math.max(vectorDirection.length, vector.vectorDirection.length)];
+    public Vector getDifference(Vector vector) {
+        double[] vectorsDifference = new double[Math.max(vectorCoordinates.length, vector.vectorCoordinates.length)];
 
 
-        for (int i = 0; i < tmp.length; ++i) {
-            tmp[i] = 0;
+        for (int i = 0; i < vectorsDifference.length; ++i) {
+            vectorsDifference[i] = 0;
 
-            if (i >= Math.min(vectorDirection.length, vector.vectorDirection.length)) {
-                tmp[i] = -getMaxVector(vectorDirection, vector.vectorDirection)[i];
+            if (i >= Math.min(vectorCoordinates.length, vector.vectorCoordinates.length)) {
+                vectorsDifference[i] = -getMaxLengthVector(vectorCoordinates, vector.vectorCoordinates)[i];
             } else {
-                tmp[i] = vectorDirection[i] - vector.vectorDirection[i];
+                vectorsDifference[i] = vectorCoordinates[i] - vector.vectorCoordinates[i];
             }
         }
 
-        return new Vector(tmp);
+        return new Vector(vectorsDifference);
     }
 
-    private static double[] getMaxVector(double[] vectorDirection1, double[] vectorDirection2) {
+    private static double[] getMaxLengthVector(double[] vectorDirection1, double[] vectorDirection2) {
         return (vectorDirection1.length > vectorDirection2.length) ? vectorDirection1 : vectorDirection2;
     }
 }

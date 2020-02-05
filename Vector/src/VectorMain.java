@@ -24,13 +24,12 @@ public class VectorMain {
             System.out.println(Arrays.toString(vector1.reverse()));
             System.out.println(Arrays.toString(vector1.getScalar(2)));
 
-
             System.out.println(Vector.getSum(vector1, vector3));
             System.out.println(Vector.getDifference(vector1, vector3));
             System.out.println(Vector.getScalarComposition(vector1, vector3));
             System.out.println();
-            System.out.println(vector1.getDiffVec(vector3));
-            System.out.println(vector.getSumVec(vector1));
+            System.out.println(vector1.getDifference(vector3));
+            System.out.println(vector.getSum(vector1));
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }

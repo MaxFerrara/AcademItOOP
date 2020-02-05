@@ -123,33 +123,48 @@ public class Vector {
     }
 
     public static Vector getSum(Vector vector1, Vector vector2) {
-        //int arrLength = Math.max(vector1.vectorSize, vector2.vectorSize);
-        double[] tmp = new double[vector1.vectorDirection.length];
+        double[] tmp = new double[Math.max(vector1.vectorDirection.length, vector2.vectorDirection.length)];
 
         for (int i = 0; i < tmp.length; ++i) {
-            tmp[i] = vector1.vectorDirection[i] + vector2.vectorDirection[i];
+            tmp[i] = 0;
+
+            if (i >= Math.min(vector1.vectorDirection.length, vector2.vectorDirection.length)) {
+                tmp[i] = getMaxVector(vector1.vectorDirection, vector2.vectorDirection)[i];
+            } else {
+                tmp[i] = vector1.vectorDirection[i] + vector2.vectorDirection[i];
+            }
         }
 
         return new Vector(tmp);
     }
 
     public static Vector getDifference(Vector vector1, Vector vector2) {
-        //int arrLength = Math.max(vector1.vectorSize, vector2.vectorSize);
-        double[] tmp = new double[vector1.vectorDirection.length];
+        double[] tmp = new double[Math.max(vector1.vectorDirection.length, vector2.vectorDirection.length)];
 
         for (int i = 0; i < tmp.length; ++i) {
-            tmp[i] = vector1.vectorDirection[i] - vector2.vectorDirection[i];
+            tmp[i] = 0;
+
+            if (i >= Math.min(vector1.vectorDirection.length, vector2.vectorDirection.length)) {
+                tmp[i] = -getMaxVector(vector1.vectorDirection, vector2.vectorDirection)[i];
+            } else {
+                tmp[i] = vector1.vectorDirection[i] - vector2.vectorDirection[i];
+            }
         }
 
         return new Vector(tmp);
     }
 
     public static Vector getScalarComposition(Vector vector1, Vector vector2) {
-        //int arrLength = Math.max(vector1.vectorSize, vector2.vectorSize);
-        double[] tmp = new double[vector1.vectorDirection.length];
+        double[] tmp = new double[Math.max(vector1.vectorDirection.length, vector2.vectorDirection.length)];
 
         for (int i = 0; i < tmp.length; ++i) {
-            tmp[i] = vector1.vectorDirection[i] * vector2.vectorDirection[i];
+            tmp[i] = 0;
+
+            if (i >= Math.min(vector1.vectorDirection.length, vector2.vectorDirection.length)) {
+                tmp[i] = 0 * getMaxVector(vector1.vectorDirection, vector2.vectorDirection)[i];
+            } else {
+                tmp[i] = vector1.vectorDirection[i] * vector2.vectorDirection[i];
+            }
         }
 
         return new Vector(tmp);
@@ -157,18 +172,15 @@ public class Vector {
 
     public Vector getSumVec(Vector vector) {
         double[] tmp = new double[Math.max(vectorDirection.length, vector.vectorDirection.length)];
-        int lengthDifference = Math.max(vectorDirection.length, vector.vectorDirection.length) - Math.min(vectorDirection.length, vector.vectorDirection.length);
 
-        for (int i = 0; i < tmp.length - lengthDifference; ++i) {
-            if(tmp[i] > Math.min(vectorDirection.length, vector.vectorDirection.length)) {
-                tmp[i] = 0;
+        for (int i = 0; i < tmp.length; ++i) {
+            tmp[i] = 0;
+
+            if (i >= Math.min(vectorDirection.length, vector.vectorDirection.length)) {
+                tmp[i] = getMaxVector(vectorDirection, vector.vectorDirection)[i];
+            } else {
+                tmp[i] = vectorDirection[i] + vector.vectorDirection[i];
             }
-
-            tmp[i] = vectorDirection[i];
-        }
-
-        for(int i = 0; i < tmp.length; ++i) {
-            tmp[i] += vector.vectorDirection[i];
         }
 
         return new Vector(tmp);
@@ -177,14 +189,21 @@ public class Vector {
     public Vector getDiffVec(Vector vector) {
         double[] tmp = new double[Math.max(vectorDirection.length, vector.vectorDirection.length)];
 
-        for (int i = 0; i < tmp.length; ++i) {
-            if (tmp[i] > Math.min(vectorDirection.length, vector.vectorDirection.length)) {
-                tmp[i] = 0;
-            }
 
-            tmp[i] = vectorDirection[i] - vector.vectorDirection[i];
+        for (int i = 0; i < tmp.length; ++i) {
+            tmp[i] = 0;
+
+            if (i >= Math.min(vectorDirection.length, vector.vectorDirection.length)) {
+                tmp[i] = -getMaxVector(vectorDirection, vector.vectorDirection)[i];
+            } else {
+                tmp[i] = vectorDirection[i] - vector.vectorDirection[i];
+            }
         }
 
         return new Vector(tmp);
+    }
+
+    private static double[] getMaxVector(double[] vectorDirection1, double[] vectorDirection2) {
+        return (vectorDirection1.length > vectorDirection2.length) ? vectorDirection1 : vectorDirection2;
     }
 }

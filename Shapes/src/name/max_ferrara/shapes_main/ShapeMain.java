@@ -1,4 +1,6 @@
-import shapes.*;
+package name.max_ferrara.shapes_main;
+
+import name.max_ferrara.shapes.*;
 
 import java.util.Arrays;
 import java.util.Comparator;

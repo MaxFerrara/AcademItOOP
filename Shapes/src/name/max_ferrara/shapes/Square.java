@@ -1,4 +1,4 @@
-package shapes;
+package name.max_ferrara.shapes;
 
 public final class Square implements Shape {
     private double sideLength;
@@ -46,7 +46,7 @@ public final class Square implements Shape {
             return true;
         }
 
-        if (obj == null || obj.getClass() != this.getClass()) {
+        if (obj == null || obj.getClass() != getClass()) {
             return false;
         }
 

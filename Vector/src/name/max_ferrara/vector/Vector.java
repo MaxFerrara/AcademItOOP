@@ -1,4 +1,4 @@
-package vector;
+package name.max_ferrara.vector;
 
 import java.util.Arrays;
 
@@ -7,8 +7,8 @@ public class Vector {
     private double[] vectorCoordinates;
 
     public Vector(int vectorSize) {
-        if (vectorSize < 0) {
-            throw new IllegalArgumentException("vectorSize can not < zero");
+        if (vectorSize <= 0) {
+            throw new IllegalArgumentException("vectorSize can not <= zero");
         }
 
         double[] tmp = new double[vectorSize];
@@ -24,8 +24,8 @@ public class Vector {
     }
 
     public Vector(double[] vectorCoordinates, int vectorSize) {
-        if (vectorSize < 0) {
-            throw new IllegalArgumentException("vectorSize can not < zero");
+        if (vectorSize <= 0) {
+            throw new IllegalArgumentException("vectorSize can not <= zero");
         }
 
         double[] tmp = new double[vectorSize];
@@ -44,8 +44,8 @@ public class Vector {
     }
 
     public Vector(Vector vector) {
-        this.vectorSize = vector.vectorSize;
-        this.vectorCoordinates = vector.vectorCoordinates;
+        vectorSize = vector.vectorSize;
+        vectorCoordinates = vector.vectorCoordinates;
     }
 
     public double[] getVectorCoordinates() {
@@ -61,8 +61,8 @@ public class Vector {
     }
 
     public void setVectorSize(int vectorSize) {
-        if (vectorSize < 0) {
-            throw new IllegalArgumentException("vectorSize can not < zero");
+        if (vectorSize <= 0) {
+            throw new IllegalArgumentException("vectorSize can not <= zero");
         }
 
         this.vectorSize = vectorSize;
@@ -161,7 +161,7 @@ public class Vector {
             vectorsScalarComposition[i] = 0;
 
             if (i >= Math.min(vector1.vectorCoordinates.length, vector2.vectorCoordinates.length)) {
-                vectorsScalarComposition[i] = 0 * getMaxLengthVector(vector1.vectorCoordinates, vector2.vectorCoordinates)[i];
+                vectorsScalarComposition[i] = 0;
             } else {
                 vectorsScalarComposition[i] = vector1.vectorCoordinates[i] * vector2.vectorCoordinates[i];
             }

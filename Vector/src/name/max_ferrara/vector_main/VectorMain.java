@@ -1,4 +1,6 @@
-import vector.Vector;
+package name.max_ferrara.vector_main;
+
+import name.max_ferrara.vector.Vector;
 
 import java.util.Arrays;
 

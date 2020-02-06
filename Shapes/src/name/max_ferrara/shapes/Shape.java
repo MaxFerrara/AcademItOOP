@@ -1,4 +1,4 @@
-package shapes;
+package name.max_ferrara.shapes;
 
 public interface Shape {
     double getWidth();

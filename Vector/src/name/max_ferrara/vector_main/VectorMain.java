@@ -26,8 +26,10 @@ public class VectorMain {
 
             System.out.println(vector2.getElementIndex(3));
             System.out.println(vector3.getLength());
-            System.out.println(Arrays.toString(vector2.reverse()));
-            System.out.println(Arrays.toString(vector2.getScalar(2)));
+            vector2.reverse();
+            System.out.println(vector2);
+            vector2.scaling(1.25);
+            System.out.println(vector2);
             System.out.println();
 
             System.out.println(Vector.getSum(vector1, vector3));
@@ -35,8 +37,8 @@ public class VectorMain {
             System.out.println(Vector.getScalarComposition(vector2, vector3));
             System.out.println();
 
-            System.out.println(vector1.getDifference(vector3));
-            System.out.println(vector2.getSum(vector3));
+            System.out.println(Arrays.toString(vector1.getDifference(vector3)));
+            System.out.println(Arrays.toString(vector2.getSum(vector3)));
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }

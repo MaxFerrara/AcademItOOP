@@ -9,20 +9,12 @@ public final class Rectangle implements Shape {
         this.width = width;
     }
 
-    public double getRectangleWidth() {
-        return width;
+    public void setWidth(double width) {
+        this.width = width;
     }
 
-    public void setRectangleWidth(double rectangleWidth) {
-        this.width = rectangleWidth;
-    }
-
-    public double getRectangleHeight() {
-        return height;
-    }
-
-    public void setRectangleHeight(double rectangleHeight) {
-        this.height = rectangleHeight;
+    public void setHeight(double height) {
+        this.height = height;
     }
 
     @Override
@@ -68,8 +60,8 @@ public final class Rectangle implements Shape {
     public int hashCode() {
         final int prime = 45;
         int hash = 1;
-        hash *= prime + Double.hashCode(height);
-        hash *= prime + Double.hashCode(width);
+        hash = prime * hash + Double.hashCode(height);
+        hash = prime * hash + Double.hashCode(width);
         return hash;
     }
 }

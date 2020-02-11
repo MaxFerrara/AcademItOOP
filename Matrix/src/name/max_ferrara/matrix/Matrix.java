@@ -27,8 +27,16 @@ public class Matrix {
         this.matrixCoordinates = matrixCoordinates;
     }
 
-    public Matrix(Vector[] vector) {
-        double[][] tmp = new double[][ vector.length];
+    public Matrix(Vector... vector) {
+        double[][] tmp = new double[vector.length][vector[0].getLength()];
+
+        for (int i = 0; i < tmp.length; ++i) {
+            for (int j = 0; j < tmp[i].length; ++i) {
+               // tmp[i][j] = vector[j].getVectorCoordinates();
+            }
+        }
+
+        this.matrixCoordinates = tmp;
     }
 
     public Matrix(Matrix matrix) {

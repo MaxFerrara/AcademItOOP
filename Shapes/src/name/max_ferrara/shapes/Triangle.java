@@ -82,7 +82,7 @@ public final class Triangle implements Shape {
 
     @Override
     public double getPerimeter() {
-        return Math.abs(getTriangleSideLength(x2, x1, y2, y1) + getTriangleSideLength(x3, x1, y3, y1) + getTriangleSideLength(x3, x2, y3, y2));
+        return getTriangleSideLength(x2, y2, x1, y1) + getTriangleSideLength(x3, y3, x1, y1) + getTriangleSideLength(x3, y3, x2, y2);
     }
 
     @Override
@@ -109,16 +109,16 @@ public final class Triangle implements Shape {
     public int hashCode() {
         final int prime = 33;
         int hash = 1;
-        hash *= prime + Double.hashCode(x1);
-        hash *= prime + Double.hashCode(y1);
-        hash *= prime + Double.hashCode(x2);
-        hash *= prime + Double.hashCode(y2);
-        hash *= prime + Double.hashCode(x3);
-        hash *= prime + Double.hashCode(y3);
+        hash = prime * hash + Double.hashCode(x1);
+        hash = prime * hash + Double.hashCode(y1);
+        hash = prime * hash + Double.hashCode(x2);
+        hash = prime * hash + Double.hashCode(y2);
+        hash = prime * hash + Double.hashCode(x3);
+        hash = prime * hash + Double.hashCode(y3);
         return hash;
     }
 
-    private double getTriangleSideLength(double x1, double x2, double y1, double y2) {
+    private static double getTriangleSideLength(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
 }

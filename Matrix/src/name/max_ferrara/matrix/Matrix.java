@@ -5,49 +5,35 @@ import name.max_ferrara.vector.Vector;
 import java.util.Arrays;
 
 public class Matrix {
-    private int stringsQuantity;
-    private int columnsQuantity;
-    private double[][] matrixCoordinates;
+    private double[][] coordinates;
 
     public Matrix(int stringsQuantity, int columnsQuantity) {
-        double[][] tmp = new double[stringsQuantity][columnsQuantity];
-
-        for (int i = 0; i < tmp.length; ++i) {
-            for (int j = 0; j < tmp[i].length; ++j) {
-                tmp[i][j] = 0;
-            }
-        }
-
-        this.stringsQuantity = stringsQuantity;
-        this.columnsQuantity = columnsQuantity;
-        this.matrixCoordinates = tmp;
+        coordinates = new double[stringsQuantity][columnsQuantity];
     }
 
     public Matrix(double[][] matrixCoordinates) {
-        this.matrixCoordinates = matrixCoordinates;
+        coordinates = Arrays.copyOf(matrixCoordinates, matrixCoordinates.length);
     }
 
     public Matrix(Vector... vector) {
-        double[][] tmp = new double[vector.length][vector[0].getLength()];
+        double[][] tmp = new double[vector.length][vector.length];
 
         for (int i = 0; i < tmp.length; ++i) {
             for (int j = 0; j < tmp[i].length; ++i) {
-               // tmp[i][j] = vector[j].getVectorCoordinates();
+                // tmp[i][j] = vector[j].getVectorCoordinates();
             }
         }
 
-        this.matrixCoordinates = tmp;
+        coordinates = tmp;
     }
 
     public Matrix(Matrix matrix) {
-        stringsQuantity = matrix.stringsQuantity;
-        columnsQuantity = matrix.columnsQuantity;
-        matrixCoordinates = matrix.matrixCoordinates;
+        coordinates = Arrays.copyOf(matrix.coordinates, matrix.coordinates.length);
     }
 
     @Override
     public String toString() {
-        return Arrays.deepToString(matrixCoordinates);
+        return Arrays.deepToString(coordinates);
     }
 
     @Override
@@ -62,17 +48,14 @@ public class Matrix {
 
         Matrix matrix = (Matrix) object;
 
-        return stringsQuantity == matrix.stringsQuantity && columnsQuantity == matrix.columnsQuantity && Arrays.equals(matrixCoordinates, matrix.matrixCoordinates);
+        return Arrays.equals(coordinates, matrix.coordinates);
     }
 
     @Override
     public int hashCode() {
         final int prime = 21;
         int hash = 1;
-
-        hash = prime * hash + columnsQuantity;
-        hash = prime * hash + stringsQuantity;
-        hash = prime * hash + Arrays.hashCode(matrixCoordinates);
+        hash = prime * hash + Arrays.hashCode(coordinates);
         return hash;
     }
 }

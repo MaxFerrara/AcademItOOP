@@ -58,4 +58,8 @@ public class Matrix {
         hash = prime * hash + Arrays.hashCode(coordinates);
         return hash;
     }
+
+    public String getMatrixSize() {
+        return String.format("Matrix size: %s x %s", coordinates.length, coordinates[0].length);
+    }
 }

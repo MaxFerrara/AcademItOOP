@@ -21,5 +21,6 @@ public class MatrixMain {
         System.out.println(matrix2);
         System.out.println(vector1);
         System.out.println(cloneMatrix);
+        System.out.println(matrix1.getMatrixSize());
     }
 }

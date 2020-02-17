@@ -34,7 +34,7 @@ public class Matrix {
 
         for (int i = 0; i < tmp.length; ++i) {
             if (tmp[i].getVectorLength() < vectorMax.getVectorLength()) {
-                tmp[i] = new Vector(vectorMax.getVectorLength(), new double[i]);
+                tmp[i] = new Vector(vectorMax.getVectorLength(), matrixCoordinates[i]);
             }
         }
 

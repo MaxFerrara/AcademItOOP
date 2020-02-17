@@ -72,6 +72,10 @@ public class Vector {
         return hash;
     }
 
+    public int getVectorLength() {
+        return coordinates.length;
+    }
+
     public double getElementIndex(int index) {
         return coordinates[index];
     }

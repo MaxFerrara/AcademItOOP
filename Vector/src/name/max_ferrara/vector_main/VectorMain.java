@@ -22,7 +22,7 @@ public class VectorMain {
             System.out.println(vector2.hashCode());
             System.out.println();
 
-            System.out.println(vector2.getElementIndex(3));
+            System.out.println(vector2.getElementByIndex(3));
             System.out.println(vector3.getLength());
             vector2.reverse();
             System.out.println(vector2);

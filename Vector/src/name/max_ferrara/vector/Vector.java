@@ -76,7 +76,7 @@ public class Vector {
         return coordinates.length;
     }
 
-    public double getElementIndex(int index) {
+    public double getElementByIndex(int index) {
         return coordinates[index];
     }
 

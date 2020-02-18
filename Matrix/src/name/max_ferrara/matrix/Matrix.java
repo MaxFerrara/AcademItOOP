@@ -5,26 +5,58 @@ import name.max_ferrara.vector.Vector;
 import java.util.Arrays;
 
 public class Matrix {
-    private double[][] coordinates;
+    private Vector[] coordinates;
 
-    public Matrix(int stringsQuantity, int columnsQuantity) {
-        coordinates = new double[stringsQuantity][columnsQuantity];
+    public Matrix(int rows, int cols) {
+        Vector[] tmp = new Vector[rows];
+
+        for (int i = 0; i < tmp.length; ++i) {
+            tmp[i] = new Vector(cols);
+        }
+
+        coordinates = tmp;
     }
 
     public Matrix(double[][] matrixCoordinates) {
-        coordinates = Arrays.copyOf(matrixCoordinates, matrixCoordinates.length);
-    }
-
-    public Matrix(Vector... vector) {
-        double[][] tmp = new double[vector.length][vector.length];
+        Vector[] tmp = new Vector[matrixCoordinates.length];
 
         for (int i = 0; i < tmp.length; ++i) {
-            for (int j = 0; j < tmp[i].length; ++i) {
-                // tmp[i][j] = vector[j].getVectorCoordinates();
+            tmp[i] = new Vector(matrixCoordinates[i]);
+        }
+
+        Vector vectorMax = new Vector(1);
+
+        for (int i = 0; i < tmp.length; ++i) {
+            if (tmp[i].getVectorLength() >= vectorMax.getVectorLength()) {
+                vectorMax = tmp[i];
+            }
+        }
+
+        for (int i = 0; i < tmp.length; ++i) {
+            if (tmp[i].getVectorLength() < vectorMax.getVectorLength()) {
+                tmp[i] = new Vector(vectorMax.getVectorLength(), matrixCoordinates[i]);
             }
         }
 
         coordinates = tmp;
+    }
+
+    public Matrix(Vector... vectors) {
+        Vector vectorMax = new Vector(1);
+
+        for (int i = 0; i < vectors.length; ++i) {
+            if (vectors[i].getVectorLength() >= vectorMax.getVectorLength()) {
+                vectorMax = vectors[i];
+            }
+        }
+
+        for(int i = 0; i < vectors.length; ++i) {
+            if (vectors[i].getVectorLength() < vectorMax.getVectorLength()) {
+                //vectors[i] = new Vector();
+            }
+        }
+
+        coordinates = vectors;
     }
 
     public Matrix(Matrix matrix) {
@@ -48,18 +80,38 @@ public class Matrix {
 
         Matrix matrix = (Matrix) object;
 
-        return Arrays.equals(coordinates, matrix.coordinates);
+        return Arrays.deepEquals(coordinates, matrix.coordinates);
     }
 
     @Override
     public int hashCode() {
         final int prime = 21;
         int hash = 1;
-        hash = prime * hash + Arrays.hashCode(coordinates);
+        hash = prime * hash + Arrays.deepHashCode(coordinates);
         return hash;
     }
 
     public String getMatrixSize() {
-        return String.format("Matrix size: %s x %s", coordinates.length, coordinates[0].length);
+        return String.format("Matrix size: rows - %s, cols -  %s", coordinates.length, coordinates[0].getVectorLength());
     }
+
+    public Vector getRowVector(int row) {
+        return new Vector(coordinates[row - 1]);
+    }
+
+    public Vector getColVector(int col) {
+        return new Vector(5);
+    }
+
+    public void transpose() {
+        for (int i = 0; i < coordinates.length; ++i) {
+            for (int j = 0; j < coordinates[j].getVectorLength(); ++j) {
+                //coordinates[i][new Vector(coordinates[j])] = ;
+            }
+        }
+    }
+
+   /* public double getDeterminant(Matrix matrix) {
+        double deter = Matrix
+    } */
 }

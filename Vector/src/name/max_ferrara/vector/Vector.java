@@ -72,7 +72,7 @@ public class Vector {
         return hash;
     }
 
-    public int getVectorLength() {
+    public int getSize() {
         return coordinates.length;
     }
 
@@ -178,14 +178,26 @@ public class Vector {
     }
 
     public static Vector getSum(Vector vector1, Vector vector2) {
-        vector1.summarize(vector2);
+        Vector cloneVector = new Vector(vector1);
+        cloneVector.summarize(vector2);
 
-        return new Vector(vector1);
+        return new Vector(cloneVector);
     }
 
     public static Vector getDifference(Vector vector1, Vector vector2) {
-        vector1.subtraction(vector2);
+        Vector cloneVector = new Vector(vector1);
+        cloneVector.subtraction(vector2);
 
-        return new Vector(vector1);
+        return new Vector(cloneVector);
+    }
+
+    public double[] getArrayFromVector() {
+        double[] tmp = new double[coordinates.length];
+
+        for (int i = 0; i < tmp.length; ++i) {
+            tmp[i] = coordinates[i];
+        }
+
+        return tmp;
     }
 }

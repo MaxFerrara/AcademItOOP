@@ -1,4 +1,4 @@
-package range;
+package name.max_ferrara.range;
 
 public final class Range {
     private double from;
@@ -39,7 +39,7 @@ public final class Range {
 
     @Override
     public String toString() {
-        return "(" + this.from + ";" + this.to + ")";
+        return String.format("%s; %s", from, to);
     }
 
     public double getLength() {
@@ -47,7 +47,7 @@ public final class Range {
     }
 
     public Range getIntersection(Range range) {
-        if (range.to >= from && range.from <= to) {
+        if (from < range.to && to > range.from) {
             return new Range(Math.max(from, range.from), Math.min(to, range.to));
         }
 
@@ -55,7 +55,7 @@ public final class Range {
     }
 
     public Range[] getUnion(Range range) {
-        if (range.to >= from && range.from <= to) {
+        if (from <= range.to && to >= range.from) {
             return new Range[]{new Range(Math.min(from, range.from), Math.max(to, range.to))};
         }
 
@@ -63,22 +63,22 @@ public final class Range {
     }
 
     public Range[] getDifference(Range range) {
-        if (from <= range.from && to <= range.to) {
+        if (range.from >= to || range.to <= from) {
+            return new Range[]{new Range(from, to)};
+        }
+
+        if (from < range.from && to <= range.to) {
             return new Range[]{new Range(from, range.from)};
         }
 
-        if (from >= range.from && to >= range.to) {
+        if (from >= range.from && to > range.to) {
             return new Range[]{new Range(range.to, to)};
         }
 
-        if (range.from <= from && range.to >= to) {
-            return new Range[]{new Range(range.from, from), new Range(to, range.to)};
-        }
-
-        if (range.from >= from && range.to <= to) {
+        if (range.from > from && range.to < to) {
             return new Range[]{new Range(from, range.from), new Range(range.to, to)};
         }
 
-        return null;
+        return new Range[]{};
     }
 }

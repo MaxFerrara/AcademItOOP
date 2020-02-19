@@ -1,4 +1,6 @@
-import range.Range;
+package name.max_ferrara.range_main;
+
+import name.max_ferrara.range.Range;
 
 import java.util.Arrays;
 

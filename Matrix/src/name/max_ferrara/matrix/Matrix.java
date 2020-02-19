@@ -27,14 +27,14 @@ public class Matrix {
         Vector vectorMax = new Vector(1);
 
         for (int i = 0; i < tmp.length; ++i) {
-            if (tmp[i].getVectorLength() >= vectorMax.getVectorLength()) {
+            if (tmp[i].getSize() >= vectorMax.getSize()) {
                 vectorMax = tmp[i];
             }
         }
 
         for (int i = 0; i < tmp.length; ++i) {
-            if (tmp[i].getVectorLength() < vectorMax.getVectorLength()) {
-                tmp[i] = new Vector(vectorMax.getVectorLength(), matrixCoordinates[i]);
+            if (tmp[i].getSize() < vectorMax.getSize()) {
+                tmp[i] = new Vector(vectorMax.getSize(), matrixCoordinates[i]);
             }
         }
 
@@ -45,14 +45,14 @@ public class Matrix {
         Vector vectorMax = new Vector(1);
 
         for (int i = 0; i < vectors.length; ++i) {
-            if (vectors[i].getVectorLength() >= vectorMax.getVectorLength()) {
+            if (vectors[i].getSize() >= vectorMax.getSize()) {
                 vectorMax = vectors[i];
             }
         }
 
-        for(int i = 0; i < vectors.length; ++i) {
-            if (vectors[i].getVectorLength() < vectorMax.getVectorLength()) {
-                //vectors[i] = new Vector();
+        for (int i = 0; i < vectors.length; ++i) {
+            if (vectors[i].getSize() < vectorMax.getSize()) {
+                vectors[i] = new Vector(vectorMax.getSize(), vectors[i].getArrayFromVector());
             }
         }
 
@@ -92,7 +92,7 @@ public class Matrix {
     }
 
     public String getMatrixSize() {
-        return String.format("Matrix size: rows - %s, cols -  %s", coordinates.length, coordinates[0].getVectorLength());
+        return String.format("Matrix size: rows - %s, cols -  %s", coordinates.length, coordinates[0].getSize());
     }
 
     public Vector getRowVector(int row) {
@@ -104,14 +104,62 @@ public class Matrix {
     }
 
     public void transpose() {
-        for (int i = 0; i < coordinates.length; ++i) {
-            for (int j = 0; j < coordinates[j].getVectorLength(); ++j) {
-                //coordinates[i][new Vector(coordinates[j])] = ;
+        double[][] tmp = getArrayFromMatrix();
+
+        for (int i = 0; i < tmp.length; i++) {
+            for (int j = i + 1; j < tmp[i].length; j++) {
+                double temp = tmp[i][j];
+                tmp[i][j] = tmp[j][i];
+                tmp[j][i] = temp;
             }
         }
     }
 
-   /* public double getDeterminant(Matrix matrix) {
-        double deter = Matrix
-    } */
+    public void scale(double number) {
+        for (int i = 0; i < coordinates.length; ++i) {
+            coordinates[i].scale(number);
+        }
+    }
+
+    public void sum(Matrix matrix) {
+        for (int i = 0; i < coordinates.length; ++i) {
+            coordinates[i].summarize(matrix.coordinates[i]);
+        }
+    }
+
+    public void diff(Matrix matrix) {
+        for (int i = 0; i < coordinates.length; ++i) {
+            coordinates[i].subtraction(matrix.coordinates[i]);
+        }
+    }
+
+    public static Matrix getSum(Matrix matrix1, Matrix matrix2) {
+        Matrix cloneMatrix = new Matrix(matrix1);
+        cloneMatrix.sum(matrix2);
+
+        return new Matrix(cloneMatrix);
+    }
+
+    public static Matrix getDiff(Matrix matrix1, Matrix matrix2) {
+        Matrix cloneMatrix = new Matrix(matrix1);
+        cloneMatrix.diff(matrix2);
+
+        return new Matrix(cloneMatrix);
+    }
+
+    public static Matrix getMulti(Matrix matrix1, Matrix matrix2) {
+        Vector[] tmp = new Vector[matrix1.coordinates.length];
+
+        return new Matrix(tmp);
+    }
+
+    public double[][] getArrayFromMatrix() {
+        double[][] tmp = new double[coordinates.length][coordinates[0].getSize()];
+
+        for (int i = 0; i < tmp.length; ++i) {
+            tmp[i] = coordinates[i].getArrayFromVector();
+        }
+
+        return tmp;
+    }
 }

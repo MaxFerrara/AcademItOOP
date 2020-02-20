@@ -56,6 +56,15 @@ public class Matrix {
             }
         }
 
+/*        for (int i = 0; i < vectors.length; ++i) {
+            // create newVec
+            for(int j = 0; j < vectors[i].getSize(); ++j) {
+                // fill Vec
+            }
+            // get full Vec
+            // Vec[i] = newVec
+        } */
+
         coordinates = vectors;
     }
 
@@ -100,19 +109,21 @@ public class Matrix {
     }
 
     public Vector getColVector(int col) {
-        return new Vector(5);
+        return new Vector(getTranspose().coordinates[col - 1]);
     }
 
-    public void transpose() {
-        double[][] tmp = getArrayFromMatrix();
+    public Matrix getTranspose() {
+        double[][] matrixT = getArrayFromMatrix();
+
+        double[][] tmp = new double[matrixT[0].length][matrixT.length];
 
         for (int i = 0; i < tmp.length; i++) {
-            for (int j = i + 1; j < tmp[i].length; j++) {
-                double temp = tmp[i][j];
-                tmp[i][j] = tmp[j][i];
-                tmp[j][i] = temp;
+            for (int j = 0; j < tmp[i].length; j++) {
+                tmp[j][i] = matrixT[i][j];
             }
         }
+
+        return new Matrix(tmp);
     }
 
     public void scale(double number) {

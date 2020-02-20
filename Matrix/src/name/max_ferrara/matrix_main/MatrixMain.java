@@ -17,8 +17,8 @@ public class MatrixMain {
 
         System.out.println(matrix2);
         System.out.println(matrix3);
-        matrix3.transpose();
-        System.out.println(matrix3);
-
+        System.out.println(matrix3.getRowVector(1));
+        System.out.println(matrix3.getColVector(1));
+        System.out.println(matrix3.getTranspose());
     }
 }

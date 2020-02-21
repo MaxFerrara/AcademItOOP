@@ -7,7 +7,9 @@ import java.util.Arrays;
 
 public class MatrixMain {
     public static void main(String[] args) {
-        Matrix matrix2 = new Matrix(new double[][]{{1, 2, 3}, {1, 2, 3, 4}, {1, 2, 3}});
+        Matrix matrix1 = new Matrix(new double[][]{{1, -1}, {2, 0}, {3, 0}});
+        Matrix matrix2 = new Matrix(new double[][]{{1, 1}, {2, 0}});
+
         Vector vector1 = new Vector(new double[]{1, 2, 3, 4, 5});
         Vector vector2 = new Vector(new double[]{1, 2, 3, 4});
         Vector vector3 = new Vector(new double[]{1, 2, 3});
@@ -15,10 +17,7 @@ public class MatrixMain {
         Vector vector5 = new Vector(new double[]{1});
         Matrix matrix3 = new Matrix(vector1, vector2, vector3, vector4, vector5);
 
-        System.out.println(matrix2);
-        System.out.println(matrix3);
-        System.out.println(matrix3.getRowVector(1));
-        System.out.println(matrix3.getColVector(1));
-        System.out.println(matrix3.getTranspose());
+        System.out.println(Matrix.getMulti(matrix1, matrix2));
+        System.out.println(matrix1.getVectorMultiply(vector4));
     }
 }

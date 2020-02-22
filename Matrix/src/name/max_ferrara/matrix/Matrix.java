@@ -100,7 +100,7 @@ public class Matrix {
         return hash;
     }
 
-    public String getMatrixSize() {
+    public String getSize() {
         return String.format("Matrix size: rows - %s, cols -  %s", coordinates.length, coordinates[0].getSize());
     }
 
@@ -108,11 +108,11 @@ public class Matrix {
         return new Vector(coordinates[row - 1]);
     }
 
-    public Vector getColVector(int col) {
-        return new Vector(getTranspose().coordinates[col - 1]);
+    public Vector getColumnVector(int col) {
+        return new Vector(getTransposed().coordinates[col - 1]);
     }
 
-    public Matrix getTranspose() {
+    public Matrix getTransposed() {
         double[][] matrixT = getArrayFromMatrix();
 
         double[][] tmp = new double[matrixT[0].length][matrixT.length];
@@ -132,33 +132,38 @@ public class Matrix {
         }
     }
 
-    public double getDeterminant() {
-        if (coordinates.length != coordinates[0].getSize()) {
+    public double getDeterminant(Matrix matrix) {
+        if (matrix.coordinates.length != matrix.coordinates[0].getSize()) {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
-        double[][] matrix = getArrayFromMatrix();
+        double[][] matrixTmp = matrix.getArrayFromMatrix();
 
-        if (matrix.length == 1) {
-            return matrix[0][0];
+        if (matrixTmp.length == 1) {
+            return matrixTmp[0][0];
         }
 
-        if (matrix.length == 2) {
-            return (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]);
+        if (matrixTmp.length == 2) {
+            return (matrixTmp[0][0] * matrixTmp[1][1]) - (matrixTmp[0][1] * matrixTmp[1][0]);
         }
+
         double determinant = 0;
 
-        for (int i = 0; i < matrix[0].length; ++i) {
-            double[][] tmp = new double[matrix.length - 1][matrix[0].length - 1];
+        for (int i = 0; i < matrixTmp[0].length; ++i) {
+            double[][] tmp = new double[matrixTmp.length - 1][matrixTmp[0].length - 1];
 
-            for(int j = 1; j < matrix.length; ++j) {
-                for(int k = 0; k < matrix[0].length; ++k) {
-
+            for (int j = 1; j < matrixTmp.length; ++j) {
+                for (int k = 0; k < matrixTmp[0].length; ++k) {
+                    if (k < i) {
+                        tmp[j - 1][k] = matrixTmp[j][k];
+                    } else if (k > i) {
+                        tmp[j - 1][k - 1] = matrixTmp[j][k];
+                    }
                 }
-
             }
-        }
 
+            determinant += matrixTmp[0][i] * Math.pow(-1, i) * getDeterminant(new Matrix(tmp));
+        }
 
         return determinant;
     }
@@ -180,33 +185,41 @@ public class Matrix {
         return new Vector(result);
     }
 
-    public void sum(Matrix matrix) {
+    public void add(Matrix matrix) {
+        if ((coordinates.length != matrix.coordinates.length) && (coordinates[0].getSize() != matrix.coordinates[0].getSize())) {
+            throw new IllegalArgumentException("Illegal matrix dimensions");
+        }
+
         for (int i = 0; i < coordinates.length; ++i) {
-            coordinates[i].summarize(matrix.coordinates[i]);
+            coordinates[i].add(matrix.coordinates[i]);
         }
     }
 
-    public void diff(Matrix matrix) {
+    public void subtract(Matrix matrix) {
+        if ((coordinates.length != matrix.coordinates.length) && (coordinates[0].getSize() != matrix.coordinates[0].getSize())) {
+            throw new IllegalArgumentException("Illegal matrix dimensions");
+        }
+
         for (int i = 0; i < coordinates.length; ++i) {
-            coordinates[i].subtraction(matrix.coordinates[i]);
+            coordinates[i].subtract(matrix.coordinates[i]);
         }
     }
 
     public static Matrix getSum(Matrix matrix1, Matrix matrix2) {
         Matrix cloneMatrix = new Matrix(matrix1);
-        cloneMatrix.sum(matrix2);
+        cloneMatrix.add(matrix2);
 
         return new Matrix(cloneMatrix);
     }
 
     public static Matrix getDiff(Matrix matrix1, Matrix matrix2) {
         Matrix cloneMatrix = new Matrix(matrix1);
-        cloneMatrix.diff(matrix2);
+        cloneMatrix.subtract(matrix2);
 
         return new Matrix(cloneMatrix);
     }
 
-    public static Matrix getMulti(Matrix matrix1, Matrix matrix2) {
+    public static Matrix getComposition(Matrix matrix1, Matrix matrix2) {
         if (matrix1.coordinates[0].getSize() != matrix2.coordinates.length) {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }

@@ -26,9 +26,7 @@ public class Vector {
             throw new IllegalArgumentException("vectorLength can not < 1");
         }
 
-        double[] tmp = new double[vectorLength];
-
-        coordinates = Arrays.copyOf(vectorCoordinates, tmp.length);
+        coordinates = Arrays.copyOf(vectorCoordinates, vectorLength);
     }
 
     public Vector(Vector vector) {
@@ -100,7 +98,7 @@ public class Vector {
         return Math.sqrt(vectorLength);
     }
 
-    public void subtraction(Vector vector) {
+    public void subtract(Vector vector) {
         if (coordinates.length > vector.coordinates.length) {
             double[] tmp = new double[Math.max(coordinates.length, vector.coordinates.length)];
             vector.coordinates = Arrays.copyOf(vector.coordinates, tmp.length);
@@ -122,7 +120,7 @@ public class Vector {
         }
     }
 
-    public void summarize(Vector vector) {
+    public void add(Vector vector) {
         if (coordinates.length > vector.coordinates.length) {
             double[] tmp = new double[Math.max(coordinates.length, vector.coordinates.length)];
             vector.coordinates = Arrays.copyOf(vector.coordinates, tmp.length);
@@ -179,14 +177,14 @@ public class Vector {
 
     public static Vector getSum(Vector vector1, Vector vector2) {
         Vector cloneVector = new Vector(vector1);
-        cloneVector.summarize(vector2);
+        cloneVector.add(vector2);
 
         return new Vector(cloneVector);
     }
 
     public static Vector getDifference(Vector vector1, Vector vector2) {
         Vector cloneVector = new Vector(vector1);
-        cloneVector.subtraction(vector2);
+        cloneVector.subtract(vector2);
 
         return new Vector(cloneVector);
     }

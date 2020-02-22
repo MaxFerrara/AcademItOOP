@@ -35,8 +35,8 @@ public class VectorMain {
             System.out.println(Vector.getScalarComposition(vector2, vector3));
             System.out.println();
 
-            vector1.subtraction(vector3);
-            vector2.summarize(vector3);
+            vector1.subtract(vector3);
+            vector2.add(vector3);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }

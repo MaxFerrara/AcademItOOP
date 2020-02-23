@@ -35,15 +35,15 @@ public class Vector {
 
     @Override
     public String toString() {
-        StringBuilder formatCoordinates = new StringBuilder();
+        StringBuilder formatCoordinates = new StringBuilder("{  }");
 
         for (double coordinate : coordinates) {
-            formatCoordinates.append(coordinate).append(", ");
+            formatCoordinates.insert(formatCoordinates.length() - 2, coordinate + ", ");
         }
 
-        formatCoordinates.setLength(formatCoordinates.length() - 2);
+        formatCoordinates.delete(formatCoordinates.length() - 4, formatCoordinates.length() - 2);
 
-        return "{ " + formatCoordinates.toString() + " }";
+        return formatCoordinates.toString();
     }
 
     @Override
@@ -99,18 +99,14 @@ public class Vector {
     }
 
     public void subtract(Vector vector) {
-        if (coordinates.length > vector.coordinates.length) {
-            double[] tmp = new double[Math.max(coordinates.length, vector.coordinates.length)];
-            vector.coordinates = Arrays.copyOf(vector.coordinates, tmp.length);
+        if (coordinates.length > vector.coordinates.length || coordinates.length < vector.coordinates.length) {
+            coordinates = Arrays.copyOf(coordinates, Math.max(coordinates.length, vector.coordinates.length));
 
             for (int i = 0; i < coordinates.length; ++i) {
-                coordinates[i] = coordinates[i] - vector.coordinates[i];
-            }
-        } else if (coordinates.length < vector.coordinates.length) {
-            double[] tmp = new double[Math.max(coordinates.length, vector.coordinates.length)];
-            coordinates = Arrays.copyOf(coordinates, tmp.length);
+                if (i == vector.coordinates.length) {
+                    return;
+                }
 
-            for (int i = 0; i < coordinates.length; ++i) {
                 coordinates[i] = coordinates[i] - vector.coordinates[i];
             }
         } else {
@@ -121,18 +117,14 @@ public class Vector {
     }
 
     public void add(Vector vector) {
-        if (coordinates.length > vector.coordinates.length) {
-            double[] tmp = new double[Math.max(coordinates.length, vector.coordinates.length)];
-            vector.coordinates = Arrays.copyOf(vector.coordinates, tmp.length);
+        if (coordinates.length > vector.coordinates.length || coordinates.length < vector.coordinates.length) {
+            coordinates = Arrays.copyOf(coordinates, Math.max(coordinates.length, vector.coordinates.length));
 
             for (int i = 0; i < coordinates.length; ++i) {
-                coordinates[i] = coordinates[i] + vector.coordinates[i];
-            }
-        } else if (coordinates.length < vector.coordinates.length) {
-            double[] tmp = new double[Math.max(coordinates.length, vector.coordinates.length)];
-            coordinates = Arrays.copyOf(coordinates, tmp.length);
+                if (i == vector.coordinates.length) {
+                    return;
+                }
 
-            for (int i = 0; i < coordinates.length; ++i) {
                 coordinates[i] = coordinates[i] + vector.coordinates[i];
             }
         } else {
@@ -179,14 +171,14 @@ public class Vector {
         Vector cloneVector = new Vector(vector1);
         cloneVector.add(vector2);
 
-        return new Vector(cloneVector);
+        return cloneVector;
     }
 
     public static Vector getDifference(Vector vector1, Vector vector2) {
         Vector cloneVector = new Vector(vector1);
         cloneVector.subtract(vector2);
 
-        return new Vector(cloneVector);
+        return cloneVector;
     }
 
     public double[] getArrayFromVector() {

@@ -5,7 +5,7 @@ public final class Range {
     private double to;
 
     public Range(double from, double to) {
-        if (to < from) {
+        if (to <= from) {
             throw new IllegalArgumentException("поле to должно быть больше чем from");
         }
 
@@ -39,7 +39,11 @@ public final class Range {
 
     @Override
     public String toString() {
-        return String.format("%s; %s", from, to);
+        return String.format("(%s; %s)", from, to);
+    }
+
+    public boolean isInside(double number) {
+        return number >= from && number <= to;
     }
 
     public double getLength() {

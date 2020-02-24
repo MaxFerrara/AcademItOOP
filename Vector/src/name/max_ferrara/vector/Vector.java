@@ -13,20 +13,20 @@ public class Vector {
         coordinates = new double[length];
     }
 
-    public Vector(double[] vectorCoordinates) {
-        if (vectorCoordinates.length < 1) {
+    public Vector(double[] coordinates) {
+        if (coordinates.length < 1) {
             throw new IllegalArgumentException("vectorLength can not < 1");
         }
 
-        coordinates = Arrays.copyOf(vectorCoordinates, vectorCoordinates.length);
+        this.coordinates = Arrays.copyOf(coordinates, coordinates.length);
     }
 
-    public Vector(int vectorLength, double[] vectorCoordinates) {
-        if (vectorCoordinates.length < 1) {
+    public Vector(int length, double[] coordinates) {
+        if (length < 1) {
             throw new IllegalArgumentException("vectorLength can not < 1");
         }
 
-        coordinates = Arrays.copyOf(vectorCoordinates, vectorLength);
+        this.coordinates = Arrays.copyOf(coordinates, length);
     }
 
     public Vector(Vector vector) {
@@ -75,7 +75,19 @@ public class Vector {
     }
 
     public double getElementByIndex(int index) {
+        if (index > coordinates.length - 1) {
+            throw new IllegalArgumentException("index can't > vector size");
+        }
+
         return coordinates[index];
+    }
+
+    public void setElementByIndex(int index, double coordinate) {
+        if (index > coordinates.length - 1) {
+            throw new IllegalArgumentException("index can't > vector size");
+        }
+
+        coordinates[index] = coordinate;
     }
 
     public void scale(double number) {
@@ -92,7 +104,7 @@ public class Vector {
         double vectorLength = 0;
 
         for (double coordinate : coordinates) {
-            vectorLength = vectorLength + Math.pow(coordinate, 2);
+            vectorLength += Math.pow(coordinate, 2);
         }
 
         return Math.sqrt(vectorLength);
@@ -135,36 +147,13 @@ public class Vector {
     }
 
     public static double getScalarComposition(Vector vector1, Vector vector2) {
-        if (vector1.coordinates.length > vector2.coordinates.length) {
-            double[] tmp = new double[Math.max(vector1.coordinates.length, vector2.coordinates.length)];
-            vector2.coordinates = Arrays.copyOf(vector2.coordinates, tmp.length);
+        double scalarComposition = 0;
 
-            for (int i = 0; i < tmp.length; ++i) {
-                tmp[i] = vector1.coordinates[i] * vector2.coordinates[i];
-            }
-
-            return Arrays.stream(tmp).sum();
+        for (int i = 0; i < Math.min(vector1.coordinates.length, vector2.coordinates.length); ++i) {
+            scalarComposition += vector1.coordinates[i] * vector2.coordinates[i];
         }
 
-        if (vector1.coordinates.length < vector2.coordinates.length) {
-            double[] tmp = new double[Math.max(vector1.coordinates.length, vector2.coordinates.length)];
-            vector1.coordinates = Arrays.copyOf(vector1.coordinates, tmp.length);
-
-            for (int i = 0; i < tmp.length; ++i) {
-                tmp[i] = vector1.coordinates[i] * vector2.coordinates[i];
-            }
-
-            return Arrays.stream(tmp).sum();
-        }
-
-        double[] tmp = new double[vector1.coordinates.length];
-
-        for (int i = 0; i < tmp.length; ++i) {
-            tmp[i] = vector1.coordinates[i] * vector2.coordinates[i];
-
-        }
-
-        return Arrays.stream(tmp).sum();
+        return scalarComposition;
     }
 
     public static Vector getSum(Vector vector1, Vector vector2) {

@@ -5,76 +5,76 @@ import name.max_ferrara.vector.Vector;
 import java.util.Arrays;
 
 public class Matrix {
-    private Vector[] coordinates;
+    private Vector[] vectors;
 
-    public Matrix(int rows, int cols) {
-        Vector[] tmp = new Vector[rows];
-
-        for (int i = 0; i < tmp.length; ++i) {
-            tmp[i] = new Vector(cols);
+    public Matrix(int rowsQuantity, int columnsQuantity) {
+        if (rowsQuantity < 1 || columnsQuantity < 1) {
+            throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
-        coordinates = tmp;
+        vectors = new Vector[rowsQuantity];
+
+        for (int i = 0; i < vectors.length; ++i) {
+            vectors[i] = new Vector(columnsQuantity);
+        }
     }
 
     public Matrix(double[][] matrixCoordinates) {
-        Vector[] tmp = new Vector[matrixCoordinates.length];
+        int maxLength = 0;
 
-        for (int i = 0; i < tmp.length; ++i) {
-            tmp[i] = new Vector(matrixCoordinates[i]);
-        }
-
-        Vector vectorMax = new Vector(1);
-
-        for (int i = 0; i < tmp.length; ++i) {
-            if (tmp[i].getSize() >= vectorMax.getSize()) {
-                vectorMax = tmp[i];
+        for (int i = 0; i < matrixCoordinates.length; ++i) {
+            if (matrixCoordinates[i].length > maxLength) {
+                maxLength = matrixCoordinates[i].length;
             }
         }
 
-        for (int i = 0; i < tmp.length; ++i) {
-            if (tmp[i].getSize() < vectorMax.getSize()) {
-                tmp[i] = new Vector(vectorMax.getSize(), matrixCoordinates[i]);
-            }
-        }
+        vectors = new Vector[matrixCoordinates.length];
 
-        coordinates = tmp;
+        for (int i = 0; i < vectors.length; ++i) {
+            vectors[i] = new Vector(maxLength, matrixCoordinates[i]);
+        }
     }
 
     public Matrix(Vector... vectors) {
-        Vector vectorMax = new Vector(1);
+        int maxLength = 0;
 
         for (int i = 0; i < vectors.length; ++i) {
-            if (vectors[i].getSize() >= vectorMax.getSize()) {
-                vectorMax = vectors[i];
+            if (maxLength < vectors[i].getSize()) {
+                maxLength = vectors[i].getSize();
             }
         }
 
         for (int i = 0; i < vectors.length; ++i) {
-            if (vectors[i].getSize() < vectorMax.getSize()) {
-                vectors[i] = new Vector(vectorMax.getSize(), vectors[i].getArrayFromVector());
-            }
+            vectors[i] = new Vector(maxLength, vectors[i].getArrayFromVector());
         }
 
-/*        for (int i = 0; i < vectors.length; ++i) {
-            // create newVec
-            for(int j = 0; j < vectors[i].getSize(); ++j) {
-                // fill Vec
-            }
-            // get full Vec
-            // Vec[i] = newVec
-        } */
-
-        coordinates = vectors;
+        this.vectors = vectors;
     }
 
     public Matrix(Matrix matrix) {
-        coordinates = Arrays.copyOf(matrix.coordinates, matrix.coordinates.length);
+        vectors = new Vector[matrix.vectors.length];
+
+        for (int i = 0; i < vectors.length; ++i) {
+            vectors[i] = new Vector(matrix.vectors[i]);
+        }
     }
+
+   /* @Override
+    public String toString() {
+        return Arrays.deepToString(vectors);
+    } */
 
     @Override
     public String toString() {
-        return Arrays.deepToString(coordinates);
+        StringBuilder formatVectors = new StringBuilder("{  }");
+
+        for (Vector vector : vectors) {
+            formatVectors.insert(formatVectors.length() - 2, vector.toString() + ", ");
+        }
+
+        formatVectors.delete(formatVectors.length() - 4, formatVectors.length() - 2);
+
+        return formatVectors.toString();
     }
 
     @Override
@@ -89,27 +89,27 @@ public class Matrix {
 
         Matrix matrix = (Matrix) object;
 
-        return Arrays.deepEquals(coordinates, matrix.coordinates);
+        return Arrays.equals(vectors, matrix.vectors);
     }
 
     @Override
     public int hashCode() {
         final int prime = 21;
         int hash = 1;
-        hash = prime * hash + Arrays.deepHashCode(coordinates);
+        hash = prime * hash + Arrays.hashCode(vectors);
         return hash;
     }
 
     public String getSize() {
-        return String.format("Matrix size: rows - %s, cols -  %s", coordinates.length, coordinates[0].getSize());
+        return String.format("Matrix size: rows - %s, columns -  %s", vectors.length, vectors[0].getSize());
     }
 
     public Vector getRowVector(int row) {
-        return new Vector(coordinates[row - 1]);
+        return new Vector(vectors[row]);
     }
 
     public Vector getColumnVector(int col) {
-        return new Vector(getTransposed().coordinates[col - 1]);
+        return new Vector(getTransposed().vectors[col]);
     }
 
     public Matrix getTransposed() {
@@ -127,13 +127,13 @@ public class Matrix {
     }
 
     public void scale(double number) {
-        for (int i = 0; i < coordinates.length; ++i) {
-            coordinates[i].scale(number);
+        for (int i = 0; i < vectors.length; ++i) {
+            vectors[i].scale(number);
         }
     }
 
     public double getDeterminant(Matrix matrix) {
-        if (matrix.coordinates.length != matrix.coordinates[0].getSize()) {
+        if (matrix.vectors.length != matrix.vectors[0].getSize()) {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
@@ -169,12 +169,12 @@ public class Matrix {
     }
 
     public Vector getVectorMultiply(Vector vector) {
-        if (vector.getSize() != coordinates[0].getSize()) {
+        if (vector.getSize() != vectors[0].getSize()) {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
         double[][] tmp = getArrayFromMatrix();
-        double[] result = new double[coordinates.length];
+        double[] result = new double[vectors.length];
 
         for (int i = 0; i < tmp.length; ++i) {
             for (int j = 0; j < tmp[i].length; ++j) {
@@ -186,22 +186,22 @@ public class Matrix {
     }
 
     public void add(Matrix matrix) {
-        if ((coordinates.length != matrix.coordinates.length) && (coordinates[0].getSize() != matrix.coordinates[0].getSize())) {
+        if ((vectors.length != matrix.vectors.length) && (vectors[0].getSize() != matrix.vectors[0].getSize())) {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
-        for (int i = 0; i < coordinates.length; ++i) {
-            coordinates[i].add(matrix.coordinates[i]);
+        for (int i = 0; i < vectors.length; ++i) {
+            vectors[i].add(matrix.vectors[i]);
         }
     }
 
     public void subtract(Matrix matrix) {
-        if ((coordinates.length != matrix.coordinates.length) && (coordinates[0].getSize() != matrix.coordinates[0].getSize())) {
+        if ((vectors.length != matrix.vectors.length) && (vectors[0].getSize() != matrix.vectors[0].getSize())) {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
-        for (int i = 0; i < coordinates.length; ++i) {
-            coordinates[i].subtract(matrix.coordinates[i]);
+        for (int i = 0; i < vectors.length; ++i) {
+            vectors[i].subtract(matrix.vectors[i]);
         }
     }
 
@@ -220,7 +220,7 @@ public class Matrix {
     }
 
     public static Matrix getComposition(Matrix matrix1, Matrix matrix2) {
-        if (matrix1.coordinates[0].getSize() != matrix2.coordinates.length) {
+        if (matrix1.vectors[0].getSize() != matrix2.vectors.length) {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
@@ -240,10 +240,10 @@ public class Matrix {
     }
 
     private double[][] getArrayFromMatrix() {
-        double[][] tmp = new double[coordinates.length][coordinates[0].getSize()];
+        double[][] tmp = new double[vectors.length][vectors[0].getSize()];
 
         for (int i = 0; i < tmp.length; ++i) {
-            tmp[i] = coordinates[i].getArrayFromVector();
+            tmp[i] = vectors[i].getArrayFromVector();
         }
 
         return tmp;

@@ -45,7 +45,7 @@ public class Matrix {
         }
 
         for (int i = 0; i < vectors.length; ++i) {
-            vectors[i] = new Vector(maxLength, vectors[i].getArrayFromVector());
+            vectors[i] = new Vector(maxLength, vectors[i].toArray());
         }
 
         this.vectors = vectors;
@@ -243,7 +243,7 @@ public class Matrix {
         double[][] tmp = new double[vectors.length][vectors[0].getSize()];
 
         for (int i = 0; i < tmp.length; ++i) {
-            tmp[i] = vectors[i].getArrayFromVector();
+            tmp[i] = vectors[i].toArray();
         }
 
         return tmp;

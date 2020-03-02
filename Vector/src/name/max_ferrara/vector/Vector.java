@@ -7,7 +7,7 @@ public class Vector {
 
     public Vector(int length) {
         if (length < 1) {
-            throw new IllegalArgumentException("vectorLength can not < 1");
+            throw new IllegalArgumentException("vectorLength can not be < 1");
         }
 
         coordinates = new double[length];
@@ -15,7 +15,7 @@ public class Vector {
 
     public Vector(double[] coordinates) {
         if (coordinates.length < 1) {
-            throw new IllegalArgumentException("vectorLength can not < 1");
+            throw new IllegalArgumentException("vectorLength can not be < 1");
         }
 
         this.coordinates = Arrays.copyOf(coordinates, coordinates.length);
@@ -23,7 +23,7 @@ public class Vector {
 
     public Vector(int length, double[] coordinates) {
         if (length < 1) {
-            throw new IllegalArgumentException("vectorLength can not < 1");
+            throw new IllegalArgumentException("vectorLength can not be < 1");
         }
 
         this.coordinates = Arrays.copyOf(coordinates, length);
@@ -75,16 +75,16 @@ public class Vector {
     }
 
     public double getElementByIndex(int index) {
-        if (index > coordinates.length - 1) {
-            throw new IllegalArgumentException("index can't > vector size");
+        if (index >= coordinates.length && index <= coordinates.length) {
+            throw new ArrayIndexOutOfBoundsException("index can't be > or < vector size");
         }
 
         return coordinates[index];
     }
 
     public void setElementByIndex(int index, double coordinate) {
-        if (index > coordinates.length - 1) {
-            throw new IllegalArgumentException("index can't > vector size");
+        if (index >= coordinates.length && index <= coordinates[0]) {
+            throw new ArrayIndexOutOfBoundsException("index can't be > or < vector size");
         }
 
         coordinates[index] = coordinate;
@@ -100,56 +100,53 @@ public class Vector {
         scale(-1);
     }
 
-    public double getLength() {
-        double vectorLength = 0;
+    public double getModule() {
+        double length = 0;
 
         for (double coordinate : coordinates) {
-            vectorLength += Math.pow(coordinate, 2);
+            length += Math.pow(coordinate, 2);
         }
 
-        return Math.sqrt(vectorLength);
+        return Math.sqrt(length);
     }
 
     public void subtract(Vector vector) {
-        if (coordinates.length > vector.coordinates.length || coordinates.length < vector.coordinates.length) {
-            coordinates = Arrays.copyOf(coordinates, Math.max(coordinates.length, vector.coordinates.length));
+        int maxLength = Math.max(coordinates.length, vector.coordinates.length);
 
-            for (int i = 0; i < coordinates.length; ++i) {
-                if (i == vector.coordinates.length) {
-                    return;
-                }
+        for (int i = 0; i < maxLength; ++i) {
+            if (maxLength >= coordinates.length) {
+                coordinates = Arrays.copyOf(coordinates, maxLength);
+            }
 
-                coordinates[i] = coordinates[i] - vector.coordinates[i];
+            if (maxLength >= vector.coordinates.length) {
+                vector.coordinates = Arrays.copyOf(vector.coordinates, maxLength);
             }
-        } else {
-            for (int i = 0; i < coordinates.length; ++i) {
-                coordinates[i] = coordinates[i] - vector.coordinates[i];
-            }
+
+            coordinates[i] = coordinates[i] - vector.coordinates[i];
         }
     }
 
     public void add(Vector vector) {
-        if (coordinates.length > vector.coordinates.length || coordinates.length < vector.coordinates.length) {
-            coordinates = Arrays.copyOf(coordinates, Math.max(coordinates.length, vector.coordinates.length));
+        int maxLength = Math.max(coordinates.length, vector.coordinates.length);
 
-            for (int i = 0; i < coordinates.length; ++i) {
-                if (i == vector.coordinates.length) {
-                    return;
-                }
+        for (int i = 0; i < maxLength; ++i) {
+            if (maxLength >= coordinates.length) {
+                coordinates = Arrays.copyOf(coordinates, maxLength);
+            }
 
-                coordinates[i] = coordinates[i] + vector.coordinates[i];
+            if (maxLength >= vector.coordinates.length) {
+                vector.coordinates = Arrays.copyOf(vector.coordinates, maxLength);
             }
-        } else {
-            for (int i = 0; i < coordinates.length; ++i) {
-                coordinates[i] = coordinates[i] + vector.coordinates[i];
-            }
+
+            coordinates[i] = coordinates[i] + vector.coordinates[i];
         }
     }
 
     public static double getScalarComposition(Vector vector1, Vector vector2) {
         double scalarComposition = 0;
+        int length = Math.min(vector1.coordinates.length, vector2.coordinates.length);
 
-        for (int i = 0; i < Math.min(vector1.coordinates.length, vector2.coordinates.length); ++i) {
+        for (int i = 0; i < length; ++i) {
             scalarComposition += vector1.coordinates[i] * vector2.coordinates[i];
         }
 
@@ -170,13 +167,7 @@ public class Vector {
         return cloneVector;
     }
 
-    public double[] getArrayFromVector() {
-        double[] tmp = new double[coordinates.length];
-
-        for (int i = 0; i < tmp.length; ++i) {
-            tmp[i] = coordinates[i];
-        }
-
-        return tmp;
+    public double[] toArray() {
+        return Arrays.copyOf(coordinates, coordinates.length);
     }
 }

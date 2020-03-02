@@ -11,10 +11,10 @@ public class VectorMain {
             Vector vector4 = new Vector(10, new double[]{10, 4, 13, 9.65, 3, 14});
             Vector cloneVector = new Vector(vector2);
             Vector vector5 = new Vector(new double[]{1, 2, 3, 4});
-            Vector vector6 = new Vector(new double[]{1, 2, 3, 4, 5, 6});
+            Vector vector6 = new Vector(new double[]{1, 2, 3, 4, -5, 6});
 
-            vector1.setElementByIndex(5, 2);
-            System.out.println(vector1);
+            System.out.println(vector5.getElementByIndex(-1));
+            /*System.out.println(vector1);
             System.out.println(vector2);
             System.out.println(vector3);
             System.out.println(vector4);
@@ -36,11 +36,13 @@ public class VectorMain {
             System.out.println(Vector.getSum(vector1, vector3));
             System.out.println(Vector.getDifference(vector1, vector3));
             System.out.println(Vector.getScalarComposition(vector2, vector3));
-            System.out.println();
+            System.out.println(); */
+            //vector6.subtract(vector5);
+            //System.out.println(vector6);
 
             vector6.add(vector5);
             System.out.println(vector6);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
     }

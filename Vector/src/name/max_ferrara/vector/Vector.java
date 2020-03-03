@@ -32,16 +32,24 @@ public class Vector {
     public Vector(Vector vector) {
         coordinates = Arrays.copyOf(vector.coordinates, vector.coordinates.length);
     }
-
+    
     @Override
     public String toString() {
-        StringBuilder formatCoordinates = new StringBuilder("{  }");
+        StringBuilder formatCoordinates = new StringBuilder();
 
-        for (double coordinate : coordinates) {
-            formatCoordinates.insert(formatCoordinates.length() - 2, coordinate + ", ");
+        for (int i = 0; i < coordinates.length; ++i) {
+            if (i == 0) {
+                formatCoordinates.append("{ ");
+                formatCoordinates.append(coordinates[i]);
+                formatCoordinates.append(", ");
+            } else if (i == coordinates.length - 1) {
+                formatCoordinates.append(coordinates[i]);
+                formatCoordinates.append(" }");
+            } else {
+                formatCoordinates.append(coordinates[i]);
+                formatCoordinates.append(", ");
+            }
         }
-
-        formatCoordinates.delete(formatCoordinates.length() - 4, formatCoordinates.length() - 2);
 
         return formatCoordinates.toString();
     }

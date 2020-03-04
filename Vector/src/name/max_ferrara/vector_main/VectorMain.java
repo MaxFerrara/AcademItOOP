@@ -14,6 +14,8 @@ public class VectorMain {
             Vector vector6 = new Vector(new double[]{1, 2, 3, 4, -5, 6});
 
             System.out.println(vector5.getElementByIndex(3));
+            vector5.setElementByIndex(-1,-15);
+            System.out.println(vector5);
             System.out.println(vector1);
             System.out.println(vector2);
             System.out.println(vector3);
@@ -38,8 +40,8 @@ public class VectorMain {
             System.out.println(Vector.getScalarComposition(vector2, vector3));
             System.out.println();
 
-            vector6.add(vector5);
-            System.out.println(vector6);
+            vector5.subtract(vector6);
+            System.out.println(vector5);
         } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
         }

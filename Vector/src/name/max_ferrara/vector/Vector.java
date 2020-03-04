@@ -32,7 +32,7 @@ public class Vector {
     public Vector(Vector vector) {
         coordinates = Arrays.copyOf(vector.coordinates, vector.coordinates.length);
     }
-    
+
     @Override
     public String toString() {
         StringBuilder formatCoordinates = new StringBuilder();
@@ -71,7 +71,7 @@ public class Vector {
 
     @Override
     public int hashCode() {
-        final int prime = 21;
+        final int prime = 19;
         int hash = 1;
 
         hash = prime * hash + Arrays.hashCode(coordinates);
@@ -83,16 +83,16 @@ public class Vector {
     }
 
     public double getElementByIndex(int index) {
-        if (index >= coordinates.length && index <= coordinates.length) {
-            throw new ArrayIndexOutOfBoundsException("index can't be > or < vector size");
+        if (index >= coordinates.length || index < coordinates.length - getSize()) {
+            throw new ArrayIndexOutOfBoundsException("index do't belong vector");
         }
 
         return coordinates[index];
     }
 
     public void setElementByIndex(int index, double coordinate) {
-        if (index >= coordinates.length && index <= coordinates[0]) {
-            throw new ArrayIndexOutOfBoundsException("index can't be > or < vector size");
+        if (index >= coordinates.length || index < coordinates.length - getSize()) {
+            throw new ArrayIndexOutOfBoundsException("index do't belong vector");
         }
 
         coordinates[index] = coordinate;
@@ -130,7 +130,7 @@ public class Vector {
                 vector.coordinates = Arrays.copyOf(vector.coordinates, maxLength);
             }
 
-            coordinates[i] = coordinates[i] - vector.coordinates[i];
+            coordinates[i] -= vector.coordinates[i];
         }
     }
 
@@ -146,7 +146,7 @@ public class Vector {
                 vector.coordinates = Arrays.copyOf(vector.coordinates, maxLength);
             }
 
-            coordinates[i] = coordinates[i] + vector.coordinates[i];
+            coordinates[i] += vector.coordinates[i];
         }
     }
 

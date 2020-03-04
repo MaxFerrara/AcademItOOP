@@ -104,12 +104,18 @@ public class Matrix {
         return String.format("Matrix size: rows - %s, columns -  %s", vectors.length, vectors[0].getSize());
     }
 
-    public Vector getRowVector(int row) {
-        return new Vector(vectors[row]);
+    public Vector getRow(int rowIndex) {
+        return new Vector(vectors[rowIndex]);
     }
 
-    public Vector getColumnVector(int col) {
-        return new Vector(getTransposed().vectors[col]);
+    public Vector getColumn(int columnIndex) {
+        double[] tmp = new double[vectors[0].getSize()];
+
+        for (int i = 0; i < vectors.length; ++i) {
+           tmp[i] = vectors[i].getElementByIndex(columnIndex);
+        }
+
+        return new Vector(tmp);
     }
 
     public Matrix getTransposed() {
@@ -124,6 +130,14 @@ public class Matrix {
         }
 
         return new Matrix(tmp);
+    }
+
+    public void trans() {
+        for (int i = 0; i < vectors.length; ++i) {
+            for (int j = 0; j < vectors[i].getSize(); ++j) {
+                vectors[i].getElementByIndex(j);
+            }
+        }
     }
 
     public void scale(double number) {

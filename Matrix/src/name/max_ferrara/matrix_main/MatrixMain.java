@@ -21,6 +21,8 @@ public class MatrixMain {
             System.out.println(matrix3);
             System.out.println(cloneMatrix);
 
+            System.out.println(cloneMatrix.getColumn(1));
+
            /* Matrix matrix1 = new Matrix(new double[][]{{1, -1}, {2, 0}, {3, 0}});
             Matrix matrix2 = new Matrix(new double[][]{{1, 1}, {2, 0}});
             Matrix matrix3 = new Matrix(new double[][]{{0, 0, 0}, {1, 1, 1}});

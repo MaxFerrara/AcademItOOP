@@ -7,10 +7,8 @@ public class MatrixMain {
     public static void main(String[] args) {
         try {
             Matrix matrix1 = new Matrix(2, 4);
-            System.out.println(matrix1);
 
             Matrix matrix2 = new Matrix(new double[][]{{1, 2, 3, 4}, {1, 2}});
-            System.out.println(matrix2);
 
             Vector vector1 = new Vector(new double[]{1, 2, 3});
             Vector vector2 = new Vector(new double[]{1, 2});
@@ -18,10 +16,12 @@ public class MatrixMain {
             Matrix matrix3 = new Matrix(vector1, vector2, vector3);
             Matrix cloneMatrix = new Matrix(matrix3);
 
-            System.out.println(matrix3);
-            System.out.println(cloneMatrix);
+            //System.out.println(matrix3);
+            //System.out.println(cloneMatrix);
 
-            System.out.println(cloneMatrix.getColumn(1));
+            matrix3.transpose();
+
+            System.out.println(matrix3);
 
            /* Matrix matrix1 = new Matrix(new double[][]{{1, -1}, {2, 0}, {3, 0}});
             Matrix matrix2 = new Matrix(new double[][]{{1, 1}, {2, 0}});

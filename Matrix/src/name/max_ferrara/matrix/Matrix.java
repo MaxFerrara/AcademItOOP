@@ -112,31 +112,22 @@ public class Matrix {
         double[] tmp = new double[vectors[0].getSize()];
 
         for (int i = 0; i < vectors.length; ++i) {
-           tmp[i] = vectors[i].getElementByIndex(columnIndex);
+            tmp[i] = vectors[i].getElementByIndex(columnIndex);
         }
 
         return new Vector(tmp);
     }
 
-    public Matrix getTransposed() {
-        double[][] matrixT = getArrayFromMatrix();
+    public void transpose() {
 
-        double[][] tmp = new double[matrixT[0].length][matrixT.length];
-
-        for (int i = 0; i < tmp.length; i++) {
-            for (int j = 0; j < tmp[i].length; j++) {
-                tmp[j][i] = matrixT[i][j];
-            }
-        }
-
-        return new Matrix(tmp);
-    }
-
-    public void trans() {
         for (int i = 0; i < vectors.length; ++i) {
+            double[] tmp = new double[vectors[0].getSize()];
+
             for (int j = 0; j < vectors[i].getSize(); ++j) {
-                vectors[i].getElementByIndex(j);
+                tmp[j] = vectors[j].getElementByIndex(i);
             }
+            Vector vector = new Vector(tmp);
+            vectors[i] = vector;
         }
     }
 

@@ -19,28 +19,36 @@ public class Matrix {
         }
     }
 
-    public Matrix(double[][] matrixCoordinates) {
+    public Matrix(double[][] twoDimensionalArray) {
+        if (twoDimensionalArray.length < 1 || twoDimensionalArray[0].length < 1) {
+            throw new IllegalArgumentException("Illegal matrix dimensions");
+        }
+
         int maxLength = 0;
 
-        for (int i = 0; i < matrixCoordinates.length; ++i) {
-            if (matrixCoordinates[i].length > maxLength) {
-                maxLength = matrixCoordinates[i].length;
+        for (double[] doubles : twoDimensionalArray) {
+            if (doubles.length > maxLength) {
+                maxLength = doubles.length;
             }
         }
 
-        vectors = new Vector[matrixCoordinates.length];
+        vectors = new Vector[twoDimensionalArray.length];
 
         for (int i = 0; i < vectors.length; ++i) {
-            vectors[i] = new Vector(maxLength, matrixCoordinates[i]);
+            vectors[i] = new Vector(maxLength, twoDimensionalArray[i]);
         }
     }
 
     public Matrix(Vector... vectors) {
+        if (vectors.length < 1) {
+            throw new IllegalArgumentException("Illegal matrix dimensions");
+        }
+
         int maxLength = 0;
 
-        for (int i = 0; i < vectors.length; ++i) {
-            if (maxLength < vectors[i].getSize()) {
-                maxLength = vectors[i].getSize();
+        for (Vector vector : vectors) {
+            if (maxLength < vector.getSize()) {
+                maxLength = vector.getSize();
             }
         }
 
@@ -89,17 +97,17 @@ public class Matrix {
 
     @Override
     public int hashCode() {
-        final int prime = 21;
+        final int prime = 19;
         int hash = 1;
         hash = prime * hash + Arrays.hashCode(vectors);
         return hash;
     }
 
-    public int getRowsQuantity() {
+    private int getRowsQuantity() {
         return vectors.length;
     }
 
-    public int getColumnsQuantity() {
+    private int getColumnsQuantity() {
         return vectors[0].getSize();
     }
 
@@ -112,7 +120,7 @@ public class Matrix {
     }
 
     public Vector getColumn(int columnIndex) {
-        double[] tmp = new double[vectors[0].getSize()];
+        double[] tmp = new double[getColumnsQuantity()];
 
         for (int i = 0; i < vectors.length; ++i) {
             tmp[i] = vectors[i].getElementByIndex(columnIndex);
@@ -133,60 +141,49 @@ public class Matrix {
         }
     }
 
-    public void scale(double number) {
-        for (int i = 0; i < vectors.length; ++i) {
-            vectors[i].scale(number);
+    public void scalarMultiply(double number) {
+        for (Vector vector : vectors) {
+            vector.scale(number);
         }
     }
 
-    public double getDeterminant(Matrix matrix) {
-        if (matrix.vectors.length != matrix.vectors[0].getSize()) {
-            throw new IllegalArgumentException("Illegal matrix dimensions");
-        }
-
-        double[][] matrixTmp = matrix.getArrayFromMatrix();
-
-        if (matrixTmp.length == 1) {
-            return matrixTmp[0][0];
-        }
-
-        if (matrixTmp.length == 2) {
-            return (matrixTmp[0][0] * matrixTmp[1][1]) - (matrixTmp[0][1] * matrixTmp[1][0]);
-        }
-
-        double determinant = 0;
-
-        for (int i = 0; i < matrixTmp[0].length; ++i) {
-            double[][] tmp = new double[matrixTmp.length - 1][matrixTmp[0].length - 1];
-
-            for (int j = 1; j < matrixTmp.length; ++j) {
-                for (int k = 0; k < matrixTmp[0].length; ++k) {
-                    if (k < i) {
-                        tmp[j - 1][k] = matrixTmp[j][k];
-                    } else if (k > i) {
-                        tmp[j - 1][k - 1] = matrixTmp[j][k];
-                    }
-                }
-            }
-
-            determinant += matrixTmp[0][i] * Math.pow(-1, i) * getDeterminant(new Matrix(tmp));
-        }
-
-        return determinant;
-    }
-
-    public void calculateDeterminant() {
+    public double calculateDeterminant() {
         if (getRowsQuantity() != getColumnsQuantity()) {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
-        if(getRowsQuantity() ==1) {
-            //return vectors[0].getElementByIndex(0);
+        if (getRowsQuantity() == 1) {
+            return this.vectors[0].getElementByIndex(0);
         }
+
+        if (getRowsQuantity() == 2) {
+            return vectors[0].getElementByIndex(0) * vectors[1].getElementByIndex(1) - vectors[1].getElementByIndex(0) * vectors[0].getElementByIndex(1);
+        }
+
+        double result = 0;
+
+        for (int i = 0; i < getColumnsQuantity(); i++) {
+            double[][] tmp = new double[getRowsQuantity() - 1][getColumnsQuantity() - 1];
+
+            for (int j = 1; j < getRowsQuantity(); j++) {
+                int columnIndex = 0;
+
+                for (int n = 0; n < getRowsQuantity(); n++) {
+                    if (n == i) {
+                        continue;
+                    }
+                    tmp[j - 1][columnIndex] = vectors[j].getElementByIndex(n);
+                    columnIndex++;
+                }
+            }
+            result += Math.pow(-1, i) * vectors[0].getElementByIndex(i) * new Matrix(tmp).calculateDeterminant();
+        }
+
+        return result;
     }
 
     public Vector getVectorMultiply(Vector vector) {
-        if (vector.getSize() != vectors[0].getSize()) {
+        if (vector.getSize() != getColumnsQuantity()) {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
@@ -202,7 +199,7 @@ public class Matrix {
     }
 
     public void add(Matrix matrix) {
-        if ((vectors.length != matrix.vectors.length) && (vectors[0].getSize() != matrix.vectors[0].getSize())) {
+        if (getRowsQuantity() != matrix.getRowsQuantity() || getColumnsQuantity() != matrix.getColumnsQuantity()) {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
@@ -212,7 +209,7 @@ public class Matrix {
     }
 
     public void subtract(Matrix matrix) {
-        if ((vectors.length != matrix.vectors.length) && (vectors[0].getSize() != matrix.vectors[0].getSize())) {
+        if (getRowsQuantity() != matrix.getRowsQuantity() || getColumnsQuantity() != matrix.getColumnsQuantity()) {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
@@ -236,11 +233,11 @@ public class Matrix {
     }
 
     public static Matrix getComposition(Matrix matrix1, Matrix matrix2) {
-        if (matrix1.vectors[0].getSize() != matrix2.vectors.length) {
+        if (matrix1.getColumnsQuantity() != matrix2.getRowsQuantity()) {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
-        double[][] multiplyResult = new double[matrix1.vectors.length][matrix2.vectors[0].getSize()];
+        double[][] multiplyResult = new double[matrix1.getRowsQuantity()][matrix2.getColumnsQuantity()];
 
         for (int i = 0; i < multiplyResult.length; ++i) {
             for (int j = 0; j < multiplyResult[i].length; ++j) {
@@ -251,15 +248,5 @@ public class Matrix {
         }
 
         return new Matrix(multiplyResult);
-    }
-
-    private double[][] getArrayFromMatrix() {
-        double[][] tmp = new double[vectors.length][vectors[0].getSize()];
-
-        for (int i = 0; i < tmp.length; ++i) {
-            tmp[i] = vectors[i].toArray();
-        }
-
-        return tmp;
     }
 }

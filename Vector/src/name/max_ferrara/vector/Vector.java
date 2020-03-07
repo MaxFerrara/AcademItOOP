@@ -35,23 +35,17 @@ public class Vector {
 
     @Override
     public String toString() {
-        StringBuilder formatCoordinates = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder("{ ");
 
-        for (int i = 0; i < coordinates.length; ++i) {
-            if (i == 0) {
-                formatCoordinates.append("{ ");
-                formatCoordinates.append(coordinates[i]);
-                formatCoordinates.append(", ");
-            } else if (i == coordinates.length - 1) {
-                formatCoordinates.append(coordinates[i]);
-                formatCoordinates.append(" }");
-            } else {
-                formatCoordinates.append(coordinates[i]);
-                formatCoordinates.append(", ");
-            }
+        for (double coordinate : coordinates) {
+            stringBuilder.append(coordinate);
+            stringBuilder.append(", ");
         }
 
-        return formatCoordinates.toString();
+        stringBuilder.setLength(stringBuilder.length() - 2);
+        stringBuilder.append(" }");
+
+        return stringBuilder.toString();
     }
 
     @Override
@@ -83,16 +77,16 @@ public class Vector {
     }
 
     public double getElementByIndex(int index) {
-        if (index >= coordinates.length || index < coordinates.length - getSize()) {
-            throw new ArrayIndexOutOfBoundsException("index do't belong vector");
+        if (index >= coordinates.length || index < 0) {
+            throw new IndexOutOfBoundsException("index don't belong vector");
         }
 
         return coordinates[index];
     }
 
     public void setElementByIndex(int index, double coordinate) {
-        if (index >= coordinates.length || index < coordinates.length - getSize()) {
-            throw new ArrayIndexOutOfBoundsException("index do't belong vector");
+        if (index >= coordinates.length || index < 0) {
+            throw new IndexOutOfBoundsException("index don't belong vector");
         }
 
         coordinates[index] = coordinate;
@@ -119,33 +113,25 @@ public class Vector {
     }
 
     public void subtract(Vector vector) {
-        int maxLength = Math.max(coordinates.length, vector.coordinates.length);
+        if (coordinates.length < vector.coordinates.length) {
+            coordinates = Arrays.copyOf(coordinates, vector.coordinates.length);
+        }
 
-        for (int i = 0; i < maxLength; ++i) {
-            if (maxLength >= coordinates.length) {
-                coordinates = Arrays.copyOf(coordinates, maxLength);
-            }
+        int minLength = Math.min(coordinates.length, vector.coordinates.length);
 
-            if (maxLength >= vector.coordinates.length) {
-                vector.coordinates = Arrays.copyOf(vector.coordinates, maxLength);
-            }
-
+        for (int i = 0; i < minLength; ++i) {
             coordinates[i] -= vector.coordinates[i];
         }
     }
 
     public void add(Vector vector) {
-        int maxLength = Math.max(coordinates.length, vector.coordinates.length);
+        if (coordinates.length < vector.coordinates.length) {
+            coordinates = Arrays.copyOf(coordinates, vector.coordinates.length);
+        }
 
-        for (int i = 0; i < maxLength; ++i) {
-            if (maxLength >= coordinates.length) {
-                coordinates = Arrays.copyOf(coordinates, maxLength);
-            }
+        int minLength = Math.min(coordinates.length, vector.coordinates.length);
 
-            if (maxLength >= vector.coordinates.length) {
-                vector.coordinates = Arrays.copyOf(vector.coordinates, maxLength);
-            }
-
+        for (int i = 0; i < minLength; ++i) {
             coordinates[i] += vector.coordinates[i];
         }
     }

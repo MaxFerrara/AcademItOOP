@@ -23,6 +23,7 @@ public class MatrixMain {
 
             System.out.println(matrix3.getVectorMultiply(vector1));
             System.out.println(Matrix.getComposition((new Matrix(new double[][]{{1, 1, 1}, {1, 1, 1}})), (new Matrix(new double[][]{{2, 2}, {2, 2}, {2, 2}}))));
+            System.out.println(cloneMatrix.calculateDeterminant());
 
            /* Matrix matrix1 = new Matrix(new double[][]{{1, -1}, {2, 0}, {3, 0}});
             Matrix matrix2 = new Matrix(new double[][]{{1, 1}, {2, 0}});

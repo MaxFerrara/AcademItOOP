@@ -59,11 +59,6 @@ public class Matrix {
         }
     }
 
-   /* @Override
-    public String toString() {
-        return Arrays.deepToString(vectors);
-    } */
-
     @Override
     public String toString() {
         StringBuilder formatVectors = new StringBuilder("{  }");
@@ -100,8 +95,16 @@ public class Matrix {
         return hash;
     }
 
+    public int getRowsQuantity() {
+        return vectors.length;
+    }
+
+    public int getColumnsQuantity() {
+        return vectors[0].getSize();
+    }
+
     public String getSize() {
-        return String.format("Matrix size: rows - %s, columns -  %s", vectors.length, vectors[0].getSize());
+        return String.format("Matrix size: rows - %s, columns -  %s", getRowsQuantity(), getColumnsQuantity());
     }
 
     public Vector getRow(int rowIndex) {
@@ -119,7 +122,6 @@ public class Matrix {
     }
 
     public void transpose() {
-
         for (int i = 0; i < vectors.length; ++i) {
             double[] tmp = new double[vectors[0].getSize()];
 
@@ -173,17 +175,26 @@ public class Matrix {
         return determinant;
     }
 
+    public void calculateDeterminant() {
+        if (getRowsQuantity() != getColumnsQuantity()) {
+            throw new IllegalArgumentException("Illegal matrix dimensions");
+        }
+
+        if(getRowsQuantity() ==1) {
+            //return vectors[0].getElementByIndex(0);
+        }
+    }
+
     public Vector getVectorMultiply(Vector vector) {
         if (vector.getSize() != vectors[0].getSize()) {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
-        double[][] tmp = getArrayFromMatrix();
         double[] result = new double[vectors.length];
 
-        for (int i = 0; i < tmp.length; ++i) {
-            for (int j = 0; j < tmp[i].length; ++j) {
-                result[i] += tmp[i][j] * vector.getElementByIndex(j);
+        for (int i = 0; i < vectors.length; ++i) {
+            for (int j = 0; j < vectors[i].getSize(); ++j) {
+                result[i] += vectors[i].getElementByIndex(j) * vector.getElementByIndex(j);
             }
         }
 
@@ -229,19 +240,17 @@ public class Matrix {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
-        double[][] matrixOne = matrix1.getArrayFromMatrix();
-        double[][] matrixTwo = matrix2.getArrayFromMatrix();
-        double[][] tmp = new double[matrixOne.length][matrixTwo[0].length];
+        double[][] multiplyResult = new double[matrix1.vectors.length][matrix2.vectors[0].getSize()];
 
-        for (int i = 0; i < tmp.length; ++i) {
-            for (int j = 0; j < tmp[i].length; ++j) {
-                for (int k = 0; k < matrixOne[0].length; ++k) {
-                    tmp[i][j] += matrixOne[i][k] * matrixTwo[k][j];
+        for (int i = 0; i < multiplyResult.length; ++i) {
+            for (int j = 0; j < multiplyResult[i].length; ++j) {
+                for (int k = 0; k < matrix1.vectors[0].getSize(); ++k) {
+                    multiplyResult[i][j] += matrix1.vectors[i].getElementByIndex(k) * matrix2.vectors[k].getElementByIndex(j);
                 }
             }
         }
 
-        return new Matrix(tmp);
+        return new Matrix(multiplyResult);
     }
 
     private double[][] getArrayFromMatrix() {

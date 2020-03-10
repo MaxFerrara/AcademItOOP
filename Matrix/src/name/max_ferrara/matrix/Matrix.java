@@ -113,11 +113,11 @@ public class Matrix {
         vectors[row] = new Vector(array);
     }
 
-    private int getRowsQuantity() {
+    public int getRowsQuantity() {
         return vectors.length;
     }
 
-    private int getColumnsQuantity() {
+    public int getColumnsQuantity() {
         return vectors[0].getSize();
     }
 

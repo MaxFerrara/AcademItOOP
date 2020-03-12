@@ -55,6 +55,35 @@ public class SinglyLinkedList<T> {
         head = new ListItem<>(listItem, head);
         size++;
     }
+
+    public T getListItemByIndex(int index) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("go beyond the list");
+        }
+
+        int indexCount = -1;
+
+        while (head != null) {
+            indexCount++;
+
+            if (index == indexCount) {
+                return head.getElement();
+            }
+
+            head = head.getNextElement();
+        }
+
+        return null;
+    }
+
+    public void setListItemByIndex(int index, T listItem) {
+        int indexCount = -1;
+        ListItem<T> tmp = new ListItem<T>(listItem);
+
+        for (tmp = head; tmp!= null; tmp = tmp.getNextElement()) {
+
+        }
+    }
 }
 
 

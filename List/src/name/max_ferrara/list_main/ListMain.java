@@ -13,12 +13,11 @@ public class ListMain {
         list1.addFirst(35);
         list1.addFirst(13);
 
-        System.out.println(list1.isEmpty());
-        System.out.println(list1.getSize());
-        System.out.println(list1.getFirstElement());
+        //System.out.println(list1.getSize());
+        //System.out.println(list1.getFirstElement());
         System.out.println(list1);
-
-        System.out.println(list2.isEmpty());
-        System.out.println(list2.getSize());
+        System.out.println(list1.getListItemByIndex(2));
+        list1.setListItemByIndex(3,100);
+        System.out.println(list1);
     }
 }

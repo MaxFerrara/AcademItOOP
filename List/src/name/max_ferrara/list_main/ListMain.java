@@ -2,6 +2,8 @@ package name.max_ferrara.list_main;
 
 import name.max_ferrara.list.SinglyLinkedList;
 
+import java.util.ArrayList;
+
 public class ListMain {
     public static void main(String[] args) {
         SinglyLinkedList<Integer> list1 = new SinglyLinkedList<>();

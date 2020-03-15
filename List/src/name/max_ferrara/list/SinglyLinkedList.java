@@ -63,14 +63,16 @@ public class SinglyLinkedList<T> {
 
         int indexCount = -1;
 
-        while (head != null) {
+        ListItem<T> tmp = head;
+
+        while (tmp != null) {
             indexCount++;
 
             if (index == indexCount) {
-                return head.getElement();
+                return tmp.getElement();
             }
 
-            head = head.getNextElement();
+            tmp = tmp.getNextElement();
         }
 
         return null;
@@ -78,11 +80,37 @@ public class SinglyLinkedList<T> {
 
     public void setListItemByIndex(int index, T listItem) {
         int indexCount = -1;
-        ListItem<T> tmp = new ListItem<T>(listItem);
 
-        for (tmp = head; tmp!= null; tmp = tmp.getNextElement()) {
+        for (ListItem<T> tmp = head; tmp != null; tmp = tmp.getNextElement()) {
+            indexCount++;
 
+            if (indexCount == index) {
+                tmp.setElement(listItem);
+            }
+
+            tmp = new ListItem<T>(tmp.getElement(), tmp.getNextElement());
         }
+    }
+
+    public void deleteListItem(int index) {
+        ListItem<T> temp = head;
+        ListItem<T> prev = null;
+
+        if(index == 0) {
+            temp = temp.getNextElement();
+        }
+
+        int counter = -1;
+
+        while (temp != null) {
+            if (counter == index) {
+               // prev.getElement() = temp.getElement();
+            }
+            prev = temp;
+            temp = temp.getNextElement();
+            counter++;
+        }
+
     }
 }
 

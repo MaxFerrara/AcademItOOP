@@ -18,8 +18,9 @@ public class ListMain {
         //System.out.println(list1.getSize());
         //System.out.println(list1.getFirstElement());
         System.out.println(list1);
-        System.out.println(list1.getListItemByIndex(2));
-        list1.setListItemByIndex(3,100);
+        System.out.println(list1.getListItemByIndex(1));
+        //list1.deleteListItem(0);
+        list1.setListItemByIndex(4,100);
         System.out.println(list1);
     }
 }

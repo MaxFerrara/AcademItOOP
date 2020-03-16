@@ -37,25 +37,16 @@ public class SinglyLinkedList<T> {
         return size;
     }
 
-    //первый элемент
+    //получение значения первого элемента
     public T getFirstElement() {
         if (isEmpty()) {
-            return null;
+            throw new NullPointerException("list is empty");
         }
 
         return head.getElement();
     }
 
-    //вставка в начало
-    public void addFirst(T listItem) {
-        if (listItem == null) {
-            throw new NullPointerException("element can't be null");
-        }
-
-        head = new ListItem<>(listItem, head);
-        size++;
-    }
-
+    //получение значения по индексу
     public T getListItemByIndex(int index) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("go beyond the list");
@@ -78,38 +69,78 @@ public class SinglyLinkedList<T> {
         return null;
     }
 
-    public void setListItemByIndex(int index, T listItem) {
+    //изменение элемента по индексу, вернуть старое значение
+    public T setListItemByIndex(int index, T listItem) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("go beyond the list");
+        }
+
+        if (listItem == null) {
+            throw new NullPointerException("listItem can't be null");
+        }
+
         int indexCount = -1;
 
         for (ListItem<T> tmp = head; tmp != null; tmp = tmp.getNextElement()) {
             indexCount++;
 
             if (indexCount == index) {
+                ListItem<T> oldListItem = new ListItem<T>(tmp.getElement());
                 tmp.setElement(listItem);
-            }
 
-            tmp = new ListItem<T>(tmp.getElement(), tmp.getNextElement());
+                return oldListItem.getElement();
+            }
         }
+
+        return null;
     }
 
-    public void deleteListItem(int index) {
-        ListItem<T> temp = head;
-        ListItem<T> prev = null;
+    public void deleteListItemByIndex(int index) {
+        int indexCount = -1;
 
-        if(index == 0) {
-            temp = temp.getNextElement();
-        }
+        for (ListItem<T> tmp = head, prev = null; tmp != null; prev = tmp, tmp = tmp.getNextElement()) {
+            indexCount++;
 
-        int counter = -1;
-
-        while (temp != null) {
-            if (counter == index) {
-               // prev.getElement() = temp.getElement();
+            if (indexCount == index) {
+                ListItem<T> delListItem = new ListItem<T>(tmp.getElement());
+                tmp = new ListItem<T>(delListItem.getElement(), delListItem.getNextElement());
             }
-            prev = temp;
-            temp = temp.getNextElement();
-            counter++;
         }
+        //size--;
+    }
+
+    //вставка в начало
+    public void addFirst(T listItem) {
+        if (listItem == null) {
+            throw new NullPointerException("element can't be null");
+        }
+
+        head = new ListItem<>(listItem, head);
+        size++;
+    }
+
+    //удаление первого элемента списка
+    public T deleteFirstListItem() {
+        ListItem<T> tmp = head;
+        head = head.getNextElement();
+        --size;
+
+        return tmp.getElement();
+    }
+
+    public void reverse() {
+        ListItem<T> curr = head;
+        ListItem<T> pre = null;
+        ListItem<T> incoming = null;
+
+        while (curr != null) {
+            incoming = curr.getNextElement();
+            //curr.getNextElement() = pre;
+            pre = curr;
+            curr = incoming;
+        }
+
+        head = pre;
 
     }
 }

@@ -28,5 +28,10 @@ public class ListItem<T> {
     public void setNextElement(ListItem<T> nextElement) {
         this.nextElement = nextElement;
     }
+
+    @Override
+    public String toString() {
+        return ""+ element;
+    }
 }
 

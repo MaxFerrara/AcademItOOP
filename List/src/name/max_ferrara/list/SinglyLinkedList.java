@@ -95,18 +95,27 @@ public class SinglyLinkedList<T> {
         return null;
     }
 
+    //удаление элемента по индексу, вернуть старое значение
     public void deleteListItemByIndex(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("List index out of bounds");
+        }
+
         int indexCount = -1;
 
-        for (ListItem<T> tmp = head, prev = null; tmp != null; prev = tmp, tmp = tmp.getNextElement()) {
+        if (index == 0) {
+            head = head.getNextElement();
+        }
+
+        for (ListItem<T> tmp = head; tmp != null; tmp = tmp.getNextElement()) {
             indexCount++;
 
-            if (indexCount == index) {
-                ListItem<T> delListItem = new ListItem<T>(tmp.getElement());
-                tmp = new ListItem<T>(delListItem.getElement(), delListItem.getNextElement());
+            if (indexCount == index - 1) {
+                tmp.setNextElement(tmp.getNextElement().getNextElement());
+                break;
             }
         }
-        //size--;
+        --size;
     }
 
     //вставка в начало
@@ -117,6 +126,64 @@ public class SinglyLinkedList<T> {
 
         head = new ListItem<>(listItem, head);
         size++;
+    }
+
+    public void insertListItemByIndex(int index, T listItem) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("List index out of bounds");
+        }
+
+        int indexCount = -1;
+
+        if (index == 0) {
+            head = new ListItem<>(listItem, head);
+            size++;
+        }
+
+        for (ListItem<T> tmp = head, prev = null; tmp != null; prev = tmp, tmp = tmp.getNextElement()) {
+            indexCount++;
+
+            if (indexCount == index - 1) {
+                prev.setNextElement(new ListItem<T>(listItem, tmp));
+                break;
+            }
+        }
+
+        ++size;
+
+
+    }
+
+    //удаление узла по значению
+    public boolean isListItemDeletedByKey(T listItem) {
+        ListItem<T> listItemBeforeDelete = this.head;
+
+        if (listItemBeforeDelete == null) {
+            return false;
+        } else if (listItemBeforeDelete.getElement() == listItem) {
+            this.head = this.head.getNextElement();
+            --size;
+
+            return true;
+        }
+
+        while (true) {
+            ListItem<T> next = listItemBeforeDelete.getNextElement();
+
+            if (next == null) {
+                return false;
+            } else if (next.getElement() == listItem) {
+                break;
+            }
+            listItemBeforeDelete = next;
+        }
+        ListItem<T> nextListItem = listItemBeforeDelete.getNextElement();
+
+        listItemBeforeDelete.setNextElement(nextListItem.getNextElement());
+        nextListItem.setNextElement(null);
+        --size;
+
+        return true;
     }
 
     //удаление первого элемента списка

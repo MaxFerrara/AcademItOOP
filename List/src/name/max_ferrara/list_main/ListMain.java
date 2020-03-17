@@ -16,10 +16,11 @@ public class ListMain {
         list1.addFirst(35);
         list1.addFirst(13);
 
+        //System.out.println(list1);
+        //System.out.println(list1.setListItemByIndex(4,100));
         System.out.println(list1);
-        System.out.println(list1.setListItemByIndex(4,100));
-        System.out.println(list1);
-        list1.deleteListItemByIndex(0);
+        list1.insertListItemByIndex(1, 100);
+        //System.out.println(list1.isListItemDeletedByKey(35));
         System.out.println(list1);
     }
 }

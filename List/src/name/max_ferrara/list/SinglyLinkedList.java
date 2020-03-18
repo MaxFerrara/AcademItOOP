@@ -128,30 +128,30 @@ public class SinglyLinkedList<T> {
         size++;
     }
 
+    //вставка элемента по индексу
     public void insertListItemByIndex(int index, T listItem) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("List index out of bounds");
         }
-
-        int indexCount = -1;
 
         if (index == 0) {
             head = new ListItem<>(listItem, head);
             size++;
         }
 
-        for (ListItem<T> tmp = head, prev = null; tmp != null; prev = tmp, tmp = tmp.getNextElement()) {
+        int indexCount = -1;
+
+        for (ListItem<T> tmp = head; tmp != null; tmp = tmp.getNextElement()) {
             indexCount++;
 
             if (indexCount == index - 1) {
-                prev.setNextElement(new ListItem<T>(listItem, tmp));
+                tmp.setNextElement(new ListItem<T>(listItem, tmp.getNextElement()));
+
                 break;
             }
         }
 
         ++size;
-
-
     }
 
     //удаление узла по значению

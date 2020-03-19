@@ -195,20 +195,31 @@ public class SinglyLinkedList<T> {
         return tmp.getElement();
     }
 
+    //разворот списка
     public void reverse() {
         ListItem<T> curr = head;
         ListItem<T> pre = null;
-        ListItem<T> incoming = null;
+        ListItem<T> incoming;
 
         while (curr != null) {
             incoming = curr.getNextElement();
-            //curr.getNextElement() = pre;
+            curr.setNextElement(pre);
             pre = curr;
             curr = incoming;
         }
 
         head = pre;
+    }
 
+    //копирование списка
+    public SinglyLinkedList<T> copy() {
+        SinglyLinkedList<T> copyList = new SinglyLinkedList<T>();
+
+        for (ListItem<T> tmp = head; tmp != null; tmp = tmp.getNextElement()) {
+            copyList.addFirst(tmp.getElement());
+        }
+
+        return copyList;
     }
 }
 

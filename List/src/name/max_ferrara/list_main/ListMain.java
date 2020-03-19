@@ -8,7 +8,7 @@ import java.util.LinkedList;
 public class ListMain {
     public static void main(String[] args) {
         SinglyLinkedList<Integer> list1 = new SinglyLinkedList<>();
-        SinglyLinkedList<Double> list2 = new SinglyLinkedList<>();
+        SinglyLinkedList<Integer> list2 = list1.copy();
 
         list1.addFirst(25);
         list1.addFirst(15);
@@ -22,5 +22,9 @@ public class ListMain {
         list1.insertListItemByIndex(4, 100);
         //System.out.println(list1.isListItemDeletedByKey(35));
         System.out.println(list1);
+        //System.out.println(list2);
+        list1.reverse();
+        System.out.println(list1);
+        System.out.println(list1.getSize());
     }
 }

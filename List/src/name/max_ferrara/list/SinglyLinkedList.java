@@ -1,6 +1,6 @@
 package name.max_ferrara.list;
 
-import name.max_ferrara.list_item.ListItem;
+import java.util.Objects;
 
 public class SinglyLinkedList<T> {
     private ListItem<T> head;
@@ -62,7 +62,6 @@ public class SinglyLinkedList<T> {
             if (index == indexCount) {
                 return tmp.getListItem();
             }
-
             tmp = tmp.getNextListItem();
         }
 
@@ -129,7 +128,7 @@ public class SinglyLinkedList<T> {
         }
 
         head = new ListItem<>(listItem, head);
-        size++;
+        ++size;
     }
 
     //вставка элемента по индексу
@@ -154,7 +153,6 @@ public class SinglyLinkedList<T> {
 
             if (indexCount == index) {
                 tmp.setNextListItem(new ListItem<>(listItem, tmp.getNextListItem()));
-
                 break;
             }
         }
@@ -164,39 +162,12 @@ public class SinglyLinkedList<T> {
 
     //удаление узла по значению
     public boolean isListItemDeletedByValue(T listItem) {
-        ListItem<T> listItemBeforeDelete = this.head;
-
-        if (listItemBeforeDelete == null) {
-            return false;
-        } else if (listItemBeforeDelete.getListItem() == listItem) {
-            this.head = this.head.getNextListItem();
-            --size;
-
-            return true;
+        if (listItem == null) {
+            throw new NullPointerException("listItem is null");
         }
 
-        while (true) {
-            ListItem<T> next = listItemBeforeDelete.getNextListItem();
-
-            if (next == null) {
-                return false;
-            } else if (next.getListItem() == listItem) {
-                break;
-            }
-            listItemBeforeDelete = next;
-        }
-        ListItem<T> nextListItem = listItemBeforeDelete.getNextListItem();
-
-        listItemBeforeDelete.setNextListItem(nextListItem.getNextListItem());
-        nextListItem.setNextListItem(null);
-        --size;
-
-        return true;
-    }
-
-    public boolean isListItemDeletedByValue1(T listItem) {
         for (ListItem<T> tmp = head, prev = null; tmp != null; prev = tmp, tmp = tmp.getNextListItem()) {
-            if (tmp.getListItem() == listItem) {
+            if (Objects.equals(tmp.getListItem(), listItem)) {
                 if (prev == null) {
                     head = tmp.getNextListItem();
                 } else {
@@ -236,7 +207,6 @@ public class SinglyLinkedList<T> {
             prev = current;
             current = tmp;
         }
-
         head = prev;
     }
 
@@ -248,18 +218,18 @@ public class SinglyLinkedList<T> {
             return copyList;
         }
 
-        ListItem<T> newItem = new ListItem<>(head.getListItem(), null);
+        ListItem<T> newListItemHead = new ListItem<>(head.getListItem(), null);
 
         for (ListItem<T> tmp = head; tmp != null; tmp = tmp.getNextListItem()) {
             if (tmp == head) {
-                copyList.head = newItem;
+                copyList.head = newListItemHead;
             } else {
-                ListItem<T> copyItem = new ListItem<>(tmp.getListItem(), null);
-                newItem.setNextListItem(copyItem);
-                newItem = copyItem;
+                ListItem<T> copyListItem = new ListItem<>(tmp.getListItem(), null);
+                newListItemHead.setNextListItem(copyListItem);
+                newListItemHead = copyListItem;
             }
         }
-        copyList.size = this.size;
+        copyList.size = size;
 
         return copyList;
     }

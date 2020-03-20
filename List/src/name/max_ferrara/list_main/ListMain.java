@@ -28,6 +28,12 @@ public class ListMain {
             list1.addListItemByIndex(2,-11);
             System.out.println(list1);
             System.out.println(list1.getSize());
+            System.out.println(list1.isListItemDeletedByValue(100));
+            System.out.println(list1);
+            System.out.println(list1.getSize());
+            list1.reverse();
+            System.out.println(list1);
+            System.out.println(list1.copy());
         } catch (IndexOutOfBoundsException | NullPointerException e) {
             e.printStackTrace();
         }

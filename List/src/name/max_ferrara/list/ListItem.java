@@ -1,4 +1,4 @@
-package name.max_ferrara.list_item;
+package name.max_ferrara.list;
 
 public class ListItem<T> {
     private T listItem;
@@ -13,12 +13,17 @@ public class ListItem<T> {
         this.nextListItem = nextListItem;
     }
 
+    @Override
+    public String toString() {
+        return listItem + "";
+    }
+
     public T getListItem() {
         return listItem;
     }
 
-    public void setListItem(T element) {
-        this.listItem = element;
+    public void setListItem(T listItem) {
+        this.listItem = listItem;
     }
 
     public ListItem<T> getNextListItem() {
@@ -27,11 +32,6 @@ public class ListItem<T> {
 
     public void setNextListItem(ListItem<T> nextListItem) {
         this.nextListItem = nextListItem;
-    }
-
-    @Override
-    public String toString() {
-        return ""+ listItem;
     }
 }
 

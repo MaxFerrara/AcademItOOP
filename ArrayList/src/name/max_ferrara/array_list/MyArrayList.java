@@ -8,9 +8,20 @@ import java.util.ListIterator;
 public class MyArrayList<T> implements List<T> {
     private int size;
     private T[] items;
+    private int modCount = 0;
     public static final int DEFAULT_CAPACITY = 10;
 
+
+    public MyArrayList(int initialCapacity) {
+        if (initialCapacity > 0) {
+            this.items = (T[]) items[initialCapacity];
+        } else {
+            this.items = (T[]) items[DEFAULT_CAPACITY];
+        }
+    }
+
     public MyArrayList() {
+        this.items = (T[]) items[DEFAULT_CAPACITY];
     }
 
     public class MyArrayListIterator implements Iterator<T> {
@@ -30,12 +41,12 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override

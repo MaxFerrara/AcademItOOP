@@ -1,31 +1,32 @@
 package name.max_ferrara.array_list;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class MyArrayList<T> implements List<T> {
     private int size;
     private T[] items;
     private int modCount = 0;
-    public static final int DEFAULT_CAPACITY = 10;
+    private static final int DEFAULT_CAPACITY = 10;
 
 
     public MyArrayList(int initialCapacity) {
         if (initialCapacity > 0) {
-            this.items = (T[]) items[initialCapacity];
+            items = (T[]) new Object[initialCapacity];
+            size = initialCapacity;
         } else {
-            this.items = (T[]) items[DEFAULT_CAPACITY];
+            items = (T[]) new Object[DEFAULT_CAPACITY];
+            size = DEFAULT_CAPACITY;
         }
     }
 
     public MyArrayList() {
-        this.items = (T[]) items[DEFAULT_CAPACITY];
+        items = (T[]) new Object[DEFAULT_CAPACITY];
+        size = DEFAULT_CAPACITY;
     }
 
     public class MyArrayListIterator implements Iterator<T> {
         private int currentIndex = -1;
+        int expectedModCount = MyArrayList.this.modCount;
 
         @Override
         public boolean hasNext() {
@@ -39,6 +40,18 @@ public class MyArrayList<T> implements List<T> {
         }
     }
 
+    public void ensureCapacity(int newCapacity) {
+        if (newCapacity < size) {
+            return;
+        }
+
+        items = Arrays.copyOf(items, newCapacity);
+    }
+
+    public void trimToSize() {
+        ensureCapacity(size());
+    }
+
     @Override
     public int size() {
         return size;
@@ -50,8 +63,8 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean contains(Object o) {
-        return false;
+    public boolean contains(Object item) {
+        return indexOf(item) >= 0;
     }
 
     @Override
@@ -61,22 +74,23 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        return Arrays.copyOf(items, size);
     }
 
     @Override
-    public <T1> T1[] toArray(T1[] a) {
+    public <E> E[] toArray(E[] a) {
         return null;
     }
 
     @Override
-    public boolean add(T t) {
-        return false;
+    public boolean add(T item) {
+        add(size(), item);
+        return true;
     }
 
     @Override
-    public boolean remove(Object o) {
-        return false;
+    public boolean remove(Object item) {
+        return true;
     }
 
     @Override
@@ -106,37 +120,105 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public void clear() {
+        modCount++;
 
+        for (int i = 0; i < size; i++) {
+            items[i] = null;
+        }
+
+        size = 0;
     }
 
     @Override
     public T get(int index) {
-        return null;
+        if (index < 0 || index >= size()) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+
+        return items[index];
     }
 
     @Override
-    public T set(int index, T element) {
-        return null;
+    public T set(int index, T item) {
+        if (index < 0 || index >= size()) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+
+        T oldItem = items[index];
+        items[index] = item;
+
+        return oldItem;
     }
 
     @Override
-    public void add(int index, T element) {
+    public void add(int index, T item) {
+        if (index < 0) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
 
+        if (items.length == size()) {
+            ensureCapacity(size() * 2 + 1);
+        }
+
+        for (int i = size; i > index; --i) {
+            items[i] = items[i - 1];
+        }
+        items[index] = item;
+
+        ++size;
     }
 
     @Override
     public T remove(int index) {
-        return null;
+        if (index < 0 || index >= size()) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+
+        T removeItem = items[index];
+        for (int i = index; i < size() - 1; i++) {
+            items[i] = items[i + 1];
+        }
+        --size;
+
+        return removeItem;
     }
 
     @Override
-    public int indexOf(Object o) {
-        return 0;
+    public int indexOf(Object item) {
+        if (item == null) {
+            for (int i = 0; i < size; i++) {
+                if (items[i] == null) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (item.equals(items[i])) {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
     }
 
     @Override
-    public int lastIndexOf(Object o) {
-        return 0;
+    public int lastIndexOf(Object item) {
+        if (item == null) {
+            for (int i = size - 1; i >= 0; i--) {
+                if (items[i] == null) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = size - 1; i >= 0; i--) {
+                if (item.equals(items[i])) {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
     }
 
     @Override

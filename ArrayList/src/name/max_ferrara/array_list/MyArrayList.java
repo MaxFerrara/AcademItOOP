@@ -12,16 +12,16 @@ public class MyArrayList<T> implements List<T> {
     public MyArrayList(int initialCapacity) {
         if (initialCapacity > 0) {
             items = (T[]) new Object[initialCapacity];
-            size = initialCapacity;
+            size = 0;
         } else {
             items = (T[]) new Object[DEFAULT_CAPACITY];
-            size = DEFAULT_CAPACITY;
+            size = 0;
         }
     }
 
     public MyArrayList() {
         items = (T[]) new Object[DEFAULT_CAPACITY];
-        size = DEFAULT_CAPACITY;
+        size = 0;
     }
 
     public class MyArrayListIterator implements Iterator<T> {
@@ -49,7 +49,22 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public void trimToSize() {
+        ++modCount;
         ensureCapacity(size());
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("[ ");
+
+        for (int i = 0; i < this.size; ++i) {
+            stringBuilder.append(items[i]).append(", ");
+        }
+
+        stringBuilder.setLength(stringBuilder.length() - 2);
+        stringBuilder.append(" ]");
+
+        return stringBuilder.toString();
     }
 
     @Override
@@ -78,8 +93,18 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public <E> E[] toArray(E[] a) {
-        return null;
+    public <E> E[] toArray(E[] element) {
+        if (element.length < size) {
+            return (E[]) Arrays.copyOf(items, size, element.getClass());
+        }
+
+        System.arraycopy(items, 0, element, 0, size);
+
+        if (element.length > size) {
+            element[size] = null;
+        }
+
+        return element;
     }
 
     @Override
@@ -90,31 +115,79 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean remove(Object item) {
-        return true;
+        if (item == null) {
+            for (int index = 0; index < size; index++)
+                if (items[index] == null) {
+                    fastRemove(index);
+
+                    return true;
+                }
+        } else {
+            for (int index = 0; index < size; index++)
+                if (item.equals(items[index])) {
+                    fastRemove(index);
+
+                    return true;
+                }
+        }
+
+        return false;
+    }
+
+    private void fastRemove(int index) {
+        modCount++;
+        int numMoved = size - index - 1;
+
+        if (numMoved > 0) {
+            System.arraycopy(items, index+1, items, index, numMoved);
+        }
+
+        items[--size] = null;
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(Collection<?> collection) {
         return false;
     }
 
     @Override
-    public boolean addAll(Collection<? extends T> c) {
+    public boolean addAll(Collection<? extends T> collection) {
+        Object[] incomingCollection = collection.toArray();
+
+        int numNew = incomingCollection.length;
+        ensureCapacity(size + numNew);
+        System.arraycopy(incomingCollection, 0, items, size, numNew);
+        size += numNew;
+
+        return numNew != 0;
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends T> collection) {
+        Object[] incomingCollection = collection.toArray();
+
+        int numNew = incomingCollection.length;
+        ensureCapacity(size + numNew);
+        int numMoved = size - index;
+
+        if (numMoved > 0) {
+            System.arraycopy(items, index, items, index + numNew,
+                    numMoved);
+        }
+
+        System.arraycopy(incomingCollection, 0, items, index, numNew);
+        size += numNew;
+
+        return numNew != 0;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> collection) {
         return false;
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends T> c) {
-        return false;
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return false;
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(Collection<?> collection) {
         return false;
     }
 
@@ -132,7 +205,7 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public T get(int index) {
         if (index < 0 || index >= size()) {
-            throw new ArrayIndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException();
         }
 
         return items[index];
@@ -141,7 +214,7 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public T set(int index, T item) {
         if (index < 0 || index >= size()) {
-            throw new ArrayIndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException();
         }
 
         T oldItem = items[index];
@@ -152,8 +225,8 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public void add(int index, T item) {
-        if (index < 0) {
-            throw new ArrayIndexOutOfBoundsException();
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("index can be <= size");
         }
 
         if (items.length == size()) {
@@ -171,7 +244,7 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public T remove(int index) {
         if (index < 0 || index >= size()) {
-            throw new ArrayIndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException();
         }
 
         T removeItem = items[index];

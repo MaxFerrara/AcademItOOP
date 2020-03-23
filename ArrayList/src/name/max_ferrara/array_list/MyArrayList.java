@@ -145,6 +145,31 @@ public class MyArrayList<T> implements List<T> {
         items[--size] = null;
     }
 
+    private boolean batchRemove(Collection<?> c, boolean complement) {
+        final Object[] items = this.items;
+        int r = 0, w = 0;
+        boolean modified = false;
+        try {
+            for (; r < size; r++)
+                if (c.contains(items[r]) == complement)
+                    items[w++] = items[r];
+        } finally {
+            if (r != size) {
+                System.arraycopy(items, r, items, w, size - r);
+                w += size - r;
+            }
+            if (w != size) {
+                for (int i = w; i < size; i++)
+                    items[i] = null;
+                modCount += size - w;
+                size = w;
+                modified = true;
+            }
+        }
+
+        return modified;
+    }
+
     @Override
     public boolean containsAll(Collection<?> collection) {
         return false;
@@ -171,8 +196,7 @@ public class MyArrayList<T> implements List<T> {
         int numMoved = size - index;
 
         if (numMoved > 0) {
-            System.arraycopy(items, index, items, index + numNew,
-                    numMoved);
+            System.arraycopy(items, index, items, index + numNew, numMoved);
         }
 
         System.arraycopy(incomingCollection, 0, items, index, numNew);
@@ -183,12 +207,14 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean removeAll(Collection<?> collection) {
-        return false;
+        Objects.requireNonNull(collection);
+        return batchRemove(collection, false);
     }
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        return false;
+        Objects.requireNonNull(collection);
+        return batchRemove(collection, true);
     }
 
     @Override

@@ -5,13 +5,11 @@ import java.util.List;
 
 public class DefaultArrList {
     public static void main(String[] args) {
-        ArrayList<Integer> list1 = new ArrayList<>(15);
-        System.out.println(list1.add(1));
-        list1.add(2);
-        list1.add(2, 15);
-        list1.add(3, 15);
-        System.out.println(list1.size());
-        System.out.println(list1);
-        list1.trimToSize();
+        List<Integer> list1 = new ArrayList<>(15);
+        list1.add(1);
+        List untypedList = list1;
+        untypedList.add("123");
+        Integer x = list1.get(0);
+        System.out.println(x);
     }
 }

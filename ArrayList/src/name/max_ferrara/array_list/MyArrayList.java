@@ -5,18 +5,17 @@ import java.util.*;
 public class MyArrayList<T> implements List<T> {
     private int size;
     private T[] items;
-    private int modCount = 0;
     private static final int DEFAULT_CAPACITY = 10;
 
+    private int modCount = 0;
 
     public MyArrayList(int initialCapacity) {
         if (initialCapacity > 0) {
             items = (T[]) new Object[initialCapacity];
-            size = 0;
         } else {
             items = (T[]) new Object[DEFAULT_CAPACITY];
-            size = 0;
         }
+        size = 0;
     }
 
     public MyArrayList() {
@@ -25,8 +24,8 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public class MyArrayListIterator implements Iterator<T> {
-        private int currentIndex = -1;
         int expectedModCount = MyArrayList.this.modCount;
+        private int currentIndex = -1;
 
         @Override
         public boolean hasNext() {
@@ -35,6 +34,14 @@ public class MyArrayList<T> implements List<T> {
 
         @Override
         public T next() {
+            if (expectedModCount != modCount) {
+                throw new ConcurrentModificationException("collection has been modified");
+            }
+
+            if (currentIndex >= size) {
+                throw new NoSuchElementException("collection is ending");
+            }
+
             ++currentIndex;
             return items[currentIndex];
         }
@@ -45,11 +52,14 @@ public class MyArrayList<T> implements List<T> {
             return;
         }
 
+        ++modCount;
+
         items = Arrays.copyOf(items, newCapacity);
     }
 
     public void trimToSize() {
         ++modCount;
+
         ensureCapacity(size());
     }
 
@@ -135,11 +145,16 @@ public class MyArrayList<T> implements List<T> {
     }
 
     private void fastRemove(int index) {
-        modCount++;
+        if (index < 0 || index >= size()) {
+            throw new ArrayIndexOutOfBoundsException("array index of bound");
+        }
+
+        ++modCount;
+
         int numMoved = size - index - 1;
 
         if (numMoved > 0) {
-            System.arraycopy(items, index+1, items, index, numMoved);
+            System.arraycopy(items, index + 1, items, index, numMoved);
         }
 
         items[--size] = null;
@@ -147,31 +162,48 @@ public class MyArrayList<T> implements List<T> {
 
     private boolean batchRemove(Collection<?> c, boolean complement) {
         final Object[] items = this.items;
-        int r = 0, w = 0;
-        boolean modified = false;
+        int count = 0;
+        int containsCount = 0;
+        boolean isModified = false;
+
         try {
-            for (; r < size; r++)
-                if (c.contains(items[r]) == complement)
-                    items[w++] = items[r];
+            for (; count < size; count++)
+                if (c.contains(items[count]) == complement) {
+                    items[containsCount++] = items[count];
+                }
         } finally {
-            if (r != size) {
-                System.arraycopy(items, r, items, w, size - r);
-                w += size - r;
+            if (count != size) {
+                System.arraycopy(items, count, items, containsCount, size - count);
+                containsCount += size - count;
             }
-            if (w != size) {
-                for (int i = w; i < size; i++)
+            if (containsCount != size) {
+                for (int i = containsCount; i < size; i++) {
                     items[i] = null;
-                modCount += size - w;
-                size = w;
-                modified = true;
+                }
+                modCount += size - containsCount;
+                size = containsCount;
+
+                isModified = true;
             }
         }
 
-        return modified;
+        return isModified;
     }
 
     @Override
     public boolean containsAll(Collection<?> collection) {
+        Set<?> set = new HashSet<>(collection);
+
+        for (T element : items) {
+            if (set.contains(element)) {
+                set.remove(element);
+
+                if (set.isEmpty()) {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
@@ -207,19 +239,25 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean removeAll(Collection<?> collection) {
-        Objects.requireNonNull(collection);
+        if (collection == null) {
+            throw new NullPointerException("collection is null");
+        }
+
         return batchRemove(collection, false);
     }
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        Objects.requireNonNull(collection);
+        if (collection == null) {
+            throw new NullPointerException("collection is null");
+        }
+
         return batchRemove(collection, true);
     }
 
     @Override
     public void clear() {
-        modCount++;
+        ++modCount;
 
         for (int i = 0; i < size; i++) {
             items[i] = null;
@@ -230,8 +268,8 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        if (index < 0 || index >= size()) {
-            throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= size) {
+            throw new ArrayIndexOutOfBoundsException("array index of bound");
         }
 
         return items[index];
@@ -239,8 +277,8 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public T set(int index, T item) {
-        if (index < 0 || index >= size()) {
-            throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= size) {
+            throw new ArrayIndexOutOfBoundsException("array index of bound");
         }
 
         T oldItem = items[index];
@@ -252,8 +290,10 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public void add(int index, T item) {
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("index can be <= size");
+            throw new ArrayIndexOutOfBoundsException("array index of bound");
         }
+
+        ++modCount;
 
         if (items.length == size()) {
             ensureCapacity(size() * 2 + 1);
@@ -270,8 +310,10 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public T remove(int index) {
         if (index < 0 || index >= size()) {
-            throw new IndexOutOfBoundsException();
+            throw new ArrayIndexOutOfBoundsException("array index of bound");
         }
+
+        ++modCount;
 
         T removeItem = items[index];
         for (int i = index; i < size() - 1; i++) {

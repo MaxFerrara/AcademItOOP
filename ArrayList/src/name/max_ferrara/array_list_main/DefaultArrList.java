@@ -7,8 +7,7 @@ public class DefaultArrList {
     public static void main(String[] args) {
         List<Integer> list1 = new ArrayList<>(15);
         list1.add(1);
-        List untypedList = list1;
-        untypedList.add("123");
+        //list1.containsAll();
         Integer x = list1.get(0);
         System.out.println(x);
     }

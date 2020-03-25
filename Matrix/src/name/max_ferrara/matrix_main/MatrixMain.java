@@ -18,22 +18,28 @@ public class MatrixMain {
             Vector vector5 = new Vector(new double[]{1});
 
             Matrix matrix5 = new Matrix(vector1, vector2, vector3, vector4, vector5);
+            System.out.println(matrix5);
+
             Matrix cloneMatrix = new Matrix(matrix5);
 
             Matrix matrix6 = new Matrix(new double[][]{{1, -1, 2, 3}, {2, 0, 6, 5}, {3, 0, 0, 0}, {1, 2, 3, 4}});
             Matrix matrix7 = new Matrix(3, 3);
 
-            matrix7.setVector(0, new double[]{1, 2, 3});
-
             System.out.println(matrix7);
+
+            matrix7.setRow(0, new double[]{1, 2, 3});
+
             System.out.println(cloneMatrix.getColumn(1));
             System.out.println(cloneMatrix.getRow(2));
-            cloneMatrix.scalarMultiply(2);
+            cloneMatrix.multiplyOnScalar(2);
             System.out.println(cloneMatrix);
             cloneMatrix.transpose();
 
             System.out.println(cloneMatrix);
             System.out.println(Matrix.getComposition(matrix1, matrix2));
+
+            System.out.println(matrix1);
+            System.out.println(vector4);
             System.out.println(matrix1.getVectorMultiply(vector4));
             System.out.println(matrix6.calculateDeterminant());
             System.out.println(Matrix.getSum(matrix3, matrix4));

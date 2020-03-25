@@ -19,23 +19,27 @@ public class Matrix {
         }
     }
 
-    public Matrix(double[][] twoDimensionalArray) {
-        if (twoDimensionalArray.length < 1 || twoDimensionalArray[0].length < 1) {
+    public Matrix(double[][] array) {
+        if (array.length < 1) {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
         int maxLength = 0;
 
-        for (double[] doubles : twoDimensionalArray) {
+        for (double[] doubles : array) {
             if (doubles.length > maxLength) {
                 maxLength = doubles.length;
             }
         }
 
-        vectors = new Vector[twoDimensionalArray.length];
+        if (maxLength < 1) {
+            throw new IllegalArgumentException("Illegal matrix dimensions");
+        }
+
+        vectors = new Vector[array.length];
 
         for (int i = 0; i < vectors.length; ++i) {
-            vectors[i] = new Vector(maxLength, twoDimensionalArray[i]);
+            vectors[i] = new Vector(maxLength, array[i]);
         }
     }
 
@@ -52,8 +56,10 @@ public class Matrix {
             }
         }
 
+        Vector vector = new Vector(maxLength);
+
         for (int i = 0; i < vectors.length; ++i) {
-            vectors[i] = new Vector(maxLength, vectors[i].toArray());
+            vectors[i] = Vector.getSum(vectors[i], vector);
         }
 
         this.vectors = vectors;
@@ -72,7 +78,7 @@ public class Matrix {
         StringBuilder stringBuilder = new StringBuilder("{ ");
 
         for (Vector vector : vectors) {
-            stringBuilder.append(vector.toString());
+            stringBuilder.append(vector);
             stringBuilder.append(", ");
         }
 
@@ -105,12 +111,16 @@ public class Matrix {
         return hash;
     }
 
-    public void setVector(int row, double[] array) {
-        if (array.length != getColumnsQuantity() || (row > getRowsQuantity() || row < 0)) {
+    public void setRow(int rowIndex, double[] array) {
+        if (array.length != getColumnsQuantity()) {
+            throw new IllegalArgumentException("Illegal row length");
+        }
+
+        if (rowIndex >= getRowsQuantity() || rowIndex < 0) {
             throw new IndexOutOfBoundsException("invalid argument value");
         }
 
-        vectors[row] = new Vector(array);
+        vectors[rowIndex] = new Vector(array);
     }
 
     public int getRowsQuantity() {
@@ -122,10 +132,18 @@ public class Matrix {
     }
 
     public Vector getRow(int rowIndex) {
+        if (rowIndex < 0 || rowIndex >= getRowsQuantity()) {
+            throw new IndexOutOfBoundsException("invalid index value");
+        }
+
         return new Vector(vectors[rowIndex]);
     }
 
     public Vector getColumn(int columnIndex) {
+        if (columnIndex < 0 || columnIndex >= getColumnsQuantity()) {
+            throw new IndexOutOfBoundsException("invalid index value");
+        }
+
         double[] tmp = new double[getRowsQuantity()];
 
         for (int i = 0; i < vectors.length; ++i) {
@@ -145,7 +163,7 @@ public class Matrix {
         vectors = tmp;
     }
 
-    public void scalarMultiply(double number) {
+    public void multiplyOnScalar(double number) {
         for (Vector vector : vectors) {
             vector.scale(number);
         }
@@ -187,7 +205,7 @@ public class Matrix {
     }
 
     public Vector getVectorMultiply(Vector vector) {
-        if (vector.getSize() != getColumnsQuantity()) {
+        if (vector.getSize() != this.getColumnsQuantity()) {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
@@ -230,7 +248,7 @@ public class Matrix {
         Matrix cloneMatrix = new Matrix(matrix1);
         cloneMatrix.add(matrix2);
 
-        return new Matrix(cloneMatrix);
+        return cloneMatrix;
     }
 
     public static Matrix getDiff(Matrix matrix1, Matrix matrix2) {
@@ -241,7 +259,7 @@ public class Matrix {
         Matrix cloneMatrix = new Matrix(matrix1);
         cloneMatrix.subtract(matrix2);
 
-        return new Matrix(cloneMatrix);
+        return cloneMatrix;
     }
 
     public static Matrix getComposition(Matrix matrix1, Matrix matrix2) {

@@ -7,7 +7,7 @@ public class MyArrayList<T> implements List<T> {
     private T[] items;
     private static final int DEFAULT_CAPACITY = 10;
 
-    private int modCount = 0;
+    private int modCount;
 
     public MyArrayList(int initialCapacity) {
         if (initialCapacity > 0) {
@@ -15,12 +15,10 @@ public class MyArrayList<T> implements List<T> {
         } else {
             items = (T[]) new Object[DEFAULT_CAPACITY];
         }
-        size = 0;
     }
 
     public MyArrayList() {
         items = (T[]) new Object[DEFAULT_CAPACITY];
-        size = 0;
     }
 
     public class MyArrayListIterator implements Iterator<T> {
@@ -160,99 +158,29 @@ public class MyArrayList<T> implements List<T> {
         items[--size] = null;
     }
 
-    private boolean batchRemove(Collection<?> c, boolean complement) {
-        final Object[] items = this.items;
-        int count = 0;
-        int containsCount = 0;
-        boolean isModified = false;
-
-        try {
-            for (; count < size; count++)
-                if (c.contains(items[count]) == complement) {
-                    items[containsCount++] = items[count];
-                }
-        } finally {
-            if (count != size) {
-                System.arraycopy(items, count, items, containsCount, size - count);
-                containsCount += size - count;
-            }
-            if (containsCount != size) {
-                for (int i = containsCount; i < size; i++) {
-                    items[i] = null;
-                }
-                modCount += size - containsCount;
-                size = containsCount;
-
-                isModified = true;
-            }
-        }
-
-        return isModified;
-    }
-
     @Override
     public boolean containsAll(Collection<?> collection) {
-        Set<?> set = new HashSet<>(collection);
-
-        for (T element : items) {
-            if (set.contains(element)) {
-                set.remove(element);
-
-                if (set.isEmpty()) {
-                    return true;
-                }
-            }
-        }
-
         return false;
     }
 
     @Override
     public boolean addAll(Collection<? extends T> collection) {
-        Object[] incomingCollection = collection.toArray();
-
-        int numNew = incomingCollection.length;
-        ensureCapacity(size + numNew);
-        System.arraycopy(incomingCollection, 0, items, size, numNew);
-        size += numNew;
-
-        return numNew != 0;
+        return true;
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends T> collection) {
-        Object[] incomingCollection = collection.toArray();
-
-        int numNew = incomingCollection.length;
-        ensureCapacity(size + numNew);
-        int numMoved = size - index;
-
-        if (numMoved > 0) {
-            System.arraycopy(items, index, items, index + numNew, numMoved);
-        }
-
-        System.arraycopy(incomingCollection, 0, items, index, numNew);
-        size += numNew;
-
-        return numNew != 0;
+        return true;
     }
 
     @Override
     public boolean removeAll(Collection<?> collection) {
-        if (collection == null) {
-            throw new NullPointerException("collection is null");
-        }
-
-        return batchRemove(collection, false);
+        return false;
     }
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        if (collection == null) {
-            throw new NullPointerException("collection is null");
-        }
-
-        return batchRemove(collection, true);
+        return false;
     }
 
     @Override

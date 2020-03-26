@@ -209,15 +209,15 @@ public class Matrix {
             throw new IllegalArgumentException("Illegal matrix dimensions");
         }
 
-        double[] result = new double[vectors.length];
+        Vector resultVector = new Vector(vectors.length);
 
         for (int i = 0; i < vectors.length; ++i) {
             for (int j = 0; j < vectors[i].getSize(); ++j) {
-                result[i] += vectors[i].getElementByIndex(j) * vector.getElementByIndex(j);
+                resultVector.setElementByIndex(i, Vector.getScalarComposition(vectors[i], vector));
             }
         }
 
-        return new Vector(result);
+        return resultVector;
     }
 
     public void add(Matrix matrix) {

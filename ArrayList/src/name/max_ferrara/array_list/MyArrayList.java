@@ -10,10 +10,14 @@ public class MyArrayList<T> implements List<T> {
     private int modCount;
 
     public MyArrayList(int initialCapacity) {
-        if (initialCapacity > 0) {
-            items = (T[]) new Object[initialCapacity];
-        } else {
+        if (initialCapacity < 0) {
+            throw new IllegalArgumentException("capacity can not be < 0");
+        }
+
+        if (initialCapacity <= 10) {
             items = (T[]) new Object[DEFAULT_CAPACITY];
+        } else {
+            items = (T[]) new Object[initialCapacity];
         }
     }
 
@@ -45,20 +49,18 @@ public class MyArrayList<T> implements List<T> {
         }
     }
 
-    public void ensureCapacity(int newCapacity) {
-        if (newCapacity < size) {
-            return;
+    private void ensureCapacity(int newCapacity) {
+        if(items.length < newCapacity) {
+            items = Arrays.copyOf(items, newCapacity);
+
+            ++modCount;
         }
-
-        ++modCount;
-
-        items = Arrays.copyOf(items, newCapacity);
     }
 
     public void trimToSize() {
-        ++modCount;
+        items = Arrays.copyOf(items, size());
 
-        ensureCapacity(size());
+        ++modCount;
     }
 
     @Override
@@ -123,39 +125,15 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean remove(Object item) {
-        if (item == null) {
-            for (int index = 0; index < size; index++)
-                if (items[index] == null) {
-                    fastRemove(index);
+        for (int i = 0; i < size; i++) {
+            if (Objects.equals(items[i], item)) {
+                remove(i);
 
-                    return true;
-                }
-        } else {
-            for (int index = 0; index < size; index++)
-                if (item.equals(items[index])) {
-                    fastRemove(index);
-
-                    return true;
-                }
+                return true;
+            }
         }
 
         return false;
-    }
-
-    private void fastRemove(int index) {
-        if (index < 0 || index >= size()) {
-            throw new ArrayIndexOutOfBoundsException("array index of bound");
-        }
-
-        ++modCount;
-
-        int numMoved = size - index - 1;
-
-        if (numMoved > 0) {
-            System.arraycopy(items, index + 1, items, index, numMoved);
-        }
-
-        items[--size] = null;
     }
 
     @Override
@@ -254,17 +232,9 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public int indexOf(Object item) {
-        if (item == null) {
-            for (int i = 0; i < size; i++) {
-                if (items[i] == null) {
-                    return i;
-                }
-            }
-        } else {
-            for (int i = 0; i < size; i++) {
-                if (item.equals(items[i])) {
-                    return i;
-                }
+        for (int i = 0; i < size; i++) {
+            if (Objects.equals(items[i], item)) {
+                return i;
             }
         }
 
@@ -273,17 +243,9 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public int lastIndexOf(Object item) {
-        if (item == null) {
-            for (int i = size - 1; i >= 0; i--) {
-                if (items[i] == null) {
-                    return i;
-                }
-            }
-        } else {
-            for (int i = size - 1; i >= 0; i--) {
-                if (item.equals(items[i])) {
-                    return i;
-                }
+        for (int i = size - 1; i >= 0; i--) {
+            if (Objects.equals(items[i], item)) {
+                return i;
             }
         }
 

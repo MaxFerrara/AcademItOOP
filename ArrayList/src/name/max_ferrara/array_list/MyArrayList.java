@@ -50,7 +50,7 @@ public class MyArrayList<T> implements List<T> {
     }
 
     private void ensureCapacity(int newCapacity) {
-        if(items.length < newCapacity) {
+        if (items.length < newCapacity) {
             items = Arrays.copyOf(items, newCapacity);
 
             ++modCount;
@@ -138,16 +138,61 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean containsAll(Collection<?> collection) {
-        return false;
+        Iterator<?> iterator = collection.iterator();
+
+        for (int i = 0; i < size; ++i) {
+            boolean isSearched = false;
+
+            while (iterator.hasNext()) {
+                if (items[i].equals(iterator.next())) {
+                    isSearched = true;
+                    break;
+                }
+            }
+
+            if (!isSearched) {
+                return false;
+            }
+
+        }
+
+        return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends T> collection) {
+        int requireCapacity = size + collection.size();
+
+        if (items.length < requireCapacity) {
+            ensureCapacity(requireCapacity * 2 + 1);
+        }
+
+        for (T element : collection) {
+            add(element);
+        }
+        ++modCount;
+
         return true;
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends T> collection) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("arrayList index of bound");
+        }
+
+        int requireCapacity = size + collection.size();
+
+        if (items.length < requireCapacity) {
+            ensureCapacity(requireCapacity * 2 + 1);
+        }
+
+        for (T element : collection) {
+            add(index, element);
+            ++index;
+        }
+        ++modCount;
+
         return true;
     }
 
@@ -175,7 +220,7 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public T get(int index) {
         if (index < 0 || index >= size) {
-            throw new ArrayIndexOutOfBoundsException("array index of bound");
+            throw new IndexOutOfBoundsException("arrayList index of bound");
         }
 
         return items[index];
@@ -184,7 +229,7 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public T set(int index, T item) {
         if (index < 0 || index >= size) {
-            throw new ArrayIndexOutOfBoundsException("array index of bound");
+            throw new IndexOutOfBoundsException("arrayList index of bound");
         }
 
         T oldItem = items[index];
@@ -196,7 +241,7 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public void add(int index, T item) {
         if (index < 0 || index > size) {
-            throw new ArrayIndexOutOfBoundsException("array index of bound");
+            throw new IndexOutOfBoundsException("arrayList index of bound");
         }
 
         ++modCount;
@@ -216,7 +261,7 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public T remove(int index) {
         if (index < 0 || index >= size()) {
-            throw new ArrayIndexOutOfBoundsException("array index of bound");
+            throw new IndexOutOfBoundsException("arrayList index of bound");
         }
 
         ++modCount;

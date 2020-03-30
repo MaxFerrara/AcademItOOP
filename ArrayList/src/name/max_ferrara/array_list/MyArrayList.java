@@ -14,11 +14,7 @@ public class MyArrayList<T> implements List<T> {
             throw new IllegalArgumentException("capacity can not be < 0");
         }
 
-        if (initialCapacity <= 10) {
-            items = (T[]) new Object[DEFAULT_CAPACITY];
-        } else {
-            items = (T[]) new Object[initialCapacity];
-        }
+        items = (T[]) new Object[initialCapacity];
     }
 
     public MyArrayList() {
@@ -26,7 +22,7 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public class MyArrayListIterator implements Iterator<T> {
-        int expectedModCount = MyArrayList.this.modCount;
+        int expectedModCount = modCount;
         private int currentIndex = -1;
 
         @Override
@@ -65,6 +61,10 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public String toString() {
+        if (items.length == 0) {
+            return "[ ]";
+        }
+
         StringBuilder stringBuilder = new StringBuilder("[ ");
 
         for (int i = 0; i < this.size; ++i) {
@@ -138,22 +138,14 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean containsAll(Collection<?> collection) {
-        Iterator<?> iterator = collection.iterator();
+        if (collection.isEmpty()) {
+            return false;
+        }
 
-        for (int i = 0; i < size; ++i) {
-            boolean isSearched = false;
-
-            while (iterator.hasNext()) {
-                if (items[i].equals(iterator.next())) {
-                    isSearched = true;
-                    break;
-                }
-            }
-
-            if (!isSearched) {
+        for (Object element : collection) {
+            if (!contains(element)) {
                 return false;
             }
-
         }
 
         return true;
@@ -161,6 +153,10 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> collection) {
+        if (collection.isEmpty()) {
+            return false;
+        }
+
         int requireCapacity = size + collection.size();
 
         if (items.length < requireCapacity) {
@@ -181,6 +177,10 @@ public class MyArrayList<T> implements List<T> {
             throw new IndexOutOfBoundsException("arrayList index of bound");
         }
 
+        if (collection.isEmpty()) {
+            return false;
+        }
+
         int requireCapacity = size + collection.size();
 
         if (items.length < requireCapacity) {
@@ -198,12 +198,38 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean removeAll(Collection<?> collection) {
-        return false;
+        if (!containsAll(collection)) {
+            return false;
+        }
+
+        for (Object element : collection) {
+            for (T arrayListElement : items) {
+                if (Objects.equals(element, arrayListElement)) {
+                    remove(arrayListElement);
+                }
+            }
+        }
+        ++modCount;
+
+        return true;
     }
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        return false;
+        if (!containsAll(collection)) {
+            return false;
+        }
+
+        for (T arrayListElement : items) {
+            for (Object element : collection) {
+                if (!Objects.equals(element, arrayListElement)) {
+                    remove(element);
+                }
+            }
+        }
+        ++modCount;
+
+        return true;
     }
 
     @Override
@@ -250,8 +276,8 @@ public class MyArrayList<T> implements List<T> {
             ensureCapacity(size() * 2 + 1);
         }
 
-        for (int i = size; i > index; --i) {
-            items[i] = items[i - 1];
+        if (size - index >= 0) {
+            System.arraycopy(items, index, items, index + 1, size - index);
         }
         items[index] = item;
 
@@ -267,8 +293,8 @@ public class MyArrayList<T> implements List<T> {
         ++modCount;
 
         T removeItem = items[index];
-        for (int i = index; i < size() - 1; i++) {
-            items[i] = items[i + 1];
+        if (size() - 1 - index >= 0) {
+            System.arraycopy(items, index + 1, items, index, size() - 1 - index);
         }
         --size;
 

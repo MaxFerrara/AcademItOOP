@@ -14,15 +14,17 @@ public class MyArrayList<T> implements List<T> {
             throw new IllegalArgumentException("capacity can not be < 0");
         }
 
+        //noinspection unchecked
         items = (T[]) new Object[initialCapacity];
     }
 
     public MyArrayList() {
+        //noinspection unchecked
         items = (T[]) new Object[DEFAULT_CAPACITY];
     }
 
     public class MyArrayListIterator implements Iterator<T> {
-        int expectedModCount = modCount;
+        private int expectedModCount = modCount;
         private int currentIndex = -1;
 
         @Override
@@ -40,12 +42,16 @@ public class MyArrayList<T> implements List<T> {
                 throw new NoSuchElementException("collection is ending");
             }
 
-            ++currentIndex;
-            return items[currentIndex];
+            if (this.hasNext()) {
+                ++currentIndex;
+                return items[currentIndex];
+            }
+
+            return null;
         }
     }
 
-    private void ensureCapacity(int newCapacity) {
+    public void ensureCapacity(int newCapacity) {
         if (items.length < newCapacity) {
             items = Arrays.copyOf(items, newCapacity);
 
@@ -105,9 +111,11 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public <E> E[] toArray(E[] element) {
         if (element.length < size) {
+            //noinspection unchecked
             return (E[]) Arrays.copyOf(items, size, element.getClass());
         }
 
+        //noinspection SuspiciousSystemArraycopy
         System.arraycopy(items, 0, element, 0, size);
 
         if (element.length > size) {

@@ -1,37 +1,41 @@
 package name.max_ferrara.list;
 
 public class ListItem<T> {
-    private T listItem;
-    private ListItem<T> nextListItem;
+    private T data;
+    private ListItem<T> next;
 
-    public ListItem(T listItem) {
-        this.listItem = listItem;
+    public ListItem(T data) {
+        this.data = data;
     }
 
-    public ListItem(T listItem, ListItem<T> nextListItem) {
-        this.listItem = listItem;
-        this.nextListItem = nextListItem;
+    public ListItem(T data, ListItem<T> next) {
+        this.data = data;
+        this.next = next;
     }
 
     @Override
     public String toString() {
-        return listItem + "";
+        if (data == null) {
+            return "null";
+        }
+
+        return data.toString();
     }
 
-    public T getListItem() {
-        return listItem;
+    public T getData() {
+        return data;
     }
 
-    public void setListItem(T listItem) {
-        this.listItem = listItem;
+    public void setData(T data) {
+        this.data = data;
     }
 
-    public ListItem<T> getNextListItem() {
-        return nextListItem;
+    public ListItem<T> getNext() {
+        return next;
     }
 
-    public void setNextListItem(ListItem<T> nextListItem) {
-        this.nextListItem = nextListItem;
+    public void setNext(ListItem<T> next) {
+        this.next = next;
     }
 }
 

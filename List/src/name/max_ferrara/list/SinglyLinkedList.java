@@ -75,7 +75,7 @@ public class SinglyLinkedList<T> {
     //изменение элемента по индексу, вернуть старое значение
     public T setDataByIndex(int index, T data) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("go beyond the list");
+            throw new IndexOutOfBoundsException("list index out of bounds");
         }
 
         ListItem<T> oldListItem = new ListItem<>(getListItemByIndex(index).getData());
@@ -87,15 +87,14 @@ public class SinglyLinkedList<T> {
     //удаление элемента по индексу, вернуть старое значение
     public T deleteDataByIndex(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("List index out of bounds");
+            throw new IndexOutOfBoundsException("list index out of bounds");
         }
 
         if (index == 0) {
             return deleteFirstListItem();
         }
 
-        index = index - 1;
-
+        index--;
         ListItem<T> deletedListItem = getListItemByIndex(index).getNext();
         getListItemByIndex(index).setNext(getListItemByIndex(index).getNext().getNext());
         --size;
@@ -112,26 +111,26 @@ public class SinglyLinkedList<T> {
     //вставка элемента по индексу
     public void addDataByIndex(int index, T data) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("List index out of bounds");
+            throw new IndexOutOfBoundsException("list index out of bounds");
         }
 
         if (index == 0) {
             addFirst(data);
         }
 
-        index = index - 1;
+        index--;
         getListItemByIndex(index).setNext(new ListItem<>(data, getListItemByIndex(index).getNext()));
         ++size;
     }
 
     //удаление узла по значению
-    public boolean deleteByValue(T listItem) {
-        for (ListItem<T> tmp = head, prev = null; tmp != null; prev = tmp, tmp = tmp.getNext()) {
-            if (Objects.equals(tmp.getData(), listItem)) {
+    public boolean deleteByValue(T data) {
+        for (ListItem<T> current = head, prev = null; current != null; prev = current, current = current.getNext()) {
+            if (Objects.equals(current.getData(), data)) {
                 if (prev == null) {
-                    head = tmp.getNext();
+                    head = current.getNext();
                 } else {
-                    prev.setNext(tmp.getNext());
+                    prev.setNext(current.getNext());
                 }
                 --size;
 
@@ -179,15 +178,12 @@ public class SinglyLinkedList<T> {
         }
 
         ListItem<T> newListItemHead = new ListItem<>(head.getData(), null);
+        listCopy.head = newListItemHead;
 
-        for (ListItem<T> tmp = head; tmp != null; tmp = tmp.getNext()) {
-            if (tmp == head) {
-                listCopy.head = newListItemHead;
-            } else {
-                ListItem<T> copyListItem = new ListItem<>(tmp.getData(), null);
-                newListItemHead.setNext(copyListItem);
-                newListItemHead = copyListItem;
-            }
+        for (ListItem<T> current = head.getNext(); current != null; current = current.getNext()) {
+            ListItem<T> copyListItem = new ListItem<>(current.getData(), null);
+            newListItemHead.setNext(copyListItem);
+            newListItemHead = copyListItem;
         }
         listCopy.size = size;
 

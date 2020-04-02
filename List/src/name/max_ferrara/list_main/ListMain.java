@@ -26,7 +26,7 @@ public class ListMain {
             System.out.println(list1.deleteDataByIndex(2));
             System.out.println(list1);
             System.out.println(list1.getSize());
-            list1.addDataByIndex(2,-11);
+            list1.addDataByIndex(2, -11);
             System.out.println(list1);
             System.out.println(list1.getSize());
             System.out.println(list1.deleteByValue(100));

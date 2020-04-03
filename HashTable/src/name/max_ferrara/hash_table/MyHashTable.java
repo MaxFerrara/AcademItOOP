@@ -1,17 +1,35 @@
 package name.max_ferrara.hash_table;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
 public class MyHashTable<T> implements Collection<T> {
+    private ArrayList<T> items;
+    private static final int DEFAULT_CAPACITY = 10;
+
+    private int modCount;
+
+    public MyHashTable(int initialCapacity) {
+        if (initialCapacity < 0) {
+            throw new IllegalArgumentException("capacity can not be < 0");
+        }
+
+        items = new ArrayList<>(initialCapacity);
+    }
+
+    public MyHashTable() {
+        items = new ArrayList<>(DEFAULT_CAPACITY);
+    }
+
     @Override
     public int size() {
-        return 0;
+        return items.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return items.size() == 0;
     }
 
     @Override

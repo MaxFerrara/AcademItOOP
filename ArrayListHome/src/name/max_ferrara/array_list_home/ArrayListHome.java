@@ -9,25 +9,19 @@ import java.util.Scanner;
 
 public class ArrayListHome {
     public static void deleteOddNumbers(List<Integer> list) {
-        list.removeIf(element -> element % 2 == 0);
+        for (int i = list.size() - 1; i >= 0; --i) {
+            if (list.get(i) % 2 == 0) {
+                list.remove(i);
+            }
+        }
     }
 
     public static List<Integer> getListWithoutDuplicates(List<Integer> list) {
         List<Integer> listWithoutDuplicates = new ArrayList<>();
 
-        for (int i = 0; i < list.size(); ++i) {
-            boolean isHaveDuplicate = false;
-
-            for (int j = i + 1; j < list.size(); ++j) {
-                if (list.get(j).equals(list.get(i))) {
-                    isHaveDuplicate = true;
-
-                    break;
-                }
-            }
-
-            if (!isHaveDuplicate) {
-                listWithoutDuplicates.add(list.get(i));
+        for (Integer number : list) {
+            if (!listWithoutDuplicates.contains(number)) {
+                listWithoutDuplicates.add(number);
             }
         }
 
@@ -35,7 +29,7 @@ public class ArrayListHome {
     }
 
 
-    public static List<String> getStringsReadFileList(String filePlace) {
+    public static List<String> getListFromFile(String filePlace) {
         List<String> outputList = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(new FileInputStream(filePlace))) {
@@ -50,7 +44,7 @@ public class ArrayListHome {
     }
 
     public static void main(String[] args) {
-        List<String> inputsList = getStringsReadFileList("./ArrayListHome/input.txt");
+        List<String> inputsList = getListFromFile("./ArrayListHome/input.txt");
         System.out.println(inputsList);
 
         List<Integer> numbersList = new ArrayList<>(Arrays.asList(1, 1, 1, 2, 3, 3, 3, 4, 5, 5, 6, 10, -5));

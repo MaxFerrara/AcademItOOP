@@ -1,12 +1,12 @@
 package name.max_ferrara.hash_table;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 public class MyHashTable<T> implements Collection<T> {
-    private ArrayList<T> items;
-    private static final int DEFAULT_CAPACITY = 10;
+    private T[] items;
+    private static final int DEFAULT_CAPACITY = 50;
 
     private int modCount;
 
@@ -15,21 +15,39 @@ public class MyHashTable<T> implements Collection<T> {
             throw new IllegalArgumentException("capacity can not be < 0");
         }
 
-        items = new ArrayList<>(initialCapacity);
+        items = (T[]) new Object[initialCapacity];
     }
 
     public MyHashTable() {
-        items = new ArrayList<>(DEFAULT_CAPACITY);
+        items = (T[]) new Object[DEFAULT_CAPACITY];
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("[ ");
+
+        for (int i = 0; i < this.size(); ++i) {
+            stringBuilder.append(items[i]).append(", ");
+        }
+
+        stringBuilder.setLength(stringBuilder.length() - 2);
+        stringBuilder.append(" ]");
+
+        return stringBuilder.toString();
+    }
+
+    private int getHashCode(T element) {
+        return element.hashCode() % items.length;
     }
 
     @Override
     public int size() {
-        return items.size();
+        return items.length;
     }
 
     @Override
     public boolean isEmpty() {
-        return items.size() == 0;
+        return items.length == 0;
     }
 
     @Override
@@ -53,8 +71,16 @@ public class MyHashTable<T> implements Collection<T> {
     }
 
     @Override
-    public boolean add(T t) {
-        return false;
+    public boolean add(T item) {
+        int key = getHashCode(item);
+
+        if (items[key] == null) {
+            LinkedList<T> list = new LinkedList<>();
+            items[key] = (T) list;
+            list.add(item);
+        }
+
+        return true;
     }
 
     @Override

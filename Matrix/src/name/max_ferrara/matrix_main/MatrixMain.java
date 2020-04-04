@@ -19,6 +19,7 @@ public class MatrixMain {
 
             Matrix matrix5 = new Matrix(vector1, vector2, vector3, vector4, vector5);
             System.out.println(matrix5);
+            System.out.println(matrix5.getColumn(0));
 
             Matrix cloneMatrix = new Matrix(matrix5);
 
@@ -27,8 +28,9 @@ public class MatrixMain {
 
             System.out.println(matrix7);
 
-            matrix7.setRow(0, new double[]{1, 2, 3});
+            matrix7.setRow(0, new Vector(new double[]{1, 2, 3}));
 
+            System.out.println(matrix7);
             System.out.println(cloneMatrix.getColumn(1));
             System.out.println(cloneMatrix.getRow(2));
             cloneMatrix.multiplyOnScalar(2);

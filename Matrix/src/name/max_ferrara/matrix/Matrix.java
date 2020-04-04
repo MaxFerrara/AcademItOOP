@@ -9,7 +9,7 @@ public class Matrix {
 
     public Matrix(int rowsQuantity, int columnsQuantity) {
         if (rowsQuantity < 1 || columnsQuantity < 1) {
-            throw new IllegalArgumentException("Illegal matrix dimensions");
+            throw new IllegalArgumentException("matrix can't has size < zero");
         }
 
         vectors = new Vector[rowsQuantity];
@@ -21,7 +21,7 @@ public class Matrix {
 
     public Matrix(double[][] array) {
         if (array.length < 1) {
-            throw new IllegalArgumentException("Illegal matrix dimensions");
+            throw new IllegalArgumentException("rows quantity can't be < zero");
         }
 
         int maxLength = 0;
@@ -33,7 +33,7 @@ public class Matrix {
         }
 
         if (maxLength < 1) {
-            throw new IllegalArgumentException("Illegal matrix dimensions");
+            throw new IllegalArgumentException("columns quantity can't be < zero");
         }
 
         vectors = new Vector[array.length];
@@ -45,7 +45,7 @@ public class Matrix {
 
     public Matrix(Vector... vectors) {
         if (vectors.length < 1) {
-            throw new IllegalArgumentException("Illegal matrix dimensions");
+            throw new IllegalArgumentException("matrix can't has size < zero");
         }
 
         int maxLength = 0;
@@ -111,18 +111,6 @@ public class Matrix {
         return hash;
     }
 
-    public void setRow(int rowIndex, double[] array) {
-        if (array.length != getColumnsQuantity()) {
-            throw new IllegalArgumentException("Illegal row length");
-        }
-
-        if (rowIndex >= getRowsQuantity() || rowIndex < 0) {
-            throw new IndexOutOfBoundsException("invalid argument value");
-        }
-
-        vectors[rowIndex] = new Vector(array);
-    }
-
     public int getRowsQuantity() {
         return vectors.length;
     }
@@ -131,9 +119,21 @@ public class Matrix {
         return vectors[0].getSize();
     }
 
+    public void setRow(int rowIndex, Vector vector) {
+        if (vector.getSize() != getColumnsQuantity()) {
+            throw new IllegalArgumentException("vector's length is invalid");
+        }
+
+        if (rowIndex >= getRowsQuantity() || rowIndex < 0) {
+            throw new IndexOutOfBoundsException("out of bounds");
+        }
+
+        vectors[rowIndex] = vector;
+    }
+
     public Vector getRow(int rowIndex) {
         if (rowIndex < 0 || rowIndex >= getRowsQuantity()) {
-            throw new IndexOutOfBoundsException("invalid index value");
+            throw new IndexOutOfBoundsException("out of bound");
         }
 
         return new Vector(vectors[rowIndex]);
@@ -141,16 +141,16 @@ public class Matrix {
 
     public Vector getColumn(int columnIndex) {
         if (columnIndex < 0 || columnIndex >= getColumnsQuantity()) {
-            throw new IndexOutOfBoundsException("invalid index value");
+            throw new IndexOutOfBoundsException("out of bound");
         }
 
-        double[] tmp = new double[getRowsQuantity()];
+        Vector column = new Vector(getRowsQuantity());
 
         for (int i = 0; i < vectors.length; ++i) {
-            tmp[i] = vectors[i].getElementByIndex(columnIndex);
+            column.setElementByIndex(i, vectors[i].getElementByIndex(columnIndex));
         }
 
-        return new Vector(tmp);
+        return column;
     }
 
     public void transpose() {
@@ -171,7 +171,7 @@ public class Matrix {
 
     public double calculateDeterminant() {
         if (getRowsQuantity() != getColumnsQuantity()) {
-            throw new IllegalArgumentException("Illegal matrix dimensions");
+            throw new IllegalArgumentException("quantity of rows and columns should be equal");
         }
 
         if (getRowsQuantity() == 1) {
@@ -205,16 +205,15 @@ public class Matrix {
     }
 
     public Vector getVectorMultiply(Vector vector) {
-        if (vector.getSize() != this.getColumnsQuantity()) {
-            throw new IllegalArgumentException("Illegal matrix dimensions");
+        if (vector.getSize() != getColumnsQuantity()) {
+            throw new IllegalArgumentException("vector length and quantity of columns should be equal");
         }
 
         Vector resultVector = new Vector(vectors.length);
 
         for (int i = 0; i < vectors.length; ++i) {
-            for (int j = 0; j < vectors[i].getSize(); ++j) {
-                resultVector.setElementByIndex(i, Vector.getScalarComposition(vectors[i], vector));
-            }
+            resultVector.setElementByIndex(i, Vector.getScalarComposition(vectors[i], vector));
+
         }
 
         return resultVector;
@@ -222,7 +221,7 @@ public class Matrix {
 
     public void add(Matrix matrix) {
         if (getRowsQuantity() != matrix.getRowsQuantity() || getColumnsQuantity() != matrix.getColumnsQuantity()) {
-            throw new IllegalArgumentException("Illegal matrix dimensions");
+            throw new IllegalArgumentException("first matrix's rows and columns should be equals second matrix's rows and columns");
         }
 
         for (int i = 0; i < vectors.length; ++i) {
@@ -232,7 +231,7 @@ public class Matrix {
 
     public void subtract(Matrix matrix) {
         if (getRowsQuantity() != matrix.getRowsQuantity() || getColumnsQuantity() != matrix.getColumnsQuantity()) {
-            throw new IllegalArgumentException("Illegal matrix dimensions");
+            throw new IllegalArgumentException("first matrix's rows and columns should be equals second matrix's rows and columns");
         }
 
         for (int i = 0; i < vectors.length; ++i) {
@@ -242,7 +241,7 @@ public class Matrix {
 
     public static Matrix getSum(Matrix matrix1, Matrix matrix2) {
         if (matrix1.getRowsQuantity() != matrix2.getRowsQuantity() || matrix1.getColumnsQuantity() != matrix2.getColumnsQuantity()) {
-            throw new IllegalArgumentException("Illegal matrix dimensions");
+            throw new IllegalArgumentException("first matrix's rows and columns should be equals second matrix's rows and columns");
         }
 
         Matrix cloneMatrix = new Matrix(matrix1);
@@ -253,7 +252,7 @@ public class Matrix {
 
     public static Matrix getDiff(Matrix matrix1, Matrix matrix2) {
         if (matrix1.getRowsQuantity() != matrix2.getRowsQuantity() || matrix1.getColumnsQuantity() != matrix2.getColumnsQuantity()) {
-            throw new IllegalArgumentException("Illegal matrix dimensions");
+            throw new IllegalArgumentException("first matrix's rows and columns should be equals second matrix's rows and columns");
         }
 
         Matrix cloneMatrix = new Matrix(matrix1);
@@ -264,14 +263,14 @@ public class Matrix {
 
     public static Matrix getComposition(Matrix matrix1, Matrix matrix2) {
         if (matrix1.getColumnsQuantity() != matrix2.getRowsQuantity()) {
-            throw new IllegalArgumentException("Illegal matrix dimensions");
+            throw new IllegalArgumentException("first matrix's columns should be equals second matrix's rows");
         }
 
         double[][] multiplyResult = new double[matrix1.getRowsQuantity()][matrix2.getColumnsQuantity()];
 
         for (int i = 0; i < multiplyResult.length; ++i) {
             for (int j = 0; j < multiplyResult[i].length; ++j) {
-                for (int k = 0; k < matrix1.vectors[0].getSize(); ++k) {
+                for (int k = 0; k < matrix1.getColumnsQuantity(); ++k) {
                     multiplyResult[i][j] += matrix1.vectors[i].getElementByIndex(k) * matrix2.vectors[k].getElementByIndex(j);
                 }
             }

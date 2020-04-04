@@ -2,10 +2,8 @@ package name.max_ferrara.person_main;
 
 import name.max_ferrara.person.Person;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class PersonMain {
     public static void main(String[] args) {
@@ -17,12 +15,16 @@ public class PersonMain {
         Person person6 = new Person(19, "Mira");
         Person person7 = new Person(32, "Mira");
 
-        //Object[] persons = {person1, person2, person3, person4, person5, person6, person7};
-        //Arrays.stream(persons);
-        //Stream<String> stream =
-        //List<Object> persons = new List<>();
+        List<Person> people = new ArrayList<>();
 
-        //System.out.println(persons);
-        //Arrays.stream(persons).distinct(p -> System.out.println(p));
+        people.add(person1);
+        people.add(person2);
+        people.add(person3);
+        people.add(person4);
+        people.add(person5);
+        people.add(person6);
+        people.add(person7);
+
+        System.out.println(people);
     }
 }

@@ -56,13 +56,14 @@ public class Matrix {
             }
         }
 
-        Vector vector = new Vector(maxLength);
+        Vector[] tmpVectors = new Vector[vectors.length];
 
         for (int i = 0; i < vectors.length; ++i) {
-            vectors[i] = Vector.getSum(vectors[i], vector);
+            tmpVectors[i] = new Vector(maxLength);
+            tmpVectors[i].add(vectors[i]);
         }
 
-        this.vectors = vectors;
+        this.vectors = tmpVectors;
     }
 
     public Matrix(Matrix matrix) {

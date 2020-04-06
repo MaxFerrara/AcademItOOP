@@ -1,12 +1,11 @@
 package name.max_ferrara.hash_table;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
 public class MyHashTable<T> implements Collection<T> {
-    private T[] items;
-    private static final int DEFAULT_CAPACITY = 50;
+    private LinkedList<T>[] items;
+    private static final int DEFAULT_CAPACITY = 16;
+    private int size;
 
     private int modCount;
 
@@ -15,18 +14,20 @@ public class MyHashTable<T> implements Collection<T> {
             throw new IllegalArgumentException("capacity can not be < 0");
         }
 
-        items = (T[]) new Object[initialCapacity];
+        items = new LinkedList[initialCapacity];
+        Arrays.fill(items, null);
     }
 
     public MyHashTable() {
-        items = (T[]) new Object[DEFAULT_CAPACITY];
+        items = new LinkedList[DEFAULT_CAPACITY];
+        Arrays.fill(items, null);
     }
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("[ ");
 
-        for (int i = 0; i < this.size(); ++i) {
+        for (int i = 0; i < items.length; ++i) {
             stringBuilder.append(items[i]).append(", ");
         }
 
@@ -36,23 +37,29 @@ public class MyHashTable<T> implements Collection<T> {
         return stringBuilder.toString();
     }
 
-    private int getHashCode(T element) {
-        return element.hashCode() % items.length;
+    private int getHashCode(Object element) {
+        return Math.abs(element.hashCode() % items.length);
     }
 
     @Override
     public int size() {
-        return items.length;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return items.length == 0;
+        return size == 0;
     }
 
     @Override
-    public boolean contains(Object o) {
-        return false;
+    public boolean contains(Object object) {
+        int key = getHashCode(object);
+
+        if (items[key] == null) {
+            return false;
+        } else {
+            return items[key].contains(object);
+        }
     }
 
     @Override
@@ -62,6 +69,7 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public Object[] toArray() {
+
         return new Object[0];
     }
 
@@ -76,20 +84,35 @@ public class MyHashTable<T> implements Collection<T> {
 
         if (items[key] == null) {
             LinkedList<T> list = new LinkedList<>();
-            items[key] = (T) list;
+            items[key] = list;
             list.add(item);
+        } else {
+            items[key].add(item);
         }
 
+        ++size;
         return true;
     }
 
     @Override
-    public boolean remove(Object o) {
-        return false;
+    public boolean remove(Object object) {
+        if (!contains(object)) {
+            return false;
+        } else {
+            int key = getHashCode(object);
+            items[key].remove(object);
+            --size;
+
+            if (items[key].size() == 0) {
+                items[key] = null;
+            }
+
+            return true;
+        }
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(Collection<?> collection) {
         return false;
     }
 
@@ -110,6 +133,7 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public void clear() {
-
+        Arrays.fill(items, null);
+        size = 0;
     }
 }

@@ -4,13 +4,21 @@ import name.max_ferrara.hash_table.MyHashTable;
 
 public class HashTableMain {
     public static void main(String[] args) {
-        MyHashTable<Integer> table = new MyHashTable<>(40);
+        MyHashTable<Integer> myTable = new MyHashTable<>(10);
 
-        table.add(1);
-        table.add(11);
-        table.add(131);
-        table.add(1311);
+        myTable.add(1);
+        myTable.add(11);
+        myTable.add(131);
+        myTable.add(1311);
 
-        System.out.println(table);
+        myTable.add(1000000);
+        myTable.add(89482582);
+        myTable.add(322);
+        myTable.add(-579335);
+
+        System.out.println(myTable);
+        System.out.println(myTable.contains(322));
+        System.out.println(myTable.remove(322));
+        System.out.println(myTable);
     }
 }

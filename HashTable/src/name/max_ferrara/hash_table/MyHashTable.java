@@ -23,6 +23,67 @@ public class MyHashTable<T> implements Collection<T> {
         Arrays.fill(items, null);
     }
 
+    public class MyHashTableIterator implements Iterator<T> {
+        private int expectedModCount = modCount;
+        private int currentIndex = -1;
+        private int currentArrayIndex = 0;
+        private LinkedList<T> currentList;
+
+        @Override
+        public boolean hasNext() {
+            return currentIndex + 1 < size;
+        }
+
+        @Override
+        public T next() {
+            if (expectedModCount != modCount) {
+                throw new ConcurrentModificationException("collection has been modified");
+            }
+
+            while (currentIndex != size) {
+                // int count = 0;
+                if (items[currentArrayIndex] != null) {
+                    currentList = items[currentArrayIndex];
+
+                    for (T element : currentList) {
+                        currentIndex++;
+
+                        return element;
+                    }
+                } else {
+                    currentArrayIndex++;
+                }
+            }
+
+            return null;
+        }
+
+        public T nex1t() {
+            if (expectedModCount != modCount) {
+                throw new ConcurrentModificationException("collection has been modified");
+            }
+
+            while (currentIndex != size) {
+                if (items[currentArrayIndex] != null) {
+                    currentList = items[currentArrayIndex];
+                    int count = 0;
+
+                    while (count <= currentList.size()) {
+                        for (T element : currentList) {
+                            currentIndex++;
+                            count++;
+                            return element;
+                        }
+                    }
+                } else {
+                    currentArrayIndex++;
+                }
+            }
+
+            return null;
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("[ ");
@@ -64,17 +125,24 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return new MyHashTableIterator();
     }
 
     @Override
     public Object[] toArray() {
+        ArrayList<T> list = new ArrayList<>(size);
 
-        return new Object[0];
+        for (LinkedList<T> item : items) {
+            if (item != null) {
+                list.addAll(item);
+            }
+        }
+
+        return list.toArray();
     }
 
     @Override
-    public <T1> T1[] toArray(T1[] a) {
+    public <E> E[] toArray(E[] elements) {
         return null;
     }
 
@@ -113,22 +181,48 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean containsAll(Collection<?> collection) {
-        return false;
+        for (Object element : collection) {
+            if (!contains(element)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
-    public boolean addAll(Collection<? extends T> c) {
-        return false;
+    public boolean addAll(Collection<? extends T> collection) {
+        if (collection.isEmpty()) {
+            return false;
+        }
+
+        for (Object element : collection) {
+            add((T) element);
+        }
+
+        return true;
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
-        return false;
+    public boolean removeAll(Collection<?> collection) {
+        for (Object element : collection) {
+            remove(element);
+        }
+
+        return true;
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
-        return false;
+    public boolean retainAll(Collection<?> collection) {
+        for (LinkedList<T> item : items) {
+            for (T element : item) {
+                if (!contains(collection)) {
+                    remove(element);
+                }
+            }
+        }
+
+        return true;
     }
 
     @Override

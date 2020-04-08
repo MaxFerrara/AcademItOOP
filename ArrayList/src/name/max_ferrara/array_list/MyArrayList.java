@@ -109,20 +109,20 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public <E> E[] toArray(E[] element) {
-        if (element.length < size) {
+    public <E> E[] toArray(E[] elements) {
+        if (elements.length < size) {
             //noinspection unchecked
-            return (E[]) Arrays.copyOf(items, size, element.getClass());
+            return (E[]) Arrays.copyOf(items, size, elements.getClass());
         }
 
         //noinspection SuspiciousSystemArraycopy
-        System.arraycopy(items, 0, element, 0, size);
+        System.arraycopy(items, 0, elements, 0, size);
 
-        if (element.length > size) {
-            element[size] = null;
+        if (elements.length > size) {
+            elements[size] = null;
         }
 
-        return element;
+        return elements;
     }
 
     @Override

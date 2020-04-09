@@ -38,16 +38,12 @@ public class MyArrayList<T> implements List<T> {
                 throw new ConcurrentModificationException("collection has been modified");
             }
 
-            if (currentIndex >= size) {
+            if (!hasNext()) {
                 throw new NoSuchElementException("collection is ending");
-            }
-
-            if (this.hasNext()) {
+            } else {
                 ++currentIndex;
                 return items[currentIndex];
             }
-
-            return null;
         }
     }
 

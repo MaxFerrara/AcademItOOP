@@ -23,11 +23,11 @@ public class MyHashTable<T> implements Collection<T> {
         Arrays.fill(items, null);
     }
 
-    public class MyHashTableIterator implements Iterator<T> {
-        private int expectedModCount = modCount;
+    private class MyHashTableIterator implements Iterator<T> {
         private int currentIndex = -1;
         private int currentArrayIndex = 0;
-        private LinkedList<T> currentList;
+        private int indexCount = -1;
+        private int expectedModCount = modCount;
 
         @Override
         public boolean hasNext() {
@@ -41,41 +41,15 @@ public class MyHashTable<T> implements Collection<T> {
             }
 
             while (currentIndex != size) {
-                // int count = 0;
-                if (items[currentArrayIndex] != null) {
-                    currentList = items[currentArrayIndex];
+                LinkedList<T> currentList = items[currentArrayIndex];
 
-                    for (T element : currentList) {
-                        currentIndex++;
+                if (items[currentArrayIndex] != null && indexCount + 1 != currentList.size()) {
+                    currentIndex++;
+                    indexCount++;
 
-                        return element;
-                    }
+                    return currentList.get(indexCount);
                 } else {
-                    currentArrayIndex++;
-                }
-            }
-
-            return null;
-        }
-
-        public T nex1t() {
-            if (expectedModCount != modCount) {
-                throw new ConcurrentModificationException("collection has been modified");
-            }
-
-            while (currentIndex != size) {
-                if (items[currentArrayIndex] != null) {
-                    currentList = items[currentArrayIndex];
-                    int count = 0;
-
-                    while (count <= currentList.size()) {
-                        for (T element : currentList) {
-                            currentIndex++;
-                            count++;
-                            return element;
-                        }
-                    }
-                } else {
+                    indexCount = -1;
                     currentArrayIndex++;
                 }
             }
@@ -86,14 +60,18 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder("[ ");
+        if (size == 0) {
+            return "[]";
+        }
 
-        for (int i = 0; i < items.length; ++i) {
-            stringBuilder.append(items[i]).append(", ");
+        StringBuilder stringBuilder = new StringBuilder("[");
+
+        for (LinkedList<T> item : items) {
+            stringBuilder.append(item).append(", ");
         }
 
         stringBuilder.setLength(stringBuilder.length() - 2);
-        stringBuilder.append(" ]");
+        stringBuilder.append("]");
 
         return stringBuilder.toString();
     }
@@ -143,7 +121,18 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public <E> E[] toArray(E[] elements) {
-        return null;
+        E[] array = (E[]) toArray();
+
+        if (elements.length <= size) {
+            return array;
+        }
+        System.arraycopy(array, 0, elements, 0, size);
+
+        if (elements.length > size) {
+            elements[size] = null;
+        }
+
+        return elements;
     }
 
     @Override
@@ -158,7 +147,9 @@ public class MyHashTable<T> implements Collection<T> {
             items[key].add(item);
         }
 
+        ++modCount;
         ++size;
+
         return true;
     }
 
@@ -170,6 +161,7 @@ public class MyHashTable<T> implements Collection<T> {
             int key = getHashCode(object);
             items[key].remove(object);
             --size;
+            ++modCount;
 
             if (items[key].size() == 0) {
                 items[key] = null;
@@ -192,15 +184,11 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> collection) {
-        if (collection.isEmpty()) {
-            return false;
-        }
-
         for (Object element : collection) {
             add((T) element);
         }
 
-        return true;
+        return collection.size() != 0;
     }
 
     @Override
@@ -215,10 +203,8 @@ public class MyHashTable<T> implements Collection<T> {
     @Override
     public boolean retainAll(Collection<?> collection) {
         for (LinkedList<T> item : items) {
-            for (T element : item) {
-                if (!contains(collection)) {
-                    remove(element);
-                }
+            if (item != null) {
+                item.retainAll(collection);
             }
         }
 
@@ -227,6 +213,7 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public void clear() {
+        ++modCount;
         Arrays.fill(items, null);
         size = 0;
     }

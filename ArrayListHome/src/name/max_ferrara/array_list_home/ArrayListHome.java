@@ -29,22 +29,22 @@ public class ArrayListHome {
     }
 
 
-    public static List<String> getListFromFile(String filePlace) {
+    public static List<String> getStringsListFromFile(String filePath) {
         List<String> outputList = new ArrayList<>();
 
-        try (Scanner scanner = new Scanner(new FileInputStream(filePlace))) {
+        try (Scanner scanner = new Scanner(new FileInputStream(filePath))) {
             while (scanner.hasNextLine()) {
                 outputList.add(scanner.nextLine());
             }
         } catch (IOException e) {
-            System.out.println("not found:" + filePlace);
+            System.out.println("not found:" + filePath);
         }
 
         return outputList;
     }
 
     public static void main(String[] args) {
-        List<String> inputsList = getListFromFile("./ArrayListHome/input.txt");
+        List<String> inputsList = getStringsListFromFile("./ArrayListHome/input.txt");
         System.out.println(inputsList);
 
         List<Integer> numbersList = new ArrayList<>(Arrays.asList(1, 1, 1, 2, 3, 3, 3, 4, 5, 5, 6, 10, -5));

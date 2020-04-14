@@ -8,15 +8,29 @@ public class BinaryTree<T extends Comparable<T>> {
     private Comparator<T> comparator;
 
     public BinaryTree() {
+        root = null;
     }
 
     public BinaryTree(Comparator<T> comparator) {
+        root = null;
         this.comparator = comparator;
     }
 
     @Override
     public String toString() {
-        return "0";
+        return toString(root);
+    }
+
+    private String toString(TreeItem<T> item) {
+        if (item == null) {
+            return "";
+        }
+
+        return item.data.toString() + "(" + toString(item.left) + ", " + toString(item.right) + ")";
+    }
+
+    public boolean isEmpty() {
+        return root == null;
     }
 
     private int compare(T data1, T data2) {
@@ -31,22 +45,22 @@ public class BinaryTree<T extends Comparable<T>> {
         add(root, data);
     }
 
-    private TreeItem<T> add(TreeItem<T> root, T data) {
-        if (this.root == null) {
-            return new TreeItem<T>(data);
+    private TreeItem<T> add(TreeItem<T> item, T value) {
+        if (item == null) {
+            return new TreeItem<>(value);
         }
 
-        if (compare(data, root.data) == 0) {
-            return root;
-        }
-
-        if (compare(data, root.data) < 0) {
-            root.left = add(root.left, data);
+        if (compare(value, item.data) == 0) {
+            item.data = value;
         } else {
-            root.right = add(root.right, data);
+            if (compare(value, item.data) < 0) {
+                item.left = add(item.left, value);
+            } else {
+                item.right = add(item.right, value);
+            }
         }
 
-        return root;
+        return item;
     }
 
     public boolean contains(T data) {

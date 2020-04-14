@@ -7,7 +7,7 @@ import java.util.TreeSet;
 
 public class TreeMain {
     public static void main(String[] args) {
-        BinaryTree<Integer> tree = new BinaryTree<>(new IntegerComp());
+        BinaryTree<Integer> tree = new BinaryTree<>(/*new IntegerComp()*/);
 
         tree.add(25);
         tree.add(0);
@@ -15,7 +15,7 @@ public class TreeMain {
         tree.add(29);
         tree.add(45);
 
-        System.out.println(tree.size());
-        //System.out.println(tree);
+        //System.out.println(tree.size());
+        System.out.println(tree.isEmpty());
     }
 }

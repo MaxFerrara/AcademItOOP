@@ -7,14 +7,6 @@ class TreeItem<T> {
 
     public TreeItem(T data) {
         this.data = data;
-        right = null;
-        left = null;
-    }
-
-    public TreeItem(T data, TreeItem<T> right, TreeItem<T> left) {
-        this.data = data;
-        this.right = right;
-        this.left = left;
     }
 
     @Override

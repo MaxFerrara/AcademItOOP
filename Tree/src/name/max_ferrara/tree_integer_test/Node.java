@@ -15,4 +15,16 @@ public class Node {
     public String toString() {
         return data + "";
     }
+
+    public int getData() {
+        return data;
+    }
+
+    public Node getRight() {
+        return right;
+    }
+
+    public Node getLeft() {
+        return left;
+    }
 }

@@ -9,7 +9,15 @@ public class BinarySearchTree {
 
     @Override
     public String toString() {
-        return "0";
+        return toString(root);
+    }
+
+    protected String toString(Node node) {
+        if (node == null) {
+            return "";
+        }
+        return node.data + ", "+toString(node.left) + ", " +
+                toString(node.right) + ", ";
     }
 
     public boolean isEmpty() {
@@ -17,7 +25,7 @@ public class BinarySearchTree {
     }
 
     public void add(int number) {
-        addRec(root, number);
+        root = addRec(root, number);
     }
 
     private Node addRec(Node current, int value) {

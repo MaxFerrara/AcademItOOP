@@ -11,8 +11,9 @@ public class TestMain {
         tree.add(-5);
         tree.add(79);
         tree.add(-500);
-        tree.add(98); 
+        tree.add(98);
 
         System.out.println(tree.isEmpty());
+        System.out.println(tree);
     }
 }

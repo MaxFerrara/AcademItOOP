@@ -1,32 +1,19 @@
 package name.max_ferrara.tree;
 
 import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 public class BinaryTree<T extends Comparable<T>> {
-    TreeItem<T> root;
+    private TreeItem<T> root;
     private Comparator<T> comparator;
 
     public BinaryTree() {
-        root = null;
     }
 
     public BinaryTree(Comparator<T> comparator) {
-        root = null;
         this.comparator = comparator;
-    }
-
-    @Override
-    public String toString() {
-        return toString(root);
-    }
-
-    private String toString(TreeItem<T> item) {
-        if (item == null) {
-            return "";
-        }
-
-        return item.data.toString() + "(" + toString(item.left) + ", " + toString(item.right) + ")";
     }
 
     public boolean isEmpty() {
@@ -42,21 +29,21 @@ public class BinaryTree<T extends Comparable<T>> {
     }
 
     public void add(T data) {
-        add(root, data);
+        root = add(root, data);
     }
 
-    private TreeItem<T> add(TreeItem<T> item, T value) {
+    private TreeItem<T> add(TreeItem<T> item, T data) {
         if (item == null) {
-            return new TreeItem<>(value);
+            return new TreeItem<>(data);
         }
 
-        if (compare(value, item.data) == 0) {
-            item.data = value;
+        if (compare(data, item.data) == 0) {
+            item.data = data;
         } else {
-            if (compare(value, item.data) < 0) {
-                item.left = add(item.left, value);
+            if (compare(data, item.data) < 0) {
+                item.left = add(item.left, data);
             } else {
-                item.right = add(item.right, value);
+                item.right = add(item.right, data);
             }
         }
 
@@ -67,57 +54,57 @@ public class BinaryTree<T extends Comparable<T>> {
         return contains(root, data);
     }
 
-    private boolean contains(TreeItem<T> root, T data) {
-        if (root == null) {
+    private boolean contains(TreeItem<T> item, T data) {
+        if (item == null) {
             return false;
-        } else if (compare(data, root.data) == 0) {
+        } else if (compare(data, item.data) == 0) {
             return true;
-        } else if (compare(data, root.data) < 0) {
-            return contains(root.left, data);
+        } else if (compare(data, item.data) < 0) {
+            return contains(item.left, data);
         } else {
-            return contains(root.right, data);
+            return contains(item.right, data);
         }
     }
 
-   /* public void delete(T data) {
-        delete(root, data);
+    public void delete(T data) {
+        root = delete(root, data);
     }
 
 
-    private TreeItem<T> delete(TreeItem<T> root, T data) {
-        if (root == null) {
+    private TreeItem<T> delete(TreeItem<T> item, T data) {
+        if (item == null) {
             return null;
-        } else if (compare(data, root.data) < 0) {
-            root.left = delete(root.left, data);
-        } else if (compare(data, root.data) > 0) {
-            root.right = delete(root.right, data);
+        } else if (compare(data, item.data) < 0) {
+            item.left = delete(item.left, data);
+        } else if (compare(data, item.data) > 0) {
+            item.right = delete(item.right, data);
         } else {
-            if (root.left == null) {
-                return root.right;
-            } else if (root.right == null) {
-                return root.left;
+            if (item.left == null) {
+                return item.right;
+            } else if (item.right == null) {
+                return item.left;
             } else {
-                root.data = getMax(root.left);
-                root.left = delete(root.left, root.data);
+                item.data = getMinData(item.left);
+                item.left = delete(item.left, item.data);
             }
-
         }
 
-        return root;
+        return item;
     }
 
-    private T getMax(TreeItem<T> root) {
-        while (root.right != null) {
-            root = root.right;
+    private T getMinData(TreeItem<T> item) {
+        while (item.right != null) {
+            item = item.right;
         }
 
-        return root.data;
-    } */
+        return item.data;
+    }
 
+    //обход в глубину и получение размера
     public int size() {
+        Stack<TreeItem<T>> stack = new Stack<>();
         TreeItem<T> currentItem = root;
         int size = 0;
-        Stack<TreeItem<T>> stack = new Stack<>();
 
         while (!stack.empty() || currentItem != null) {
             if (currentItem != null) {
@@ -133,4 +120,38 @@ public class BinaryTree<T extends Comparable<T>> {
         return size;
     }
 
+    //обход в глубину рекурсия
+    public void depthVisit() {
+        visit(root);
+    }
+
+    private void visit(TreeItem<T> item) {
+        if (item != null) {
+            System.out.println(item);
+
+            visit(item.left);
+            visit(item.right);
+        }
+    }
+
+    //обход в ширину
+    public void widthVisit() {
+        Queue<TreeItem<T>> queue = new LinkedList<>();
+        TreeItem<T> currentItem = root;
+
+        queue.add(currentItem);
+
+        while (!queue.isEmpty()) {
+            TreeItem<T> tmp = queue.poll();
+
+            System.out.println(tmp.data);
+            if (tmp.left != null) {
+                queue.add(tmp.left);
+            }
+
+            if (tmp.right != null) {
+                queue.add(tmp.right);
+            }
+        }
+    }
 }

@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 public class IntegerComp implements Comparator<Integer> {
     @Override
-    public int compare(Integer num1, Integer num2) {
-        return num1 - num2;
+    public int compare(Integer number1, Integer number2) {
+        return number1 - number2;
     }
 }

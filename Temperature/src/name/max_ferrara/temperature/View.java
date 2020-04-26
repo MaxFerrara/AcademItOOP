@@ -8,28 +8,28 @@ import java.util.Objects;
 
 public class View {
     Model model = new Model();
+    JFrame errorFrame = new JFrame();
+    JFrame mainFrame = new JFrame();
 
     public void createUIMessageError() {
-        JFrame frame = new JFrame();
         JPanel panel = new JPanel();
-        frame.add(panel);
-        frame.setTitle("Temperature converter powered by MaxFerrara");
-        frame.setLocation(550, 200);
-        frame.setSize(150, 80);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        errorFrame.add(panel);
+        errorFrame.setTitle("Temperature converter powered by MaxFerrara");
+        errorFrame.setLocation(550, 200);
+        errorFrame.setSize(250, 80);
+        errorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        errorFrame.setVisible(true);
         panel.add(new JLabel("equals scales were selected or letters entered"));
     }
 
     public void createUI() {
-        JFrame frame = new JFrame();
         JPanel panel = new JPanel();
-        frame.add(panel);
-        frame.setTitle("Temperature converter powered by MaxFerrara");
-        frame.setLocation(550, 200);
-        frame.setSize(350, 220);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        mainFrame.add(panel);
+        mainFrame.setTitle("Temperature converter powered by MaxFerrara");
+        mainFrame.setLocation(550, 200);
+        mainFrame.setSize(350, 220);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setVisible(true);
 
         GridBagLayout layout = new GridBagLayout();
         panel.setLayout(layout);
@@ -132,39 +132,42 @@ public class View {
 
         panel.add(reset, resetButtonConstraints);
 
-        // тут реализация листенера
         convert.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                double convertResult = 0;
-                String stringTemperature = input.getText();
-                double digitTemperature = Double.parseDouble(stringTemperature);
+                if (Objects.equals(firstTemperaturesSpinner.getSelectedItem(), secondTemperaturesSpinner.getSelectedItem())) {
+                    createUIMessageError();
+                } else {
+                    double convertResult = 0;
+                    String stringTemperature = input.getText();
+                    double digitTemperature = Double.parseDouble(stringTemperature);
 
-                if (Objects.equals(firstTemperaturesSpinner.getSelectedItem(), "celsius") && Objects.equals(secondTemperaturesSpinner.getSelectedItem(), "fahrenheit")) {
-                    convertResult = model.getFahrenheitFromCelsius(digitTemperature);
+                    if (Objects.equals(firstTemperaturesSpinner.getSelectedItem(), "celsius") && Objects.equals(secondTemperaturesSpinner.getSelectedItem(), "fahrenheit")) {
+                        convertResult = model.getFahrenheitFromCelsius(digitTemperature);
+                    }
+
+                    if (Objects.equals(firstTemperaturesSpinner.getSelectedItem(), "celsius") && Objects.equals(secondTemperaturesSpinner.getSelectedItem(), "kalvin")) {
+                        convertResult = model.getKalvinFromCelsius(digitTemperature);
+                    }
+
+                    if (Objects.equals(firstTemperaturesSpinner.getSelectedItem(), "fahrenheit") && Objects.equals(secondTemperaturesSpinner.getSelectedItem(), "celsius")) {
+                        convertResult = model.getCelsiusFromFahrenheit(digitTemperature);
+                    }
+
+                    if (Objects.equals(firstTemperaturesSpinner.getSelectedItem(), "fahrenheit") && Objects.equals(secondTemperaturesSpinner.getSelectedItem(), "kalvin")) {
+                        convertResult = model.getKalvinFromFahrenheit(digitTemperature);
+                    }
+
+                    if (Objects.equals(firstTemperaturesSpinner.getSelectedItem(), "kalvin") && Objects.equals(secondTemperaturesSpinner.getSelectedItem(), "celsius")) {
+                        convertResult = model.getCelsiusFromKelvin(digitTemperature);
+                    }
+
+                    if (Objects.equals(firstTemperaturesSpinner.getSelectedItem(), "kalvin") && Objects.equals(secondTemperaturesSpinner.getSelectedItem(), "fahrenheit")) {
+                        convertResult = model.getFahrenheitFromKelvin(digitTemperature);
+                    }
+
+                    output.setText(String.valueOf(convertResult));
                 }
-
-                if (Objects.equals(firstTemperaturesSpinner.getSelectedItem(), "celsius") && Objects.equals(secondTemperaturesSpinner.getSelectedItem(), "kalvin")) {
-                    convertResult = model.getKalvinFromCelsius(digitTemperature);
-                }
-
-                if (Objects.equals(firstTemperaturesSpinner.getSelectedItem(), "fahrenheit") && Objects.equals(secondTemperaturesSpinner.getSelectedItem(), "celsius")) {
-                    convertResult = model.getCelsiusFromFahrenheit(digitTemperature);
-                }
-
-                if (Objects.equals(firstTemperaturesSpinner.getSelectedItem(), "fahrenheit") && Objects.equals(secondTemperaturesSpinner.getSelectedItem(), "kalvin")) {
-                    convertResult = model.getKalvinFromFahrenheit(digitTemperature);
-                }
-
-                if (Objects.equals(firstTemperaturesSpinner.getSelectedItem(), "kalvin") && Objects.equals(secondTemperaturesSpinner.getSelectedItem(), "celsius")) {
-                    convertResult = model.getCelsiusFromKelvin(digitTemperature);
-                }
-
-                if (Objects.equals(firstTemperaturesSpinner.getSelectedItem(), "kalvin") && Objects.equals(secondTemperaturesSpinner.getSelectedItem(), "fahrenheit")) {
-                    convertResult = model.getFahrenheitFromKelvin(digitTemperature);
-                }
-
-                output.setText(String.valueOf(convertResult));
             }
         });
 

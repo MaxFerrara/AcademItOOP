@@ -1,12 +1,12 @@
-package name.max_ferrara.temperature;
+package name.max_ferrara.temperature.model;
 
 public class Model {
-    private static final double CELSIUS_FAHRENHEIT_COEFFICIENT = 1.8;
-    private static final double KALVIN_CONSTANT = 273.15;
-    private static final double FAHRENHEIT_CONSTANT = 32;
+    private final double CELSIUS_FAHRENHEIT_COEFFICIENT = 1.8;
+    private final double KALVIN_CONSTANT = 273.15;
+    private final double FAHRENHEIT_CONSTANT = 32;
 
     public double getCelsiusFromFahrenheit(double temperature) {
-        return (temperature - FAHRENHEIT_CONSTANT) * 5 / 9;
+        return (temperature - FAHRENHEIT_CONSTANT) / CELSIUS_FAHRENHEIT_COEFFICIENT;
     }
 
     public double getCelsiusFromKelvin(double temperature) {
@@ -26,6 +26,6 @@ public class Model {
     }
 
     public double getKalvinFromFahrenheit(double temperature) {
-        return (temperature - FAHRENHEIT_CONSTANT) * 5 / 9 + KALVIN_CONSTANT;
+        return (temperature - FAHRENHEIT_CONSTANT) / CELSIUS_FAHRENHEIT_COEFFICIENT + KALVIN_CONSTANT;
     }
 }

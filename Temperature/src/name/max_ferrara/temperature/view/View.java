@@ -1,10 +1,10 @@
-package name.max_ferrara.temperature1;
+package name.max_ferrara.temperature.view;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class ViewNew extends JFrame {
+public class View extends JFrame {
     private JComboBox<String> firstTemperaturesSpinner = new JComboBox<>();
     private JComboBox<String> secondTemperaturesSpinner = new JComboBox<>();
     private JButton convertButton = new JButton("convert");
@@ -12,9 +12,9 @@ public class ViewNew extends JFrame {
     private JTextField temperatureInput = new JTextField(8);
     private JTextField temperatureOutput = new JTextField(8);
 
-    public ViewNew() {
+    public View() {
         this.setTitle("Temperature converter powered by MaxFerrara");
-        this.setLocation(550, 200);
+        this.setLocation(800, 400);
         this.setSize(350, 220);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -30,8 +30,7 @@ public class ViewNew extends JFrame {
         jLabelFromConstraints.gridy = 0;
         jLabelFromConstraints.gridheight = 2;
         jLabelFromConstraints.gridwidth = 2;
-        JLabel fromLabel = new JLabel("from");
-        mainPanel.add(fromLabel, jLabelFromConstraints);
+        mainPanel.add(new JLabel("from"), jLabelFromConstraints);
 
         GridBagConstraints firstSpinnerConstraints = new GridBagConstraints();
         firstSpinnerConstraints.gridx = 0;
@@ -48,8 +47,7 @@ public class ViewNew extends JFrame {
         jLabelToConstraints.gridy = 50;
         jLabelToConstraints.gridheight = 2;
         jLabelToConstraints.gridwidth = 2;
-        JLabel toLabel = new JLabel("to");
-        mainPanel.add(toLabel, jLabelToConstraints);
+        mainPanel.add(new JLabel("to"), jLabelToConstraints);
 
         GridBagConstraints secondSpinnerConstraints = new GridBagConstraints();
         secondSpinnerConstraints.gridx = 0;
@@ -66,8 +64,7 @@ public class ViewNew extends JFrame {
         jLabelInputConstraints.gridy = 0;
         jLabelInputConstraints.gridheight = 2;
         jLabelInputConstraints.gridwidth = 2;
-        JLabel inputLabel = new JLabel("input");
-        mainPanel.add(inputLabel, jLabelInputConstraints);
+        mainPanel.add(new JLabel("input"), jLabelInputConstraints);
 
         GridBagConstraints inputFiledConstrains = new GridBagConstraints();
         inputFiledConstrains.gridx = 85;
@@ -81,8 +78,7 @@ public class ViewNew extends JFrame {
         jLabelOutputConstraints.gridy = 50;
         jLabelOutputConstraints.gridheight = 2;
         jLabelOutputConstraints.gridwidth = 2;
-        JLabel outputLabel = new JLabel("output");
-        mainPanel.add(outputLabel, jLabelOutputConstraints);
+        mainPanel.add(new JLabel("output"), jLabelOutputConstraints);
 
         GridBagConstraints outputFieldConstraints = new GridBagConstraints();
         outputFieldConstraints.gridx = 85;
@@ -123,11 +119,11 @@ public class ViewNew extends JFrame {
         temperatureOutput.setText(temperature);
     }
 
-    void addConvertButtonListener(ActionListener listener) {
+    public void addConvertButtonListener(ActionListener listener) {
         convertButton.addActionListener(listener);
     }
 
-    void addResetButtonListener(ActionListener listener) {
+    public void addResetButtonListener(ActionListener listener) {
         resetButton.addActionListener(listener);
     }
 

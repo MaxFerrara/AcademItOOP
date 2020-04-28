@@ -7,10 +7,10 @@ public class StreamMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Введи число:");
+        System.out.println("Поток корней чисел, укажите сколько нужно вычислить: ");
         int sqrtCount = scanner.nextInt();
 
-        DoubleStream numbersStream = DoubleStream.iterate(1, x -> x + 1).map(Math::sqrt);
-        numbersStream.limit(sqrtCount).forEach(System.out::println);
+        DoubleStream squaresStream = DoubleStream.iterate(1, x -> x + 1).map(Math::sqrt);
+        squaresStream.limit(sqrtCount).forEach(System.out::println);
     }
 }

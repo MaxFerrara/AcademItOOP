@@ -42,7 +42,7 @@ public class MatrixMain {
 
             System.out.println(matrix1);
             System.out.println(vector4);
-            System.out.println(matrix1.getVectorMultiply(vector4));
+            System.out.println(matrix1.getMultiply(vector4));
             System.out.println(matrix6.calculateDeterminant());
             System.out.println(Matrix.getSum(matrix3, matrix4));
             System.out.println(Matrix.getDiff((new Matrix(new double[][]{{1, 1, 1}, {1, 1, 1}})), (new Matrix(new double[][]{{2, 2, 2}, {2, 2, 2}}))));

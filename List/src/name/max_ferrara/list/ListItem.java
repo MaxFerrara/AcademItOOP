@@ -1,6 +1,6 @@
 package name.max_ferrara.list;
 
-public class ListItem<T> {
+class ListItem<T> {
     private T data;
     private ListItem<T> next;
 

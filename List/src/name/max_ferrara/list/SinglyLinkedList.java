@@ -13,19 +13,19 @@ public class SinglyLinkedList<T> {
     @Override
     public String toString() {
         if (isEmpty()) {
-            return "[ ]";
+            return "[]";
         }
 
-        StringBuilder stringBuilder = new StringBuilder("[ ");
-        ListItem<T> tmp = head;
+        StringBuilder stringBuilder = new StringBuilder("[");
+        ListItem<T> currentItem = head;
 
-        while (tmp != null) {
-            stringBuilder.append(tmp.getData()).append(", ");
-            tmp = tmp.getNext();
+        while (currentItem != null) {
+            stringBuilder.append(currentItem.getData()).append(", ");
+            currentItem = currentItem.getNext();
         }
 
         stringBuilder.setLength(stringBuilder.length() - 2);
-        stringBuilder.append(" ]");
+        stringBuilder.append("]");
 
         return stringBuilder.toString();
     }
@@ -49,57 +49,54 @@ public class SinglyLinkedList<T> {
         return head.getData();
     }
 
-    public ListItem<T> getListItemByIndex(int index) {
-        int i = 0;
+    private ListItem<T> getListItemByIndex(int index) {
+        ListItem<T> currentItem = head;
 
-        for (ListItem<T> current = head; current != null; current = current.getNext()) {
-            if (index == i) {
-                return current;
-            }
-
-            i++;
+        for (int i = 0; i != index; ++i) {
+            currentItem = currentItem.getNext();
         }
 
-        return null;
+        return currentItem;
+    }
+
+    private void checkIndex(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("index must be >=0 and < " + size + ", current indexValue: " + index);
+        }
     }
 
     //получение значения по индексу
     public T getDataByIndex(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("list index out of bounds");
-        }
+        checkIndex(index);
 
         return getListItemByIndex(index).getData();
     }
 
     //изменение элемента по индексу, вернуть старое значение
     public T setDataByIndex(int index, T data) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("list index out of bounds");
-        }
+        checkIndex(index);
 
-        ListItem<T> oldListItem = new ListItem<>(getListItemByIndex(index).getData());
-        getListItemByIndex(index).setData(data);
+        ListItem<T> item = getListItemByIndex(index);
+        T oldValue = item.getData();
+        item.setData(data);
 
-        return oldListItem.getData();
+        return oldValue;
     }
 
     //удаление элемента по индексу, вернуть старое значение
     public T deleteDataByIndex(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("list index out of bounds");
-        }
+        checkIndex(index);
 
         if (index == 0) {
-            return deleteFirstListItem();
+            return deleteFirst();
         }
 
-        index--;
-        ListItem<T> deletedListItem = getListItemByIndex(index).getNext();
-        getListItemByIndex(index).setNext(getListItemByIndex(index).getNext().getNext());
+        ListItem<T> item = getListItemByIndex(index - 1);
+        T deletedValue = item.getNext().getData();
+        item.setNext(item.getNext().getNext());
         --size;
 
-        return deletedListItem.getData();
+        return deletedValue;
     }
 
     //вставка в начало
@@ -110,17 +107,18 @@ public class SinglyLinkedList<T> {
 
     //вставка элемента по индексу
     public void addDataByIndex(int index, T data) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("list index out of bounds");
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("index must be >=0 and <= " + size + ", current indexValue: " + index);
         }
 
         if (index == 0) {
             addFirst(data);
-        }
+        } else {
+            ListItem<T> item = getListItemByIndex(index - 1);
+            item.setNext(new ListItem<>(data, item.getNext()));
 
-        index--;
-        getListItemByIndex(index).setNext(new ListItem<>(data, getListItemByIndex(index).getNext()));
-        ++size;
+            ++size;
+        }
     }
 
     //удаление узла по значению
@@ -142,7 +140,7 @@ public class SinglyLinkedList<T> {
     }
 
     //удаление первого элемента списка
-    public T deleteFirstListItem() {
+    public T deleteFirst() {
         if (isEmpty()) {
             throw new NoSuchElementException("list is empty");
         }
@@ -158,14 +156,14 @@ public class SinglyLinkedList<T> {
     public void reverse() {
         ListItem<T> current = head;
         ListItem<T> prev = null;
-        ListItem<T> tmp;
 
         while (current != null) {
-            tmp = current.getNext();
+            ListItem<T> tmp = current.getNext();
             current.setNext(prev);
             prev = current;
             current = tmp;
         }
+
         head = prev;
     }
 
@@ -177,13 +175,13 @@ public class SinglyLinkedList<T> {
             return listCopy;
         }
 
-        ListItem<T> newListItemHead = new ListItem<>(head.getData(), null);
-        listCopy.head = newListItemHead;
+        ListItem<T> copiedItem = new ListItem<>(head.getData(), null);
+        listCopy.head = copiedItem;
 
         for (ListItem<T> current = head.getNext(); current != null; current = current.getNext()) {
             ListItem<T> copyListItem = new ListItem<>(current.getData(), null);
-            newListItemHead.setNext(copyListItem);
-            newListItemHead = copyListItem;
+            copiedItem.setNext(copyListItem);
+            copiedItem = copyListItem;
         }
         listCopy.size = size;
 

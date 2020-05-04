@@ -6,10 +6,23 @@ import java.util.List;
 
 public class DefaultArrList {
     public static void main(String[] args) {
-        int[] arr = new int[0];
-        System.out.println(arr.length);
-        arr[0] = 1;
+        List<Integer> list1 = new ArrayList<>();
+        List<Integer> list2 = new ArrayList<>();
 
-        System.out.println(Arrays.toString(arr));
+        /*list2.add(-1);
+        list2.add(-2);
+        list2.add(-3);
+        list2.add(-4); */
+
+        list1.add(1);
+        list1.add(2);
+        list1.add(3);
+        list1.add(4);
+        list1.add(5);
+
+        System.out.println(list1);
+        System.out.println(list2);
+        System.out.println(list1.addAll(2, list2));
+        System.out.println(list1);
     }
 }

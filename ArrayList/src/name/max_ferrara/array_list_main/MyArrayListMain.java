@@ -11,20 +11,32 @@ public class MyArrayListMain {
             MyArrayList<Integer> list1 = new MyArrayList<>();
             MyArrayList<Integer> list2 = new MyArrayList<>();
 
-            list2.add(1);
+            list2.add(-1);
+            list2.add(2);
+            list2.add(-3);
             list2.add(4);
-            System.out.println(list2);
 
             list1.add(1);
             list1.add(2);
             list1.add(3);
             list1.add(4);
             list1.add(5);
+            list1.add(6);
+
+            Integer delItem = 6;
+
+            System.out.println(list1.size());
+            System.out.println(list1);
+            System.out.println(list1.remove(delItem));
+            System.out.println(list1);
+            System.out.println(list1.size());
 
             System.out.println(list1.retainAll(list2));
 
             System.out.println(list1);
             System.out.println(list2);
+            list1.removeAll(list2);
+            System.out.println(list1);
 
             MyArrayList<Integer> list3 = new MyArrayList<>(0);
             System.out.println(list3);

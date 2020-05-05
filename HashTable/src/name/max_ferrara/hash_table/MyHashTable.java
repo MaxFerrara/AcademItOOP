@@ -3,8 +3,8 @@ package name.max_ferrara.hash_table;
 import java.util.*;
 
 public class MyHashTable<T> implements Collection<T> {
-    private LinkedList<T>[] items;
-    private static final int DEFAULT_CAPACITY = 16;
+    private ArrayList<T>[] items;
+    private static final int DEFAULT_ARRAY_LENGTH = 16;
     private int size;
 
     private int modCount;
@@ -14,13 +14,11 @@ public class MyHashTable<T> implements Collection<T> {
             throw new IllegalArgumentException("capacity can not be < 0");
         }
 
-        items = new LinkedList[initialCapacity];
-        Arrays.fill(items, null);
+        items = new ArrayList[initialCapacity];
     }
 
     public MyHashTable() {
-        items = new LinkedList[DEFAULT_CAPACITY];
-        Arrays.fill(items, null);
+        items = new ArrayList[DEFAULT_ARRAY_LENGTH];
     }
 
     private class MyHashTableIterator implements Iterator<T> {
@@ -41,17 +39,17 @@ public class MyHashTable<T> implements Collection<T> {
             }
 
             while (currentIndex != size) {
-                LinkedList<T> currentList = items[currentArrayIndex];
+                ArrayList<T> currentList = items[currentArrayIndex];
 
                 if (items[currentArrayIndex] != null && indexCount + 1 != currentList.size()) {
                     currentIndex++;
                     indexCount++;
 
                     return currentList.get(indexCount);
-                } else {
-                    indexCount = -1;
-                    currentArrayIndex++;
                 }
+
+                indexCount = -1;
+                currentArrayIndex++;
             }
 
             return null;
@@ -66,7 +64,7 @@ public class MyHashTable<T> implements Collection<T> {
 
         StringBuilder stringBuilder = new StringBuilder("[");
 
-        for (LinkedList<T> item : items) {
+        for (ArrayList<T> item : items) {
             stringBuilder.append(item).append(", ");
         }
 
@@ -76,7 +74,7 @@ public class MyHashTable<T> implements Collection<T> {
         return stringBuilder.toString();
     }
 
-    private int getHashCode(Object element) {
+    private int getKey(Object element) {
         return Math.abs(element.hashCode() % items.length);
     }
 
@@ -92,13 +90,13 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean contains(Object object) {
-        int key = getHashCode(object);
+        int key = getKey(object);
 
         if (items[key] == null) {
             return false;
-        } else {
-            return items[key].contains(object);
         }
+
+        return items[key].contains(object);
     }
 
     @Override
@@ -108,24 +106,24 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public Object[] toArray() {
-        ArrayList<T> list = new ArrayList<>(size);
+        Object[] array = new Object[size];
+        int index = 0;
 
-        for (LinkedList<T> item : items) {
-            if (item != null) {
-                list.addAll(item);
-            }
+        for (T item : this) {
+            array[index++] = item;
         }
 
-        return list.toArray();
+        return array;
     }
 
     @Override
     public <E> E[] toArray(E[] elements) {
-        E[] array = (E[]) toArray();
+        Object[] array = toArray();
 
-        if (elements.length <= size) {
-            return array;
+        if (elements.length < size) {
+            return (E[]) array;
         }
+
         System.arraycopy(array, 0, elements, 0, size);
 
         if (elements.length > size) {
@@ -137,15 +135,14 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean add(T item) {
-        int key = getHashCode(item);
+        int key = getKey(item);
+        ArrayList<T> list = new ArrayList<>();
 
         if (items[key] == null) {
-            LinkedList<T> list = new LinkedList<>();
             items[key] = list;
-            list.add(item);
-        } else {
-            items[key].add(item);
         }
+
+        items[key].add(item);
 
         ++modCount;
         ++size;
@@ -155,20 +152,16 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean remove(Object object) {
-        if (!contains(object)) {
-            return false;
-        } else {
-            int key = getHashCode(object);
-            items[key].remove(object);
+        int key = getKey(object);
+
+        if (items[key].remove(object)) {
             --size;
             ++modCount;
 
-            if (items[key].size() == 0) {
-                items[key] = null;
-            }
-
             return true;
         }
+
+        return false;
     }
 
     @Override
@@ -184,8 +177,8 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> collection) {
-        for (Object element : collection) {
-            add((T) element);
+        for (T element : collection) {
+            add(element);
         }
 
         return collection.size() != 0;
@@ -193,22 +186,42 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean removeAll(Collection<?> collection) {
-        for (Object element : collection) {
-            remove(element);
+        int deletedItemsCount = 0;
+
+        for (ArrayList<T> item : items) {
+            if (item != null) {
+                for (int i = 0; i < item.size(); ++i) {
+                    if (collection.contains(item.get(i))) {
+                        remove(item.get(i));
+
+                        --i;
+                        ++deletedItemsCount;
+                    }
+                }
+            }
         }
 
-        return true;
+        return deletedItemsCount != 0;
     }
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        for (LinkedList<T> item : items) {
+        int deletedItemsCount = 0;
+
+        for (ArrayList<T> item : items) {
             if (item != null) {
-                item.retainAll(collection);
+                for (int i = 0; i < item.size(); ++i) {
+                    if (!collection.contains(item.get(i))) {
+                        remove(item.get(i));
+
+                        --i;
+                        ++deletedItemsCount;
+                    }
+                }
             }
         }
 
-        return true;
+        return deletedItemsCount != 0;
     }
 
     @Override

@@ -80,6 +80,10 @@ public class MyHashTable<T> implements Collection<T> {
     }
 
     private int getKey(Object element) {
+        if (element == null) {
+            return 0;
+        }
+
         return Math.abs(element.hashCode() % items.length);
     }
 

@@ -13,11 +13,12 @@ public class MyHashTable<T> implements Collection<T> {
         if (initialCapacity < 0) {
             throw new IllegalArgumentException("capacity can not be < 0");
         }
-
+        //noinspection unchecked
         items = new ArrayList[initialCapacity];
     }
 
     public MyHashTable() {
+        //noinspection unchecked
         items = new ArrayList[DEFAULT_ARRAY_LENGTH];
     }
 
@@ -38,18 +39,22 @@ public class MyHashTable<T> implements Collection<T> {
                 throw new ConcurrentModificationException("collection has been modified");
             }
 
-            while (currentIndex != size) {
-                ArrayList<T> currentList = items[currentArrayIndex];
+            if (!hasNext()) {
+                throw new ConcurrentModificationException("collection has been modified");
+            } else {
+                while (currentIndex != size) {
+                    ArrayList<T> currentList = items[currentArrayIndex];
 
-                if (items[currentArrayIndex] != null && indexCount + 1 != currentList.size()) {
-                    currentIndex++;
-                    indexCount++;
+                    if (items[currentArrayIndex] != null && indexCount + 1 != currentList.size()) {
+                        currentIndex++;
+                        indexCount++;
 
-                    return currentList.get(indexCount);
+                        return currentList.get(indexCount);
+                    }
+
+                    indexCount = -1;
+                    currentArrayIndex++;
                 }
-
-                indexCount = -1;
-                currentArrayIndex++;
             }
 
             return null;
@@ -121,9 +126,11 @@ public class MyHashTable<T> implements Collection<T> {
         Object[] array = toArray();
 
         if (elements.length < size) {
+            //noinspection unchecked
             return (E[]) array;
         }
 
+        //noinspection SuspiciousSystemArraycopy
         System.arraycopy(array, 0, elements, 0, size);
 
         if (elements.length > size) {

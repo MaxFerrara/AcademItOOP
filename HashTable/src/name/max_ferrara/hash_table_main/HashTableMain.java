@@ -3,14 +3,11 @@ package name.max_ferrara.hash_table_main;
 import name.max_ferrara.hash_table.MyHashTable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 public class HashTableMain {
     public static void main(String[] args) {
         MyHashTable<Integer> myTable = new MyHashTable<>(6);
-        Iterator<Integer> iterator = myTable.iterator();
         List<Integer> list = new ArrayList<>();
 
         list.add(11);

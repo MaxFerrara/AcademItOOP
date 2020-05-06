@@ -40,12 +40,12 @@ public class MyHashTable<T> implements Collection<T> {
             }
 
             if (!hasNext()) {
-                throw new ConcurrentModificationException("collection has been modified");
+                throw new NoSuchElementException("collection is ending");
             } else {
                 while (currentIndex != size) {
                     ArrayList<T> currentList = items[currentArrayIndex];
 
-                    if (items[currentArrayIndex] != null && indexCount + 1 != currentList.size()) {
+                    if (currentList != null && indexCount + 1 != currentList.size()) {
                         currentIndex++;
                         indexCount++;
 

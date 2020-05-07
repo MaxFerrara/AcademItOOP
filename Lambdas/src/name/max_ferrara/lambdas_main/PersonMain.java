@@ -7,10 +7,17 @@ import java.util.stream.Collectors;
 
 public class PersonMain {
     public static void main(String[] args) {
-        Person[] personsArray = {new Person(25, "Max"), new Person(48, "Victor"), new Person(28, "Victor"), new Person(21, "Lola"),
-                new Person(35, "Marina"), new Person(19, "Mira"), new Person(32, "Mira"), new Person(16, "Eva"), new Person(14, "Alex")};
-
-        List<Person> persons = Arrays.asList(personsArray);
+        List<Person> persons = new ArrayList<>(Arrays.asList(
+                new Person(25, "Max"),
+                new Person(48, "Victor"),
+                new Person(28, "Victor"),
+                new Person(21, "Lola"),
+                new Person(35, "Marina"),
+                new Person(19, "Mira"),
+                new Person(32, "Mira"),
+                new Person(16, "Eva"),
+                new Person(14, "Alex")
+        ));
 
         //начальный список
         System.out.println(persons);
@@ -23,7 +30,7 @@ public class PersonMain {
                 .collect(Collectors.toList());
 
         //Б) вывести список уникальных имен в формате: Имена: Иван, Сергей, Петр.
-        System.out.println("Names: " + uniqueNames.stream().collect(Collectors.joining(",")));
+        System.out.println("Names:" + uniqueNames.stream().collect(Collectors.joining(", ", " ", ".")));
         System.out.println();
 
         //В) получить список людей младше 18, посчитать для них средний возраст
@@ -41,18 +48,19 @@ public class PersonMain {
         System.out.println();
 
         //Г) при помощи группировки получить Map , в котором ключи имена, а значения средний возраст
-        Map<String, Double> personsByAverageName = persons.stream()
+        Map<String, Double> personsByMiddleAge = persons.stream()
                 .collect(Collectors.groupingBy(Person::getName, Collectors.averagingDouble(Person::getAge)));
 
-        System.out.println(personsByAverageName);
+        System.out.println(personsByMiddleAge);
         System.out.println();
 
         //Д) получить людей, возраст которых от 20 до 45, вывести в консоль их имена в порядке убывания возраста
         Comparator<Person> comparator = Comparator.comparingInt(Person::getAge);
-        List<Person> personsByAgeBetween20And45 = persons.stream()
+        List<Person> personsWithAgeBetween20And45 = persons.stream()
                 .filter(p -> p.getAge() >= 20 && p.getAge() <= 40)
-                .sorted(comparator.reversed()).collect(Collectors.toList());
+                .sorted(comparator.reversed())
+                .collect(Collectors.toList());
 
-        System.out.println(personsByAgeBetween20And45);
+        System.out.println(personsWithAgeBetween20And45);
     }
 }

@@ -123,12 +123,12 @@ public class SinglyLinkedList<T> {
 
     //удаление узла по значению
     public boolean deleteByValue(T data) {
-        for (ListItem<T> current = head, prev = null; current != null; prev = current, current = current.getNext()) {
+        for (ListItem<T> current = head, previous = null; current != null; previous = current, current = current.getNext()) {
             if (Objects.equals(current.getData(), data)) {
-                if (prev == null) {
+                if (previous == null) {
                     head = current.getNext();
                 } else {
-                    prev.setNext(current.getNext());
+                    previous.setNext(current.getNext());
                 }
                 --size;
 
@@ -155,16 +155,16 @@ public class SinglyLinkedList<T> {
     //разворот списка
     public void reverse() {
         ListItem<T> current = head;
-        ListItem<T> prev = null;
+        ListItem<T> previous = null;
 
         while (current != null) {
             ListItem<T> tmp = current.getNext();
-            current.setNext(prev);
-            prev = current;
+            current.setNext(previous);
+            previous = current;
             current = tmp;
         }
 
-        head = prev;
+        head = previous;
     }
 
     //копирование списка
@@ -175,14 +175,15 @@ public class SinglyLinkedList<T> {
             return listCopy;
         }
 
-        ListItem<T> copiedItem = new ListItem<>(head.getData(), null);
+        ListItem<T> copiedItem = new ListItem<>(head.getData());
         listCopy.head = copiedItem;
 
         for (ListItem<T> current = head.getNext(); current != null; current = current.getNext()) {
-            ListItem<T> copyListItem = new ListItem<>(current.getData(), null);
+            ListItem<T> copyListItem = new ListItem<>(current.getData());
             copiedItem.setNext(copyListItem);
             copiedItem = copyListItem;
         }
+
         listCopy.size = size;
 
         return listCopy;

@@ -287,6 +287,7 @@ public class MyArrayList<T> implements List<T> {
         }
 
         ++modCount;
+        items[size - 1] = null;
         --size;
 
         return removedItem;

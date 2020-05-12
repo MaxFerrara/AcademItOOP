@@ -11,7 +11,7 @@ public class MyArrayList<T> implements List<T> {
 
     public MyArrayList(int initialCapacity) {
         if (initialCapacity < 0) {
-            throw new IllegalArgumentException("capacity can not be < 0");
+            throw new IllegalArgumentException("capacity can not be < 0, current capacity:" + initialCapacity);
         }
 
         //noinspection unchecked
@@ -40,10 +40,10 @@ public class MyArrayList<T> implements List<T> {
 
             if (!hasNext()) {
                 throw new NoSuchElementException("collection is ending");
-            } else {
-                ++currentIndex;
-                return items[currentIndex];
             }
+
+            ++currentIndex;
+            return items[currentIndex];
         }
     }
 
@@ -143,10 +143,10 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean remove(Object item) {
-        int indexForSearch = indexOf(item);
+        int index = indexOf(item);
 
-        if (indexForSearch >= 0) {
-            remove(indexForSearch);
+        if (index >= 0) {
+            remove(index);
 
             return true;
         }
@@ -156,10 +156,6 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean containsAll(Collection<?> collection) {
-        if (collection.isEmpty()) {
-            return true;
-        }
-
         for (Object element : collection) {
             if (!contains(element)) {
                 return false;
@@ -185,7 +181,7 @@ public class MyArrayList<T> implements List<T> {
         int requiredCapacity = size + collection.size();
 
         if (items.length < requiredCapacity) {
-            ensureCapacity(requiredCapacity * 2 + 1);
+            ensureCapacity(requiredCapacity + 1);
         }
 
         System.arraycopy(items, index, items, index + collection.size(), size - index);
@@ -202,34 +198,34 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean removeAll(Collection<?> collection) {
-        int deletedItemsCount = 0;
+        boolean isCollectionModified = false;
 
         for (int i = 0; i < size; ++i) {
             if (collection.contains(items[i])) {
                 remove(i);
-
                 --i;
-                ++deletedItemsCount;
+
+                isCollectionModified = true;
             }
         }
 
-        return deletedItemsCount != 0;
+        return isCollectionModified;
     }
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        int deletedItemsCount = 0;
+        boolean isCollectionModified = false;
 
         for (int i = 0; i < size; ++i) {
             if (!collection.contains(items[i])) {
                 remove(i);
-
                 --i;
-                ++deletedItemsCount;
+
+                isCollectionModified = true;
             }
         }
 
-        return deletedItemsCount != 0;
+        return isCollectionModified;
     }
 
     @Override
@@ -265,12 +261,13 @@ public class MyArrayList<T> implements List<T> {
         checkIndexForAdd(index);
 
         if (items.length == size) {
-            ensureCapacity(size() * 2 + 1);
+            ensureCapacity(items.length * 2 + 1);
         }
 
         if (index < size) {
             System.arraycopy(items, index, items, index + 1, size - index);
         }
+
         items[index] = item;
         ++modCount;
 
@@ -281,17 +278,18 @@ public class MyArrayList<T> implements List<T> {
     public T remove(int index) {
         checkIndex(index);
 
-        T removeItem = items[index];
+        T removedItem = items[index];
 
         if (index == size - 1) {
             items[index] = null;
         } else {
             System.arraycopy(items, index + 1, items, index, size - 1 - index);
         }
+
         ++modCount;
         --size;
 
-        return removeItem;
+        return removedItem;
     }
 
     @Override

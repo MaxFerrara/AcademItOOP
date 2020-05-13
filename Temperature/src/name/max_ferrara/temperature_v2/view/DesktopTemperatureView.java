@@ -4,8 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class View1 {
-    private JFrame frame = new JFrame();
+public class DesktopTemperatureView implements TemperatureView {
     private JComboBox<String> firstTemperaturesSpinner = new JComboBox<>();
     private JComboBox<String> secondTemperaturesSpinner = new JComboBox<>();
     private JButton convertButton = new JButton("convert");
@@ -13,7 +12,8 @@ public class View1 {
     private JTextField temperatureInput = new JTextField(8);
     private JTextField temperatureOutput = new JTextField(8);
 
-    public View1() {
+    public DesktopTemperatureView() {
+        JFrame frame = new JFrame();
         frame.setTitle("Temperature converter powered by MaxFerrara");
         frame.setLocation(800, 400);
         frame.setSize(350, 220);
@@ -104,30 +104,37 @@ public class View1 {
         mainPanel.add(resetButton, resetButtonConstraints);
     }
 
+    @Override
     public double getInputTemperature() {
         return Double.parseDouble(temperatureInput.getText());
     }
 
+    @Override
     public String getFirstSpinnerValue() {
         return (String) firstTemperaturesSpinner.getSelectedItem();
     }
 
+    @Override
     public String getSecondSpinnerValue() {
         return (String) secondTemperaturesSpinner.getSelectedItem();
     }
 
+    @Override
     public void setOutputTemperature(String temperature) {
         temperatureOutput.setText(temperature);
     }
 
-    public void addConvertButtonListener(ActionListener listener) {
+    @Override
+    public void addConvertActionListener(ActionListener listener) {
         convertButton.addActionListener(listener);
     }
 
-    public void addResetButtonListener(ActionListener listener) {
+    @Override
+    public void addResetActionListener(ActionListener listener) {
         resetButton.addActionListener(listener);
     }
 
+    @Override
     public void clearViewFields() {
         temperatureOutput.setText("");
         temperatureInput.setText("");

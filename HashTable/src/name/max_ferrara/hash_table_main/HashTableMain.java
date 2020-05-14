@@ -24,9 +24,13 @@ public class HashTableMain {
         myTable.add(-5735);
 
         System.out.println(myTable);
-        System.out.println(myTable.size());
+        /*System.out.println(myTable.size());
         System.out.println(myTable.retainAll(list));
         System.out.println(myTable);
-        System.out.println(myTable.size());
+        System.out.println(myTable.size()); */
+
+        for(Integer num: myTable) {
+            System.out.println(num);
+        }
     }
 }

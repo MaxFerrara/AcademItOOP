@@ -41,20 +41,20 @@ public class MyHashTable<T> implements Collection<T> {
 
             if (!hasNext()) {
                 throw new NoSuchElementException("collection is ending");
-            } else {
-                while (currentIndex != size) {
-                    ArrayList<T> currentList = items[currentArrayIndex];
+            }
 
-                    if (currentList != null && indexCount + 1 != currentList.size()) {
-                        currentIndex++;
-                        indexCount++;
+            while (currentIndex != size) {
+                ArrayList<T> currentList = items[currentArrayIndex];
 
-                        return currentList.get(indexCount);
-                    }
+                if (currentList != null && indexCount + 1 != currentList.size()) {
+                    currentIndex++;
+                    indexCount++;
 
-                    indexCount = -1;
-                    currentArrayIndex++;
+                    return currentList.get(indexCount);
                 }
+
+                indexCount = -1;
+                currentArrayIndex++;
             }
 
             return null;
@@ -197,42 +197,42 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean removeAll(Collection<?> collection) {
-        int deletedItemsCount = 0;
+        boolean isCollectionModified = false;
 
         for (ArrayList<T> item : items) {
             if (item != null) {
                 for (int i = 0; i < item.size(); ++i) {
                     if (collection.contains(item.get(i))) {
                         remove(item.get(i));
-
                         --i;
-                        ++deletedItemsCount;
+
+                        isCollectionModified = true;
                     }
                 }
             }
         }
 
-        return deletedItemsCount != 0;
+        return isCollectionModified;
     }
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        int deletedItemsCount = 0;
+        boolean isCollectionModified = false;
 
         for (ArrayList<T> item : items) {
             if (item != null) {
                 for (int i = 0; i < item.size(); ++i) {
                     if (!collection.contains(item.get(i))) {
                         remove(item.get(i));
-
                         --i;
-                        ++deletedItemsCount;
+
+                        isCollectionModified = true;
                     }
                 }
             }
         }
 
-        return deletedItemsCount != 0;
+        return isCollectionModified;
     }
 
     @Override

@@ -30,7 +30,7 @@ public class PersonMain {
                 .collect(Collectors.toList());
 
         //Б) вывести список уникальных имен в формате: Имена: Иван, Сергей, Петр.
-        System.out.println("Names:" + uniqueNames.stream().collect(Collectors.joining(", ", " ", ".")));
+        System.out.println(uniqueNames.stream().collect(Collectors.joining(", ", "Names: ", ".")));
         System.out.println();
 
         //В) получить список людей младше 18, посчитать для них средний возраст
@@ -48,10 +48,10 @@ public class PersonMain {
         System.out.println();
 
         //Г) при помощи группировки получить Map , в котором ключи имена, а значения средний возраст
-        Map<String, Double> personsByMiddleAge = persons.stream()
+        Map<String, Double> namesByAverageAge = persons.stream()
                 .collect(Collectors.groupingBy(Person::getName, Collectors.averagingDouble(Person::getAge)));
 
-        System.out.println(personsByMiddleAge);
+        System.out.println(namesByAverageAge);
         System.out.println();
 
         //Д) получить людей, возраст которых от 20 до 45, вывести в консоль их имена в порядке убывания возраста

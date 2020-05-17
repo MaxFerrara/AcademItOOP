@@ -1,18 +1,20 @@
 package name.max_ferrara.temperature_v2.model;
 
 public class KelvinTemperature implements Temperature {
+    private final static double KALVIN_CONSTANT = 273.15;
+
     @Override
-    public double getCelsius(double temperature) {
-        return temperature - KELVIN_CONSTANT;
+    public String getName() {
+        return "kelvin";
     }
 
     @Override
-    public double getFahrenheit(double temperature) {
-        return (temperature - KELVIN_CONSTANT) * CELSIUS_FAHRENHEIT_COEFFICIENT + FAHRENHEIT_CONSTANT;
+    public double convertToCelsius(double temperature) {
+        return temperature - KALVIN_CONSTANT;
     }
 
     @Override
-    public double getKalvin(double temperature) {
-        return temperature;
+    public double convertFromCelsius(double temperature) {
+        return temperature + KALVIN_CONSTANT;
     }
 }

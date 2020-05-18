@@ -5,22 +5,28 @@ import name.max_ferrara.temperature_v2.model.Temperature;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.util.Objects;
 
 public class DesktopTemperatureView implements TemperatureView {
-    private JComboBox<String> firstTemperaturesSpinner = new JComboBox<>();
-    private JComboBox<String> secondTemperaturesSpinner = new JComboBox<>();
+    private JComboBox<String> firstTemperaturesSpinner;
+    private JComboBox<String> secondTemperaturesSpinner;
     private JButton convertButton = new JButton("convert");
     private JButton resetButton = new JButton("reset");
     private JTextField temperatureInput = new JTextField(8);
     private JTextField temperatureOutput = new JTextField(8);
     private Temperature[] temperatures;
+    private String[] temperatureValues;
 
     public DesktopTemperatureView(Temperature[] temperatures) {
-        this.temperatures = temperatures;
-    }
-
-    public void initView() {
         SwingUtilities.invokeLater(() -> {
+            this.temperatures = temperatures;
+
+            temperatureValues = new String[temperatures.length];
+            for (int i = 0; i < temperatureValues.length; ++i) {
+                temperatureValues[i] = temperatures[i].getName();
+            }
+
             JFrame frame = new JFrame();
             frame.setTitle("Temperature converter powered by MaxFerrara");
             frame.setLocation(800, 400);
@@ -47,10 +53,7 @@ public class DesktopTemperatureView implements TemperatureView {
             firstSpinnerConstraints.gridy = 25;
             firstSpinnerConstraints.gridheight = 2;
             firstSpinnerConstraints.gridwidth = 2;
-            firstTemperaturesSpinner.addItem("celsius");
-            firstTemperaturesSpinner.addItem("fahrenheit");
-            firstTemperaturesSpinner.addItem("kalvin");
-            mainPanel.add(firstTemperaturesSpinner, firstSpinnerConstraints);
+            mainPanel.add(firstTemperaturesSpinner = new JComboBox<>(temperatureValues), firstSpinnerConstraints);
 
             GridBagConstraints jLabelToConstraints = new GridBagConstraints();
             jLabelToConstraints.gridx = 0;
@@ -64,10 +67,7 @@ public class DesktopTemperatureView implements TemperatureView {
             secondSpinnerConstraints.gridy = 75;
             secondSpinnerConstraints.gridheight = 2;
             secondSpinnerConstraints.gridwidth = 2;
-            secondTemperaturesSpinner.addItem("celsius");
-            secondTemperaturesSpinner.addItem("fahrenheit");
-            secondTemperaturesSpinner.addItem("kalvin");
-            mainPanel.add(secondTemperaturesSpinner, secondSpinnerConstraints);
+            mainPanel.add(secondTemperaturesSpinner = new JComboBox<>(temperatureValues), secondSpinnerConstraints);
 
             GridBagConstraints jLabelInputConstraints = new GridBagConstraints();
             jLabelInputConstraints.gridx = 85;
@@ -114,20 +114,45 @@ public class DesktopTemperatureView implements TemperatureView {
         });
     }
 
+    @Override
     public double getInputTemperature() {
-        return Double.parseDouble(temperatureInput.getText());
+        String inputTemperature = temperatureInput.getText();
+        char number = inputTemperature.charAt(0);
+
+        if(!Character.isDigit(number)) {
+            JOptionPane.showMessageDialog(null, "input value is't number", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+
+        return Double.parseDouble(inputTemperature);
     }
 
-    public String getInitialScale() {
-        return (String) firstTemperaturesSpinner.getSelectedItem();
+    @Override
+    public Temperature getInitialScale() {
+        Temperature scaleToFind = null;
+
+        for (Temperature temperature : temperatures) {
+            if (Objects.equals(temperature.getName(), firstTemperaturesSpinner.getSelectedItem())) {
+                scaleToFind = temperature;
+            }
+        }
+        return scaleToFind;
     }
 
-    public String getEndScale() {
-        return (String) secondTemperaturesSpinner.getSelectedItem();
+    @Override
+    public Temperature getEndScale() {
+        Temperature scaleToFind = null;
+
+        for (Temperature temperature : temperatures) {
+            if (Objects.equals(temperature.getName(), secondTemperaturesSpinner.getSelectedItem())) {
+                scaleToFind = temperature;
+            }
+        }
+        return scaleToFind;
     }
 
-    public void setOutputTemperature(String temperature) {
-        temperatureOutput.setText(temperature);
+    @Override
+    public void setOutputTemperature(double temperature) {
+        temperatureOutput.setText(new DecimalFormat("#0.00").format(temperature));
     }
 
     @Override

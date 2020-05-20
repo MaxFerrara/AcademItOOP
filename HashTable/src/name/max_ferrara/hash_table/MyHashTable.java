@@ -9,12 +9,12 @@ public class MyHashTable<T> implements Collection<T> {
 
     private int modCount;
 
-    public MyHashTable(int initialCapacity) {
-        if (initialCapacity < 0) {
+    public MyHashTable(int arrayLength) {
+        if (arrayLength < 0) {
             throw new IllegalArgumentException("capacity can not be < 0");
         }
         //noinspection unchecked
-        items = new ArrayList[initialCapacity];
+        items = new ArrayList[arrayLength];
     }
 
     public MyHashTable() {
@@ -119,7 +119,8 @@ public class MyHashTable<T> implements Collection<T> {
         int index = 0;
 
         for (T item : this) {
-            array[index++] = item;
+            array[index] = item;
+            ++index;
         }
 
         return array;
@@ -127,15 +128,13 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public <E> E[] toArray(E[] elements) {
-        Object[] array = toArray();
-
         if (elements.length < size) {
             //noinspection unchecked
-            return (E[]) array;
+            return (E[]) Arrays.copyOf(toArray(), size, elements.getClass());
         }
 
         //noinspection SuspiciousSystemArraycopy
-        System.arraycopy(array, 0, elements, 0, size);
+        System.arraycopy(toArray(), 0, elements, 0, size);
 
         if (elements.length > size) {
             elements[size] = null;
@@ -147,9 +146,9 @@ public class MyHashTable<T> implements Collection<T> {
     @Override
     public boolean add(T item) {
         int key = getKey(item);
-        ArrayList<T> list = new ArrayList<>();
 
         if (items[key] == null) {
+            ArrayList<T> list = new ArrayList<>();
             items[key] = list;
         }
 
@@ -198,18 +197,21 @@ public class MyHashTable<T> implements Collection<T> {
     @Override
     public boolean removeAll(Collection<?> collection) {
         boolean isCollectionModified = false;
+        int sizeAfterModification = 0;
 
         for (ArrayList<T> item : items) {
-            if (item != null) {
-                for (int i = 0; i < item.size(); ++i) {
-                    if (collection.contains(item.get(i))) {
-                        remove(item.get(i));
-                        --i;
+            if (item != null && item.size() > 0) {
+                item.removeAll(collection);
 
-                        isCollectionModified = true;
-                    }
-                }
+                sizeAfterModification += item.size();
             }
+        }
+
+        if (size != sizeAfterModification) {
+            size = sizeAfterModification;
+            isCollectionModified = true;
+
+            ++modCount;
         }
 
         return isCollectionModified;
@@ -218,18 +220,21 @@ public class MyHashTable<T> implements Collection<T> {
     @Override
     public boolean retainAll(Collection<?> collection) {
         boolean isCollectionModified = false;
+        int sizeAfterModification = 0;
 
         for (ArrayList<T> item : items) {
-            if (item != null) {
-                for (int i = 0; i < item.size(); ++i) {
-                    if (!collection.contains(item.get(i))) {
-                        remove(item.get(i));
-                        --i;
+            if (item != null && item.size() > 0) {
+                item.retainAll(collection);
 
-                        isCollectionModified = true;
-                    }
-                }
+                sizeAfterModification += item.size();
             }
+        }
+
+        if (size != sizeAfterModification) {
+            size = sizeAfterModification;
+            isCollectionModified = true;
+
+            ++modCount;
         }
 
         return isCollectionModified;

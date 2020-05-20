@@ -219,14 +219,18 @@ public class Matrix {
         return resultVector;
     }
 
-    public void add(Matrix matrix) {
-        if (getRowsQuantity() != matrix.getRowsQuantity()) {
-            throw new IllegalArgumentException("first matrix's rows: " + getRowsQuantity() + " should be equals second matrix's rows: " + matrix.getRowsQuantity());
+    private static void checkMatrixSizes(int firstMatrixRowsQuantity, int secondMatrixRowsQuantity, int firstMatrixColumnsQuantity, int secondMatrixColumnsQuantity) {
+        if (firstMatrixRowsQuantity != secondMatrixRowsQuantity) {
+            throw new IllegalArgumentException("first matrix's rows: " + firstMatrixRowsQuantity + " should be equals second matrix's rows: " + secondMatrixRowsQuantity);
         }
 
-        if (getColumnsQuantity() != matrix.getColumnsQuantity()) {
-            throw new IllegalArgumentException("first matrix's columns: " + getColumnsQuantity() + " should be equals second matrix's columns: " + matrix.getColumnsQuantity());
+        if (firstMatrixColumnsQuantity != secondMatrixColumnsQuantity) {
+            throw new IllegalArgumentException("first matrix's columns: " + firstMatrixColumnsQuantity + " should be equals second matrix's columns: " + secondMatrixColumnsQuantity);
         }
+    }
+
+    public void add(Matrix matrix) {
+        checkMatrixSizes(getRowsQuantity(), matrix.getRowsQuantity(), getColumnsQuantity(), matrix.getColumnsQuantity());
 
         for (int i = 0; i < vectors.length; ++i) {
             vectors[i].add(matrix.vectors[i]);
@@ -234,13 +238,7 @@ public class Matrix {
     }
 
     public void subtract(Matrix matrix) {
-        if (getRowsQuantity() != matrix.getRowsQuantity()) {
-            throw new IllegalArgumentException("first matrix's rows: " + getRowsQuantity() + " should be equals second matrix's rows: " + matrix.getRowsQuantity());
-        }
-
-        if (getColumnsQuantity() != matrix.getColumnsQuantity()) {
-            throw new IllegalArgumentException("first matrix's columns: " + getColumnsQuantity() + " should be equals second matrix's columns: " + matrix.getColumnsQuantity());
-        }
+        checkMatrixSizes(getRowsQuantity(), matrix.getRowsQuantity(), getColumnsQuantity(), matrix.getColumnsQuantity());
 
         for (int i = 0; i < vectors.length; ++i) {
             vectors[i].subtract(matrix.vectors[i]);
@@ -248,13 +246,7 @@ public class Matrix {
     }
 
     public static Matrix getSum(Matrix matrix1, Matrix matrix2) {
-        if (matrix1.getRowsQuantity() != matrix2.getRowsQuantity()) {
-            throw new IllegalArgumentException("first matrix's rows: " + matrix1.getRowsQuantity() + " should be equals second matrix's rows: " + matrix2.getRowsQuantity());
-        }
-
-        if (matrix1.getColumnsQuantity() != matrix2.getColumnsQuantity()) {
-            throw new IllegalArgumentException("first matrix's columns: " + matrix1.getColumnsQuantity() + " should be equals second matrix's columns: " + matrix2.getColumnsQuantity());
-        }
+        checkMatrixSizes(matrix1.getRowsQuantity(), matrix2.getRowsQuantity(), matrix1.getColumnsQuantity(), matrix2.getColumnsQuantity());
 
         Matrix cloneMatrix = new Matrix(matrix1);
         cloneMatrix.add(matrix2);
@@ -263,13 +255,7 @@ public class Matrix {
     }
 
     public static Matrix getDiff(Matrix matrix1, Matrix matrix2) {
-        if (matrix1.getRowsQuantity() != matrix2.getRowsQuantity()) {
-            throw new IllegalArgumentException("first matrix's rows: " + matrix1.getRowsQuantity() + " should be equals second matrix's rows: " + matrix2.getRowsQuantity());
-        }
-
-        if (matrix1.getColumnsQuantity() != matrix2.getColumnsQuantity()) {
-            throw new IllegalArgumentException("first matrix's columns: " + matrix1.getColumnsQuantity() + " should be equals second matrix's columns: " + matrix2.getColumnsQuantity());
-        }
+        checkMatrixSizes(matrix1.getRowsQuantity(), matrix2.getRowsQuantity(), matrix1.getColumnsQuantity(), matrix2.getColumnsQuantity());
 
         Matrix cloneMatrix = new Matrix(matrix1);
         cloneMatrix.subtract(matrix2);

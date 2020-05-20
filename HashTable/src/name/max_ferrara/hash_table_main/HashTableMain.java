@@ -10,8 +10,8 @@ public class HashTableMain {
         MyHashTable<Integer> myTable = new MyHashTable<>(6);
         List<Integer> list = new ArrayList<>();
 
-        list.add(11);
-        list.add(322);
+        list.add(-11);
+        list.add(-322);
 
         myTable.add(1);
         myTable.add(11);
@@ -24,13 +24,20 @@ public class HashTableMain {
         myTable.add(-5735);
 
         System.out.println(myTable);
-        /*System.out.println(myTable.size());
+        System.out.println(myTable.size());
         System.out.println(myTable.retainAll(list));
+        System.out.println(myTable);
+        System.out.println(myTable.size());
+
+        //System.out.println();
+        //myTable.removeAll(list);
+        //System.out.println(myTable);
+        /*System.out.println(myTable.size());
         System.out.println(myTable);
         System.out.println(myTable.size()); */
 
-        for(Integer num: myTable) {
+        /*for(Integer num: myTable) {
             System.out.println(num);
-        }
+        }*/
     }
 }

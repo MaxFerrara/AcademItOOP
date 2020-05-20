@@ -18,4 +18,6 @@ public interface TemperatureView {
     void addConvertActionListener(ActionListener listener);
 
     void resetScaleFields();
+
+    void showInputErrors();
 }

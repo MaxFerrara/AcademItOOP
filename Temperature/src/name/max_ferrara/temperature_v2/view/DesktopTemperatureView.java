@@ -23,6 +23,7 @@ public class DesktopTemperatureView implements TemperatureView {
             this.temperatures = temperatures;
 
             temperatureValues = new String[temperatures.length];
+
             for (int i = 0; i < temperatureValues.length; ++i) {
                 temperatureValues[i] = temperatures[i].getName();
             }
@@ -114,40 +115,48 @@ public class DesktopTemperatureView implements TemperatureView {
         });
     }
 
-    @Override
+   /* @Override
     public double getInputTemperature() {
         String inputTemperature = temperatureInput.getText();
         char number = inputTemperature.charAt(0);
 
-        if(!Character.isDigit(number)) {
-            JOptionPane.showMessageDialog(null, "input value is't number", "Warning", JOptionPane.WARNING_MESSAGE);
+        if(temperatureInput.getText().isEmpty()) {
+           JOptionPane.showMessageDialog(null, "input field is empty", "Warning", JOptionPane.WARNING_MESSAGE);
         }
 
+        if(!Character.isDigit(number)) {
+           JOptionPane.showMessageDialog(null, "input value is't number", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+
+
         return Double.parseDouble(inputTemperature);
+    }  */
+
+    @Override
+    public double getInputTemperature() {
+        return Double.parseDouble(temperatureInput.getText());
+    }
+
+    private Temperature getScale(Object scale) {
+        Temperature scaleToFind = null;
+
+        for (Temperature temperature : temperatures) {
+            if (Objects.equals(temperature.getName(), scale)) {
+                scaleToFind = temperature;
+            }
+        }
+
+        return scaleToFind;
     }
 
     @Override
     public Temperature getInitialScale() {
-        Temperature scaleToFind = null;
-
-        for (Temperature temperature : temperatures) {
-            if (Objects.equals(temperature.getName(), firstTemperaturesSpinner.getSelectedItem())) {
-                scaleToFind = temperature;
-            }
-        }
-        return scaleToFind;
+        return getScale(firstTemperaturesSpinner.getSelectedItem());
     }
 
     @Override
     public Temperature getEndScale() {
-        Temperature scaleToFind = null;
-
-        for (Temperature temperature : temperatures) {
-            if (Objects.equals(temperature.getName(), secondTemperaturesSpinner.getSelectedItem())) {
-                scaleToFind = temperature;
-            }
-        }
-        return scaleToFind;
+        return getScale(secondTemperaturesSpinner.getSelectedItem());
     }
 
     @Override
@@ -169,5 +178,19 @@ public class DesktopTemperatureView implements TemperatureView {
     public void resetScaleFields() {
         temperatureOutput.setText("");
         temperatureInput.setText("");
+    }
+
+    @Override
+    public void showInputErrors() {
+        try {
+            String inputTemperature = temperatureInput.getText();
+            char number = inputTemperature.charAt(0);
+
+            if (!Character.isDigit(number)) {
+                JOptionPane.showMessageDialog(null, "input value is't number", "Warning", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (StringIndexOutOfBoundsException n) {
+            JOptionPane.showMessageDialog(null, "input field is empty", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
     }
 }

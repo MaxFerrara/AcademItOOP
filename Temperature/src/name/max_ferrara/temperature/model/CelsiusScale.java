@@ -1,6 +1,6 @@
-package name.max_ferrara.temperature_v2.model;
+package name.max_ferrara.temperature.model;
 
-public class CelsiusTemperature implements Temperature {
+public class CelsiusScale implements Scale {
 
     @Override
     public String getName() {

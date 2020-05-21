@@ -1,7 +1,7 @@
-package name.max_ferrara.temperature_v2.model;
+package name.max_ferrara.temperature.model;
 
 public class TemperatureConverter {
-    public double convertTemperature(double temperature, Temperature from, Temperature to) {
+    public double convertTemperature(double temperature, Scale from, Scale to) {
         double result = from.convertToCelsius(temperature);
 
         return to.convertFromCelsius(result);

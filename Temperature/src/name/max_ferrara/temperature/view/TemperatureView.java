@@ -1,15 +1,15 @@
-package name.max_ferrara.temperature_v2.view;
+package name.max_ferrara.temperature.view;
 
-import name.max_ferrara.temperature_v2.model.Temperature;
+import name.max_ferrara.temperature.model.Scale;
 
 import java.awt.event.ActionListener;
 
 public interface TemperatureView {
     double getInputTemperature();
 
-    Temperature getInitialScale();
+    Scale getInitialScale();
 
-    Temperature getEndScale();
+    Scale getEndScale();
 
     void setOutputTemperature(double temperature);
 

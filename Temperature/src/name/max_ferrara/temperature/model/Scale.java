@@ -1,6 +1,6 @@
-package name.max_ferrara.temperature_v2.model;
+package name.max_ferrara.temperature.model;
 
-public interface Temperature {
+public interface Scale {
     String getName();
 
     double convertToCelsius(double temperature);

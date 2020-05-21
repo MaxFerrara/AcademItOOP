@@ -1,6 +1,6 @@
-package name.max_ferrara.temperature_v2.model;
+package name.max_ferrara.temperature.model;
 
-public class FahrenheitTemperature implements Temperature {
+public class FahrenheitScale implements Scale {
     private final static double CELSIUS_FAHRENHEIT_COEFFICIENT = 1.8;
     private final static double FAHRENHEIT_CONSTANT = 32;
 

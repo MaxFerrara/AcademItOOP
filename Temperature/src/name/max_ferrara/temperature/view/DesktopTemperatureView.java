@@ -1,6 +1,6 @@
-package name.max_ferrara.temperature_v2.view;
+package name.max_ferrara.temperature.view;
 
-import name.max_ferrara.temperature_v2.model.Temperature;
+import name.max_ferrara.temperature.model.Scale;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,10 +15,10 @@ public class DesktopTemperatureView implements TemperatureView {
     private JButton resetButton = new JButton("reset");
     private JTextField temperatureInput = new JTextField(8);
     private JTextField temperatureOutput = new JTextField(8);
-    private Temperature[] temperatures;
+    private Scale[] temperatures;
     private String[] temperatureValues;
 
-    public DesktopTemperatureView(Temperature[] temperatures) {
+    public DesktopTemperatureView(Scale[] temperatures) {
         SwingUtilities.invokeLater(() -> {
             this.temperatures = temperatures;
 
@@ -115,32 +115,15 @@ public class DesktopTemperatureView implements TemperatureView {
         });
     }
 
-   /* @Override
-    public double getInputTemperature() {
-        String inputTemperature = temperatureInput.getText();
-        char number = inputTemperature.charAt(0);
-
-        if(temperatureInput.getText().isEmpty()) {
-           JOptionPane.showMessageDialog(null, "input field is empty", "Warning", JOptionPane.WARNING_MESSAGE);
-        }
-
-        if(!Character.isDigit(number)) {
-           JOptionPane.showMessageDialog(null, "input value is't number", "Warning", JOptionPane.WARNING_MESSAGE);
-        }
-
-
-        return Double.parseDouble(inputTemperature);
-    }  */
-
     @Override
     public double getInputTemperature() {
         return Double.parseDouble(temperatureInput.getText());
     }
 
-    private Temperature getScale(Object scale) {
-        Temperature scaleToFind = null;
+    private Scale getScale(Object scale) {
+        Scale scaleToFind = null;
 
-        for (Temperature temperature : temperatures) {
+        for (Scale temperature : temperatures) {
             if (Objects.equals(temperature.getName(), scale)) {
                 scaleToFind = temperature;
             }
@@ -150,12 +133,12 @@ public class DesktopTemperatureView implements TemperatureView {
     }
 
     @Override
-    public Temperature getInitialScale() {
+    public Scale getInitialScale() {
         return getScale(firstTemperaturesSpinner.getSelectedItem());
     }
 
     @Override
-    public Temperature getEndScale() {
+    public Scale getEndScale() {
         return getScale(secondTemperaturesSpinner.getSelectedItem());
     }
 

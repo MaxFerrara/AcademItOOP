@@ -1,6 +1,6 @@
-package name.max_ferrara.temperature_v2.model;
+package name.max_ferrara.temperature.model;
 
-public class KelvinTemperature implements Temperature {
+public class KelvinScale implements Scale {
     private final static double KALVIN_CONSTANT = 273.15;
 
     @Override

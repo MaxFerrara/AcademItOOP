@@ -24,7 +24,7 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public class MyArrayListIterator implements Iterator<T> {
-        private int expectedModCount = modCount;
+        private final int expectedModCount = modCount;
         private int currentIndex = -1;
 
         @Override
@@ -280,9 +280,7 @@ public class MyArrayList<T> implements List<T> {
 
         T removedItem = items[index];
 
-        if (index == size - 1) {
-            items[index] = null;
-        } else {
+        if (index < size - 1) {
             System.arraycopy(items, index + 1, items, index, size - 1 - index);
         }
 

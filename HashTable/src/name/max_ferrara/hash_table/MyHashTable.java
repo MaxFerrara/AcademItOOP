@@ -25,8 +25,8 @@ public class MyHashTable<T> implements Collection<T> {
     private class MyHashTableIterator implements Iterator<T> {
         private int currentIndex = -1;
         private int currentArrayIndex = 0;
-        private int indexCount = -1;
-        private int expectedModCount = modCount;
+        private int currentListIndex = -1;
+        private final int expectedModCount = modCount;
 
         @Override
         public boolean hasNext() {
@@ -46,14 +46,14 @@ public class MyHashTable<T> implements Collection<T> {
             while (currentIndex != size) {
                 ArrayList<T> currentList = items[currentArrayIndex];
 
-                if (currentList != null && indexCount + 1 != currentList.size()) {
+                if (currentList != null && currentListIndex + 1 != currentList.size()) {
                     currentIndex++;
-                    indexCount++;
+                    currentListIndex++;
 
-                    return currentList.get(indexCount);
+                    return currentList.get(currentListIndex);
                 }
 
-                indexCount = -1;
+                currentListIndex = -1;
                 currentArrayIndex++;
             }
 
@@ -148,8 +148,7 @@ public class MyHashTable<T> implements Collection<T> {
         int key = getKey(item);
 
         if (items[key] == null) {
-            ArrayList<T> list = new ArrayList<>();
-            items[key] = list;
+            items[key] = new ArrayList<>();
         }
 
         items[key].add(item);

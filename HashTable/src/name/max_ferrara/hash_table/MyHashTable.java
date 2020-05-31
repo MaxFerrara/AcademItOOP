@@ -3,7 +3,7 @@ package name.max_ferrara.hash_table;
 import java.util.*;
 
 public class MyHashTable<T> implements Collection<T> {
-    private ArrayList<T>[] items;
+    private final ArrayList<T>[] items;
     private static final int DEFAULT_ARRAY_LENGTH = 16;
     private int size;
 

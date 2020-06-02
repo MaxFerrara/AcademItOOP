@@ -10,9 +10,8 @@ public class TemperatureMain {
         Scale[] temperatures = {new CelsiusScale(), new FahrenheitScale(), new KelvinScale()};
 
         TemperatureConverter converter = new TemperatureConverter(temperatures);
-        Controller controller = new Controller()
-        TemperatureView view = new DesktopTemperatureView(new Controller(view, converter));
-
-        //new Controller(view, converter);
+        TemperatureView view = new DesktopTemperatureView();
+        Controller controller = new Controller(view, converter);
+        view.setController(controller);
     }
 }

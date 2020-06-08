@@ -1,5 +1,6 @@
 package name.max_ferrara.temperature.controller;
 
+import name.max_ferrara.temperature.model.Scale;
 import name.max_ferrara.temperature.model.TemperatureConverter;
 import name.max_ferrara.temperature.view.TemperatureView;
 
@@ -10,24 +11,13 @@ public class Controller {
     public Controller(TemperatureView view, TemperatureConverter converter) {
         this.view = view;
         this.converter = converter;
-
-        initController();
     }
 
-    public void initController() {
-        this.view.addConvertActionListener(e -> {
-            try {
-                double convertResult;
-                double inputTemperature = view.getInputTemperature();
+    public Scale[] getScales() {
+        return converter.getScales();
+    }
 
-                convertResult = converter.convertTemperature(inputTemperature, view.getInitialScale(), view.getEndScale());
-                view.setOutputTemperature(convertResult);
-            } catch (NumberFormatException | StringIndexOutOfBoundsException n) {
-                view.showInputErrors();
-            }
-        });
-
-        this.view.addResetActionListener(e -> view.resetScaleFields());
+    public double convertTemperature() {
+        return converter.convertTemperature(view.getInputTemperature(), view.getInitialScale(), view.getEndScale());
     }
 }
-

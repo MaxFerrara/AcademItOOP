@@ -1,9 +1,19 @@
 package name.max_ferrara.temperature.model;
 
 public class TemperatureConverter {
-    public double convertTemperature(double temperature, Scale from, Scale to) {
-        double result = from.convertToCelsius(temperature);
+    private final Scale[] scales;
 
-        return to.convertFromCelsius(result);
+    public TemperatureConverter(Scale[] scales) {
+        this.scales = scales;
+    }
+
+    public double convertTemperature(double temperature, Scale from, Scale to) {
+        double convertResult = from.convertToCelsius(temperature);
+
+        return to.convertFromCelsius(convertResult);
+    }
+
+    public Scale[] getScales() {
+        return scales;
     }
 }

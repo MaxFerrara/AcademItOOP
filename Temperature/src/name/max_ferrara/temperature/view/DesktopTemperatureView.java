@@ -1,43 +1,46 @@
 package name.max_ferrara.temperature.view;
 
+import name.max_ferrara.temperature.controller.Controller;
 import name.max_ferrara.temperature.model.Scale;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.util.Objects;
 
-public class DesktopTemperatureView implements TemperatureView {
+
+public class DesktopTemperatureView extends JFrame implements TemperatureView {
     private JComboBox<String> firstTemperaturesSpinner;
     private JComboBox<String> secondTemperaturesSpinner;
-    private JButton convertButton = new JButton("convert");
-    private JButton resetButton = new JButton("reset");
-    private JTextField temperatureInput = new JTextField(8);
-    private JTextField temperatureOutput = new JTextField(8);
-    private Scale[] temperatures;
-    private String[] temperatureValues;
+    private final JButton convertButton = new JButton("convert");
+    private final JButton resetButton = new JButton("reset");
+    private final JTextField temperatureInput = new JTextField(8);
+    private final JTextField temperatureOutput = new JTextField(8);
+    private String[] temperatureValues = null;
 
-    public DesktopTemperatureView(Scale[] temperatures) {
+    private Controller controller;
+
+    public DesktopTemperatureView() {
+        initFrame();
+    }
+
+    public void initFrame() {
         SwingUtilities.invokeLater(() -> {
-            this.temperatures = temperatures;
-
-            temperatureValues = new String[temperatures.length];
+            temperatureValues = new String[controller.getScales().length];
 
             for (int i = 0; i < temperatureValues.length; ++i) {
-                temperatureValues[i] = temperatures[i].getName();
+                temperatureValues[i] = controller.getScales()[i].getName();
             }
 
-            JFrame frame = new JFrame();
-            frame.setTitle("Temperature converter powered by MaxFerrara");
-            frame.setLocation(800, 400);
-            frame.setSize(350, 220);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setResizable(false);
-            frame.setVisible(true);
+            setTitle("Temperature converter powered by MaxFerrara");
+            setLocation(800, 400);
+            setSize(350, 220);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setResizable(false);
+            setVisible(true);
 
             JPanel mainPanel = new JPanel();
-            frame.add(mainPanel);
+            add(mainPanel);
 
             GridBagLayout layout = new GridBagLayout();
             mainPanel.setLayout(layout);
@@ -104,6 +107,7 @@ public class DesktopTemperatureView implements TemperatureView {
             convertButtonConstraints.gridy = 95;
             convertButtonConstraints.gridheight = 2;
             convertButtonConstraints.gridwidth = 2;
+            convertButton.setPreferredSize(new Dimension(80,30));
             mainPanel.add(convertButton, convertButtonConstraints);
 
             GridBagConstraints resetButtonConstraints = new GridBagConstraints();
@@ -111,7 +115,19 @@ public class DesktopTemperatureView implements TemperatureView {
             resetButtonConstraints.gridy = 115;
             resetButtonConstraints.gridheight = 2;
             resetButtonConstraints.gridwidth = 2;
+            resetButton.setPreferredSize(new Dimension(80,30));
             mainPanel.add(resetButton, resetButtonConstraints);
+
+            convertButton.addActionListener(e -> {
+                try {
+                    double outputTemperature = controller.convertTemperature();
+                    setOutputTemperature(outputTemperature);
+                } catch (StringIndexOutOfBoundsException | NumberFormatException n) {
+                    JOptionPane.showMessageDialog(null, "input field is empty or temperature's value is not digit", "Warning", JOptionPane.WARNING_MESSAGE);
+                }
+            });
+
+            resetButton.addActionListener(e -> resetScaleFields());
         });
     }
 
@@ -120,12 +136,12 @@ public class DesktopTemperatureView implements TemperatureView {
         return Double.parseDouble(temperatureInput.getText());
     }
 
-    private Scale getScale(Object scale) {
+    private Scale getScale(Object temperature) {
         Scale scaleToFind = null;
 
-        for (Scale temperature : temperatures) {
-            if (Objects.equals(temperature.getName(), scale)) {
-                scaleToFind = temperature;
+        for (Scale scale : controller.getScales()) {
+            if (Objects.equals(temperature, scale.getName())) {
+                scaleToFind = scale;
             }
         }
 
@@ -148,32 +164,13 @@ public class DesktopTemperatureView implements TemperatureView {
     }
 
     @Override
-    public void addConvertActionListener(ActionListener listener) {
-        convertButton.addActionListener(listener);
-    }
-
-    @Override
-    public void addResetActionListener(ActionListener listener) {
-        resetButton.addActionListener(listener);
-    }
-
-    @Override
     public void resetScaleFields() {
         temperatureOutput.setText("");
         temperatureInput.setText("");
     }
 
     @Override
-    public void showInputErrors() {
-        try {
-            String inputTemperature = temperatureInput.getText();
-            char number = inputTemperature.charAt(0);
-
-            if (!Character.isDigit(number)) {
-                JOptionPane.showMessageDialog(null, "input value is't number", "Warning", JOptionPane.WARNING_MESSAGE);
-            }
-        } catch (StringIndexOutOfBoundsException n) {
-            JOptionPane.showMessageDialog(null, "input field is empty", "Warning", JOptionPane.WARNING_MESSAGE);
-        }
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 }

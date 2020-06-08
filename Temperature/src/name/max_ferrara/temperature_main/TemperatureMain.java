@@ -12,6 +12,7 @@ public class TemperatureMain {
         TemperatureConverter converter = new TemperatureConverter(temperatures);
         TemperatureView view = new DesktopTemperatureView();
         Controller controller = new Controller(view, converter);
+        
         view.setController(controller);
     }
 }

@@ -8,39 +8,42 @@ import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.Objects;
 
-
-public class DesktopTemperatureView extends JFrame implements TemperatureView {
+public class DesktopTemperatureView implements TemperatureView {
     private JComboBox<String> firstTemperaturesSpinner;
     private JComboBox<String> secondTemperaturesSpinner;
-    private final JButton convertButton = new JButton("convert");
-    private final JButton resetButton = new JButton("reset");
-    private final JTextField temperatureInput = new JTextField(8);
-    private final JTextField temperatureOutput = new JTextField(8);
-    private String[] temperatureValues = null;
+    private JButton convertButton;
+    private JButton resetButton;
+    private JTextField temperatureInput;
+    private JTextField temperatureOutput;
+    private String[] temperatureValues;
 
     private Controller controller;
 
-    public DesktopTemperatureView() {
-        initFrame();
+    public DesktopTemperatureView(Controller controller) {
+        this.controller = controller;
+        createWindow();
     }
 
-    public void initFrame() {
+    private void createWindow() {
         SwingUtilities.invokeLater(() -> {
-            temperatureValues = new String[controller.getScales().length];
+            Scale[] scales = controller.getScales();
+
+            temperatureValues = new String[scales.length];
 
             for (int i = 0; i < temperatureValues.length; ++i) {
-                temperatureValues[i] = controller.getScales()[i].getName();
+                temperatureValues[i] = scales[i].getName();
             }
 
-            setTitle("Temperature converter powered by MaxFerrara");
-            setLocation(800, 400);
-            setSize(350, 220);
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            setResizable(false);
-            setVisible(true);
+            JFrame frame = new JFrame();
+            frame.setTitle("Temperature converter powered by MaxFerrara");
+            frame.setSize(350, 220);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setResizable(false);
+            frame.setVisible(true);
+            frame.setLocationRelativeTo(null);
 
             JPanel mainPanel = new JPanel();
-            add(mainPanel);
+            frame.add(mainPanel);
 
             GridBagLayout layout = new GridBagLayout();
             mainPanel.setLayout(layout);
@@ -85,6 +88,7 @@ public class DesktopTemperatureView extends JFrame implements TemperatureView {
             inputFiledConstrains.gridy = 25;
             inputFiledConstrains.gridheight = 2;
             inputFiledConstrains.gridwidth = 2;
+            temperatureInput = new JTextField(8);
             mainPanel.add(temperatureInput, inputFiledConstrains);
 
             GridBagConstraints jLabelOutputConstraints = new GridBagConstraints();
@@ -99,6 +103,7 @@ public class DesktopTemperatureView extends JFrame implements TemperatureView {
             outputFieldConstraints.gridy = 75;
             outputFieldConstraints.gridheight = 2;
             outputFieldConstraints.gridwidth = 2;
+            temperatureOutput = new JTextField(8);
             temperatureOutput.setEditable(false);
             mainPanel.add(temperatureOutput, outputFieldConstraints);
 
@@ -107,7 +112,8 @@ public class DesktopTemperatureView extends JFrame implements TemperatureView {
             convertButtonConstraints.gridy = 95;
             convertButtonConstraints.gridheight = 2;
             convertButtonConstraints.gridwidth = 2;
-            convertButton.setPreferredSize(new Dimension(80,30));
+            convertButton = new JButton("convert");
+            convertButton.setPreferredSize(new Dimension(80, 30));
             mainPanel.add(convertButton, convertButtonConstraints);
 
             GridBagConstraints resetButtonConstraints = new GridBagConstraints();
@@ -115,7 +121,8 @@ public class DesktopTemperatureView extends JFrame implements TemperatureView {
             resetButtonConstraints.gridy = 115;
             resetButtonConstraints.gridheight = 2;
             resetButtonConstraints.gridwidth = 2;
-            resetButton.setPreferredSize(new Dimension(80,30));
+            resetButton = new JButton("reset");
+            resetButton.setPreferredSize(new Dimension(80, 30));
             mainPanel.add(resetButton, resetButtonConstraints);
 
             convertButton.addActionListener(e -> {
@@ -167,10 +174,5 @@ public class DesktopTemperatureView extends JFrame implements TemperatureView {
     public void resetScaleFields() {
         temperatureOutput.setText("");
         temperatureInput.setText("");
-    }
-
-    @Override
-    public void setController(Controller controller) {
-        this.controller = controller;
     }
 }

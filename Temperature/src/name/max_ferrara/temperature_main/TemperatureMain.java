@@ -7,12 +7,11 @@ import name.max_ferrara.temperature.view.TemperatureView;
 
 public class TemperatureMain {
     public static void main(String[] args) {
-        Scale[] temperatures = {new CelsiusScale(), new FahrenheitScale(), new KelvinScale()};
+        Scale[] scales = {new CelsiusScale(), new FahrenheitScale(), new KelvinScale()};
 
-        TemperatureConverter converter = new TemperatureConverter(temperatures);
-        TemperatureView view = new DesktopTemperatureView();
-        Controller controller = new Controller(view, converter);
-        
-        view.setController(controller);
+        TemperatureConverter converter = new TemperatureConverter(scales);
+        Controller controller = new Controller(converter);
+        TemperatureView view = new DesktopTemperatureView(controller);
+        controller.setView(view);
     }
 }

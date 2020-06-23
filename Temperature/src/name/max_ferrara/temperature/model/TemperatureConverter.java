@@ -8,9 +8,7 @@ public class TemperatureConverter {
     }
 
     public double convertTemperature(double temperature, Scale from, Scale to) {
-        double convertResult = from.convertToCelsius(temperature);
-
-        return to.convertFromCelsius(convertResult);
+        return to.convertFromCelsius(from.convertToCelsius(temperature));
     }
 
     public Scale[] getScales() {

@@ -8,8 +8,7 @@ public class Controller {
     private TemperatureView view;
     private TemperatureConverter converter;
 
-    public Controller(TemperatureView view, TemperatureConverter converter) {
-        this.view = view;
+    public Controller(TemperatureConverter converter) {
         this.converter = converter;
     }
 
@@ -19,5 +18,9 @@ public class Controller {
 
     public double convertTemperature() {
         return converter.convertTemperature(view.getInputTemperature(), view.getInitialScale(), view.getEndScale());
+    }
+
+    public void setView(TemperatureView view) {
+        this.view = view;
     }
 }

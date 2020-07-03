@@ -6,7 +6,7 @@ import name.max_ferrara.temperature.view.TemperatureView;
 
 public class Controller {
     private TemperatureView view;
-    private TemperatureConverter converter;
+    private final TemperatureConverter converter;
 
     public Controller(TemperatureConverter converter) {
         this.converter = converter;

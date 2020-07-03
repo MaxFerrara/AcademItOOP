@@ -17,7 +17,7 @@ public class DesktopTemperatureView implements TemperatureView {
     private JTextField temperatureOutput;
     private String[] temperatureValues;
 
-    private Controller controller;
+    private final Controller controller;
 
     public DesktopTemperatureView(Controller controller) {
         this.controller = controller;

@@ -20,8 +20,8 @@ public class mainFrame {
 
     public mainFrame() {
         //createMainFrame();
-        //createSettingsFrame();
-        createRecordsFrame();
+        createSettingsFrame();
+        //createRecordsFrame();
     }
 
     private void createMainFrame() {
@@ -43,7 +43,6 @@ public class mainFrame {
             GridBagConstraints settingsButtonConstraints = new GridBagConstraints();
             settingsButtonConstraints.gridx = 0;
             settingsButtonConstraints.gridy = 0;
-            settingsButtonConstraints.gridheight = 2;
             settingsButtonConstraints.gridwidth = 2;
             settingsButton = new JButton("settings");
             settingsButton.setPreferredSize(new Dimension(80, 40));
@@ -51,8 +50,7 @@ public class mainFrame {
 
             GridBagConstraints recordsButtonConstraints = new GridBagConstraints();
             recordsButtonConstraints.gridx = 0;
-            recordsButtonConstraints.gridy = 200;
-            recordsButtonConstraints.gridheight = 2;
+            recordsButtonConstraints.gridy = 1;
             recordsButtonConstraints.gridwidth = 2;
             recordsButton = new JButton("records");
             recordsButton.setPreferredSize(new Dimension(80, 40));
@@ -60,21 +58,21 @@ public class mainFrame {
 
             GridBagConstraints startButtonConstraints = new GridBagConstraints();
             startButtonConstraints.gridx = 0;
-            startButtonConstraints.gridy = 400;
-            startButtonConstraints.gridheight = 2;
-            startButtonConstraints.gridwidth = 2;
+            startButtonConstraints.gridy = 3;
+            startButtonConstraints.gridwidth = 1;
             startButton = new JButton("start");
             startButton.setPreferredSize(new Dimension(80, 40));
             mainPanel.add(startButton, startButtonConstraints);
 
             GridBagConstraints exitButtonConstraints = new GridBagConstraints();
-            exitButtonConstraints.gridx = 200;
-            exitButtonConstraints.gridy = 400;
-            exitButtonConstraints.gridheight = 2;
-            exitButtonConstraints.gridwidth = 2;
+            exitButtonConstraints.gridx = 1;
+            exitButtonConstraints.gridy = 3;
+            exitButtonConstraints.gridwidth = 1;
             exitButton = new JButton("exit");
             exitButton.setPreferredSize(new Dimension(80, 40));
             mainPanel.add(exitButton, exitButtonConstraints);
+
+
         });
     }
 
@@ -94,22 +92,14 @@ public class mainFrame {
             GridBagLayout settingsLayout = new GridBagLayout();
             settingsPanel.setLayout(settingsLayout);
 
-            GridBagConstraints goBackButtonConstrains = new GridBagConstraints();
-            goBackButtonConstrains.gridx = 0;
-            goBackButtonConstrains.gridy = 0;
-            goBackButtonConstrains.gridwidth = 2;
-            goBackButton = new JButton("back");
-            goBackButton.setPreferredSize(new Dimension(70, 20));
-            settingsPanel.add(goBackButton, goBackButtonConstrains);
-
             GridBagConstraints jLabelFieldSideConstrains = new GridBagConstraints();
-            jLabelFieldSideConstrains.gridx = 1;
+            jLabelFieldSideConstrains.gridx = 0;
             jLabelFieldSideConstrains.gridy = 1;
             jLabelFieldSideConstrains.gridwidth = 2;
             settingsPanel.add(new JLabel("enter side filed"), jLabelFieldSideConstrains);
 
             GridBagConstraints fieldSideInputConstrains = new GridBagConstraints();
-            fieldSideInputConstrains.gridx = 1;
+            fieldSideInputConstrains.gridx = 0;
             fieldSideInputConstrains.gridy = 2;
             fieldSideInputConstrains.gridwidth = 2;
             sideFieldInput = new JTextFiledHint("default 9");
@@ -117,13 +107,13 @@ public class mainFrame {
             settingsPanel.add(sideFieldInput, fieldSideInputConstrains);
 
             GridBagConstraints jLabelBombsQuantityConstrains = new GridBagConstraints();
-            jLabelBombsQuantityConstrains.gridx = 1;
+            jLabelBombsQuantityConstrains.gridx = 0;
             jLabelBombsQuantityConstrains.gridy = 3;
             jLabelBombsQuantityConstrains.gridwidth = 2;
             settingsPanel.add(new JLabel("enter bombs quantity"), jLabelBombsQuantityConstrains);
 
             GridBagConstraints bombsQuantityInputConstrains = new GridBagConstraints();
-            bombsQuantityInputConstrains.gridx = 1;
+            bombsQuantityInputConstrains.gridx = 0;
             bombsQuantityInputConstrains.gridy = 4;
             bombsQuantityInputConstrains.gridwidth = 2;
             bombsQuantityInput = new JTextFiledHint("default 10");
@@ -131,12 +121,20 @@ public class mainFrame {
             settingsPanel.add(bombsQuantityInput, bombsQuantityInputConstrains);
 
             GridBagConstraints changeTimeButtonConstraints = new GridBagConstraints();
-            changeTimeButtonConstraints.gridx = 1;
+            changeTimeButtonConstraints.gridx = 0;
             changeTimeButtonConstraints.gridy = 5;
-            changeTimeButtonConstraints.gridwidth = 2;
+            changeTimeButtonConstraints.gridwidth = 1;
             changeTimeButton = new JButton("save changes");
             changeTimeButton.setPreferredSize(new Dimension(120, 30));
             settingsPanel.add(changeTimeButton, changeTimeButtonConstraints);
+
+            GridBagConstraints goBackButtonConstrains = new GridBagConstraints();
+            goBackButtonConstrains.gridx = 1;
+            goBackButtonConstrains.gridy = 5;
+            goBackButtonConstrains.gridwidth = 1;
+            goBackButton = new JButton("back");
+            goBackButton.setPreferredSize(new Dimension(120, 30));
+            settingsPanel.add(goBackButton, goBackButtonConstrains);
         });
     }
 
